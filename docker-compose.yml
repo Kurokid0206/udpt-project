@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:14.6-alpine
+    container_name: label-stick-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  object_storage:
+    image: chrislusf/seaweedfs:3.47
+    container_name: label-stick-object-storage
+    command:
+      [
+        "server",
+        "-s3",
+        "-volume.max",
+        "8",
+        "-master.volumeSizeLimitMB",
+        "10"
+      ]
+    ports:
+      - 8333:8333
+      - 8888:8888
+      - 8080:8080
+      - 9333:9333
+    volumes:
+      - ./data/seaweedfs/data:/data
+      - ./data/seaweedfs/buckets:/buckets
+
+  # label-stick-be:
+  #   container_name: label-stick-bd
+  #   build: ./fileManager
+  #   ports:
+  #     - "8000:8000"
+  #   entrypoint:
+  #     - "/venv/bin/gunicorn"
+  #     - "-b"
+  #     - "0.0.0.0:8000"
+  #     - "myDjango.myDjango.wsgi"
+  #     - "--reload"
+  #   environment:
+  #     - DB_Host=postgres
+
+  label-stick-fe:
+    container_name: label-stick-fe
+    build: ./label-stick-fe
+    ports:
+      - "3000:3000"
+    depends_on:
+      - label-stick
