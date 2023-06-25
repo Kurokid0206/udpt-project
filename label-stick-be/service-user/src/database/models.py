@@ -36,11 +36,12 @@ class User(Base):
         onupdate=func.now(),
     )
 
+    # Relationship
+    projects = relationship("ProjectUser", back_populates="users")
+    assignments = relationship("Assignment", back_populates="users")
+
     def __repr__(self):
         return f"<User(id={self.id}, username={self.username})>"
-
-    # Relationship
-    # tasks = relationship("UserTask", back_populates="user")
 
 
 class Project(Base):
@@ -55,6 +56,10 @@ class Project(Base):
         onupdate=func.now(),
     )
     # project_type = Column(String(50), nullable=False)
+
+    # Relationship
+    users = relationship("ProjectUser", back_populates="projects")
+    documents = relationship("Document", back_populates="project")
 
     def __repr__(self):
         return f"<Project(id={self.id}, project_name={self.name})>"
@@ -71,6 +76,10 @@ class ProjectUser(Base):
         server_default=func.now(),
         onupdate=func.now(),
     )
+
+    # Relationship
+    projects = relationship("Project", back_populates="users")
+    users = relationship("User", back_populates="projects")
 
     def __repr__(self):
         return f"<ProjectUser(id={self.id}, project_id={self.project_id}, user_id={self.user_id})>"
@@ -96,6 +105,10 @@ class Document(Base):
         onupdate=func.now(),
     )
 
+    # Relationship
+    project = relationship("Project", back_populates="documents")
+    sentences = relationship("Sentence", back_populates="document")
+
     def __repr__(self):
         return f"<Document(id={self.id}, document_name={self.name})>"
 
@@ -110,6 +123,9 @@ class Label(Base):
         server_default=func.now(),
         onupdate=func.now(),
     )
+
+    # Relationship
+    sentences = relationship("LabelSentence", back_populates="labels")
 
     def __repr__(self):
         return f"<Label(id={self.id}, label_name={self.name})>"
@@ -127,6 +143,10 @@ class Sentence(Base):
         server_default=func.now(),
         onupdate=func.now(),
     )
+
+    # Relationship
+    document = relationship("Document", back_populates="sentences")
+    labels = relationship("LabelSentence", back_populates="sentences")
 
     def __repr__(self):
         return f"<Sentence(id={self.id}, sentence_name={self.name})>"
@@ -154,6 +174,10 @@ class LabelSentence(Base):
         server_default=func.now(),
         onupdate=func.now(),
     )
+
+    # Relationship
+    sentences = relationship("Sentence", back_populates="labels")
+    labels = relationship("Label", back_populates="sentences")
 
     def __repr__(self):
         return f"<LabelSentence(id={self.id}, sentence_id={self.sentence_id}, label_id={self.label_id}, user_id={self.user_id})>"
@@ -184,6 +208,9 @@ class Assignment(Base):
         server_default=func.now(),
         onupdate=func.now(),
     )
+
+    # Relationship
+    user = relationship("User", back_populates="assignments")
 
     def __repr__(self):
         return f"<Assignment(id={self.id}, assignment_name={self.name})>"

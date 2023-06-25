@@ -32,20 +32,6 @@ services:
       - ./data/seaweedfs/data:/data
       - ./data/seaweedfs/buckets:/buckets
 
-  # label-stick-be:
-  #   container_name: label-stick-bd
-  #   build: ./fileManager
-  #   ports:
-  #     - "8000:8000"
-  #   entrypoint:
-  #     - "/venv/bin/gunicorn"
-  #     - "-b"
-  #     - "0.0.0.0:8000"
-  #     - "myDjango.myDjango.wsgi"
-  #     - "--reload"
-  #   environment:
-  #     - DB_Host=postgres
-
   service-user:
     container_name: label-stick-service-user
     build: ./label-stick-be/service-user
@@ -63,6 +49,64 @@ services:
       - ./label-stick-be/service-user:/app/service-user
     environment:
       - POSTGRES_SERVER=postgres
+    depends_on:
+      - postgres
+
+  service-manager:
+    container_name: label-stick-service-manager
+    build: ./label-stick-be/service-manager
+    ports:
+      - "8010:8010"
+    entrypoint:
+      - "/venv/bin/uvicorn"
+      - "src.main:app"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8010"
+      - "--reload"
+    volumes:
+      - ./label-stick-be/service-manager:/app/service-manager
+    environment:
+      - POSTGRES_SERVER=postgres
+    depends_on:
+      - postgres
+
+  service-label:
+    container_name: label-stick-service-label
+    build: ./label-stick-be/service-label
+    ports:
+      - "8010:8010"
+    entrypoint:
+      - "/venv/bin/uvicorn"
+      - "src.main:app"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8010"
+      - "--reload"
+    volumes:
+      - ./label-stick-be/service-label:/app/service-label
+    environment:
+      - POSTGRES_SERVER=postgres
+    depends_on:
+      - postgres
+
+  service-gateway:
+    container_name: label-stick-service-gateway
+    build: ./label-stick-be/service-gateway
+    ports:
+      - "8000:8000"
+    entrypoint:
+      - "/venv/bin/uvicorn"
+      - "src.main:app"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8000"
+      - "--reload"
+    volumes:
+      - ./label-stick-be/service-gateway:/app/service-gateway
     depends_on:
       - postgres
 
