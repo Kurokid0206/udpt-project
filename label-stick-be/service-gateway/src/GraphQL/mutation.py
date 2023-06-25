@@ -1,3 +1,7 @@
+from ..services.assignment.resolver import resolve_create_assignment, resolve_update_assignment
+from ..services.assignment.dto import AssignmentResponseDTO, CreateAssignmentInputDTO, UpdateAssignmentInputDTO
+from ..services.docment.resolver import resolve_create_document, resolve_delete_document, resolve_update_document
+from ..services.docment.dto import CreateDocumentInputDTO, DocumentResponseDTO, UpdateDocumnetInputDTO
 import strawberry
 from strawberry.file_uploads import Upload
 
@@ -62,24 +66,29 @@ class Mutation:
 
     # Document
     @strawberry.mutation
-    def create_document(self, file: Upload) -> ResponseDTO[UserResponseDTO]:
-        return {}
+    def create_document(self, input: CreateDocumentInputDTO) -> ResponseDTO[DocumentResponseDTO]:
+        result = resolve_create_document(input)
+        return result
 
     @strawberry.mutation
-    def update_document(self, id: str, file: Upload) -> ResponseDTO[UserResponseDTO]:
-        return {}
+    def update_document(self, input: UpdateDocumnetInputDTO) -> ResponseDTO[DocumentResponseDTO]:
+        result = resolve_update_document(input)
+        return result
 
     @strawberry.mutation
-    def delete_document(self, id: str) -> ResponseDTO[UserResponseDTO]:
-        return {}
+    def delete_document(self, id: int) -> ResponseDTO[dict]:
+        result = resolve_delete_document(id)
+        return result
 
     @strawberry.mutation
-    def create_assignment(self) -> ResponseDTO[UserResponseDTO]:
-        return {}
+    def create_assignment(self, input: CreateAssignmentInputDTO) -> ResponseDTO[AssignmentResponseDTO]:
+        result = resolve_create_assignment(input)
+        return result
 
     @strawberry.mutation
-    def update_assignment(self) -> ResponseDTO[UserResponseDTO]:
-        return {}
+    def update_assignment(self, input: UpdateAssignmentInputDTO) -> ResponseDTO[UserResponseDTO]:
+        result = resolve_update_assignment(input)
+        return result
 
     # TODO: create list of sentences.
     # 1. upload file
