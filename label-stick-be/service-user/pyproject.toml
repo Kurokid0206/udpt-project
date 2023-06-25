@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "service-user"
+version = "0.1.0"
+description = ""
+authors = ["Phạm Tân Tị <kurokid0206@gmail.com>"]
+readme = "README.md"
+# packages = [{include = "service_user"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+alembic = "^1.11.1"
+fastapi = "^0.98.0"
+pydantic = {extras = ["email"], version = "^1.10.9"}
+uvicorn = "^0.22.0"
+psycopg2-binary = "^2.9.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

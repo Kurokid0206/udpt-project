@@ -31,7 +31,3 @@ dist-ssr
 
 **/postgres-data
 **/seaweed-fs-data
-
-
-**/poetry.lock
-**/pyproject.toml
