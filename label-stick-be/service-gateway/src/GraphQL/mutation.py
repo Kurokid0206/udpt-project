@@ -18,6 +18,7 @@ from ..services.sentence.dto import (
 from ..services.sentence_label.dto import (
     SentenceLabelInputDTO,
     SentenceLabelResponseDTO,
+    StatusSentenceLabelResponseDTO
 )
 
 from ..services.user.resolver import resolve_signup, resolve_update_profile
@@ -129,6 +130,6 @@ class Mutation:
     def delete_sentence_label(
             self,
             id: int
-    ) -> ResponseDTO[SentenceLabelResponseDTO]:
+    ) -> ResponseDTO[StatusSentenceLabelResponseDTO]:
         result = resolve_delete_sentence_label(id)
         return result
