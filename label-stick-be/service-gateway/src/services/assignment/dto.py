@@ -6,9 +6,8 @@ import strawberry
 
 @strawberry.enum
 class AssignmentTypeEnum:
-    CLASSIFICATION = "CLASSIFICATION"
-    GENERATION = "GENERATION"
-    SEQUENSELABELING = "SEQUENSELABELING"
+    LABELING = "LABELING"
+    REVIEW = "REVIEW"
 
 @strawberry.type
 class AssignmentResponseDTO:
