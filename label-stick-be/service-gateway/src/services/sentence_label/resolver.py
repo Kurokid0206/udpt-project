@@ -13,8 +13,7 @@ async def resolve_create_sentence_label(sentence: SentenceLabelInputDTO) -> Resp
     return ResponseDTO[SentenceLabelResponseDTO](**response)
 
 
-async def resolve_delete_sentence_label(sentence: SentenceLabelInputDTO) -> ResponseDTO[SentenceLabelResponseDTO]:
-    url = f"{SENTENCE_SERVICE_URL}/delete_sentence_label"
-    data = jsonable_encoder(sentence)
-    response = await call_api(url=url, method=HttpMethod.DELETE, json=data)
+async def resolve_delete_sentence_label(id: int = None) -> ResponseDTO[SentenceLabelResponseDTO]:
+    url = f"{SENTENCE_SERVICE_URL}/delete_sentence_label/{id}"
+    response = await call_api(url=url, method=HttpMethod.DELETE)
     return ResponseDTO[SentenceLabelResponseDTO](**response)

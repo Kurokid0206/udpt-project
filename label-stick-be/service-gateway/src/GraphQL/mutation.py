@@ -12,7 +12,6 @@ from ..services.user.dto import (
 from ..services.sentence.dto import (
     SentenceInputDTO,
     SentencesInputDTO,
-    UpdateSentenceInputDTO,
     SentenceResponseDTO
 )
 
@@ -110,7 +109,8 @@ class Mutation:
     @strawberry.mutation
     def update_sentence(
             self,
-            input: UpdateSentenceInputDTO
+            id: int,
+            input: SentenceInputDTO
     ) -> ResponseDTO[SentenceResponseDTO]:
         # TODO: only manager can update sentence
         result = resolve_update_sentence(input)
@@ -128,7 +128,7 @@ class Mutation:
     @strawberry.mutation
     def delete_sentence_label(
             self,
-            input: SentenceInputDTO
+            id: int
     ) -> ResponseDTO[SentenceLabelResponseDTO]:
-        result = resolve_delete_sentence_label(input)
+        result = resolve_delete_sentence_label(id)
         return result

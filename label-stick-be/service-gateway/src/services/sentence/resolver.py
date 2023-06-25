@@ -1,4 +1,4 @@
-from .dto import SentenceInputDTO, SentenceResponseDTO, UpdateSentenceInputDTO
+from .dto import SentenceInputDTO, SentenceResponseDTO
 from ...utils.dto import ResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
 from ...configs.base import SENTENCE_SERVICE_URL
@@ -13,8 +13,8 @@ async def resolve_create_sentences(sentences: SentenceInputDTO) -> ResponseDTO[S
     return ResponseDTO[list[SentenceResponseDTO]](**response)
 
 
-async def resolve_update_sentence(sentence: UpdateSentenceInputDTO) -> ResponseDTO[SentenceResponseDTO]:
-    url = f"{SENTENCE_SERVICE_URL}/update_sentence_label"
+async def resolve_update_sentence(id: int = None, sentence: SentenceInputDTO) -> ResponseDTO[SentenceResponseDTO]:
+    url = f"{SENTENCE_SERVICE_URL}/update_sentence_label/{id}"
     data = jsonable_encoder(sentence)
     response = await call_api(url=url, method=HttpMethod.PUT, json=data)
     return ResponseDTO[SentenceResponseDTO](**response)
