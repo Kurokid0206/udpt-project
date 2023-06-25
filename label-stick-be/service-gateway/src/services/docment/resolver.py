@@ -19,8 +19,8 @@ async def resolve_update_document(input: UpdateDocumnetInputDTO) -> ResponseDTO[
     return ResponseDTO[DocumentResponseDTO](**{"data": DocumentResponseDTO(**response)})
 
 async def resolve_delete_document(id: int) -> ResponseDTO[dict]:
-    url = f"{MANAGER_SERVICE_URL}/document"
-    response = await call_api(url=url, method=HttpMethod.DELETE, json={"id": id})
+    url = f"{MANAGER_SERVICE_URL}/document/{id}"
+    response = await call_api(url=url, method=HttpMethod.DELETE)
     return ResponseDTO[dict](**{"data":response})
 
 

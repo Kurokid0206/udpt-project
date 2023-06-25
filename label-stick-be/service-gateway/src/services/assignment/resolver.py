@@ -13,7 +13,7 @@ async def resolve_create_assignment(input: CreateAssignmentInputDTO) -> Response
     return ResponseDTO[AssignmentResponseDTO](**{"data": AssignmentResponseDTO(**response)})
 
 async def resolve_update_assignment(input: UpdateAssignmentInputDTO) -> ResponseDTO[AssignmentResponseDTO]:
-    url = f"{MANAGER_SERVICE_URL}/assignment"
+    url = f"{MANAGER_SERVICE_URL}/assignment/{id}"
     data = jsonable_encoder(input)
     response = await call_api(url=url, method=HttpMethod.PATCH, json=data)
     return ResponseDTO[AssignmentResponseDTO](**{"data": AssignmentResponseDTO(**response)})
