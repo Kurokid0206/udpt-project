@@ -114,7 +114,7 @@ class Mutation:
             input: SentenceInputDTO
     ) -> ResponseDTO[SentenceResponseDTO]:
         # TODO: only manager can update sentence
-        result = resolve_update_sentence(input)
+        result = resolve_update_sentence(id, input)
         return result
 
     # Labeler

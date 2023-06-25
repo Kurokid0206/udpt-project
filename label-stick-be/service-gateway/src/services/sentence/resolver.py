@@ -13,7 +13,7 @@ async def resolve_create_sentences(sentences: SentenceInputDTO) -> ResponseDTO[S
     return ResponseDTO[list[SentenceResponseDTO]](**response)
 
 
-async def resolve_update_sentence(id: int = None, sentence: SentenceInputDTO) -> ResponseDTO[SentenceResponseDTO]:
+async def resolve_update_sentence(id: int, sentence: SentenceInputDTO) -> ResponseDTO[SentenceResponseDTO]:
     url = f"{SENTENCE_SERVICE_URL}/update_sentence_label/{id}"
     data = jsonable_encoder(sentence)
     response = await call_api(url=url, method=HttpMethod.PUT, json=data)
