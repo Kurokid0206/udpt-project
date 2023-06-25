@@ -9,7 +9,21 @@ from ..services.user.dto import (
     LoginResponseDTO,
 )
 
+from ..services.sentence.dto import (
+    SentenceInputDTO,
+    SentencesInputDTO,
+    UpdateSentenceInputDTO,
+    SentenceResponseDTO
+)
+
+from ..services.sentence_label.dto import (
+    SentenceLabelInputDTO,
+    SentenceLabelResponseDTO,
+)
+
 from ..services.user.resolver import resolve_signup, resolve_update_profile
+from ..services.sentence.resolver import resolve_create_sentences, resolve_update_sentence
+from ..services.sentence_label.resolver import resolve_create_sentence_label, resolve_delete_sentence_label
 
 
 @strawberry.type
@@ -37,18 +51,18 @@ class Mutation:
     # Manager
     @strawberry.mutation
     def create_project(
-        self,
-        name: str,
-        description: str,
+            self,
+            name: str,
+            description: str,
     ) -> ResponseDTO[UserResponseDTO]:
         return {}
 
     @strawberry.mutation
     def update_project(
-        self,
-        id: str,
-        name: str,
-        description: str,
+            self,
+            id: str,
+            name: str,
+            description: str,
     ) -> ResponseDTO[UserResponseDTO]:
         return {}
 
@@ -87,34 +101,34 @@ class Mutation:
     # 3. call create sentences from list
     @strawberry.mutation
     def create_sentences(
-        self,
-        document_id: int,
-        sentences: list[str] = [],
-    ) -> ResponseDTO[UserResponseDTO]:
-        return {}
+            self,
+            input: SentencesInputDTO
+    ) -> ResponseDTO[list[SentenceResponseDTO]]:
+        result = resolve_create_sentences(input)
+        return result
 
     @strawberry.mutation
     def update_sentence(
-        self,
-        id: int,
-        sentence: str,
-    ) -> ResponseDTO[UserResponseDTO]:
+            self,
+            input: UpdateSentenceInputDTO
+    ) -> ResponseDTO[SentenceResponseDTO]:
         # TODO: only manager can update sentence
-        return {}
+        result = resolve_update_sentence(input)
+        return result
 
     # Labeler
     @strawberry.mutation
     def create_sentence_label(
-        self,
-        sentence_id: int,
-        label_id: int,
-    ) -> ResponseDTO[UserResponseDTO]:
-        return {}
+            self,
+            input: SentenceLabelInputDTO
+    ) -> ResponseDTO[SentenceLabelResponseDTO]:
+        result = resolve_create_sentence_label(input)
+        return result
 
     @strawberry.mutation
     def delete_sentence_label(
-        self,
-        sentence_id: int,
-        label_id: int,
-    ) -> ResponseDTO[UserResponseDTO]:
-        return {}
+            self,
+            input: SentenceInputDTO
+    ) -> ResponseDTO[SentenceLabelResponseDTO]:
+        result = resolve_delete_sentence_label(input)
+        return result
