@@ -1,7 +1,6 @@
 import strawberry
-from pydantic import BaseModel
 
 
 @strawberry.input
-class ProjectUserDTO(BaseModel):
+class ProjectUserDTO:
     ids: list[int] = []

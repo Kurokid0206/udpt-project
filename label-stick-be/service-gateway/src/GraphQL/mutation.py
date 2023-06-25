@@ -9,7 +9,7 @@ from ..services.user.dto import (
     LoginResponseDTO,
 )
 
-from ..services.user.resolver import resolve_signup
+from ..services.user.resolver import resolve_signup, resolve_update_profile
 
 
 @strawberry.type
@@ -22,12 +22,12 @@ class Mutation:
     @strawberry.mutation
     def signup(self, input: UserInputDTO) -> ResponseDTO[UserResponseDTO]:
         result = resolve_signup(input)
-        print(result)
         return result
 
     @strawberry.mutation
     def update_profile(self, input: UserInputDTO) -> ResponseDTO[UserResponseDTO]:
-        return {}
+        result = resolve_update_profile(input)
+        return result
 
     # Admin
     @strawberry.mutation

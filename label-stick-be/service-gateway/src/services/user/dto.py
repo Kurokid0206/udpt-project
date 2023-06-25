@@ -1,16 +1,15 @@
 import strawberry
-from pydantic import BaseModel
 from enum import Enum
 
 
 @strawberry.input
-class LoginDTO(BaseModel):
+class LoginDTO:
     username: str = None
     password: str = None
 
 
 @strawberry.type
-class LoginResponseDTO(BaseModel):
+class LoginResponseDTO:
     access_token: str = None
     refresh_token: str = None
 

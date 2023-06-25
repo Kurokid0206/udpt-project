@@ -48,7 +48,7 @@ async def call_api(
                 error_fields=[response.json()],
             )
 
-        # return response.json()
+        return response.json()
         return {
             "status_code": 200,
             "message": "success",
