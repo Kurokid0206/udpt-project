@@ -1,5 +1,6 @@
 import strawberry
 from pydantic import BaseModel
+from enum import Enum
 
 
 @strawberry.input
@@ -14,13 +15,27 @@ class LoginResponseDTO(BaseModel):
     refresh_token: str = None
 
 
+@strawberry.enum
+class UserRoleEnum(Enum):
+    ADMIN = "ADMIN"
+    MANAGER = "MANAGER"
+    USER_LV_1 = "USER_LV_1"
+    USER_LV_2 = "USER_LV_2"
+    USER_LV_3 = "USER_LV_3"
+
+
 @strawberry.input
-class UserInputDTO(LoginDTO):
+class UserInputDTO:
     username: str = None
+    email: str = None
     password: str = None
+    first_name: str = None
+    last_name: str = None
+    role: UserRoleEnum = UserRoleEnum.USER_LV_1
 
 
 @strawberry.type
-class UserResponseDTO(BaseModel):
+class UserResponseDTO:
+    user_id: str = None
     username: str = None
-    role: str = None
+    email: str = None

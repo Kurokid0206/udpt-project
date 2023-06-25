@@ -19,9 +19,12 @@ async def get_user(session: AsyncSession = Depends(get_session)):
     return users
 
 
-@router.post("/", status_code=200, response_model=User)
-def create_user(user_data: UserCreate, session: AsyncSession = Depends(get_session)):
-    print(user_data)
+@router.post("/signup", status_code=200, response_model=User)
+async def signup_user(
+    user_data: UserCreate,
+    session: AsyncSession = Depends(get_session),
+) -> User:
+    return {"username": "string", "email": "string", "user_id": 0}
     user = user_repository.create(obj_in=user_data, db=session)
     return user
 

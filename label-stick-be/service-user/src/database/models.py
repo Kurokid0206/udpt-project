@@ -11,6 +11,14 @@ from enum import Enum
 Base = declarative_base()
 
 
+class UserRoleEnum(str, Enum):
+    ADMIN = "ADMIN"
+    MANAGER = "MANAGER"
+    USER_LV_1 = "USER_LV_1"
+    USER_LV_2 = "USER_LV_2"
+    USER_LV_3 = "USER_LV_3"
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -20,7 +28,7 @@ class User(Base):
     email = Column(String(50), nullable=False, unique=True)
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
-    role = Column(ENUM("admin", "user", name="role_enum"), nullable=False)
+    role = Column(ENUM(UserRoleEnum, name="user_role_enum"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(
         DateTime(timezone=True),
@@ -32,46 +40,4 @@ class User(Base):
         return f"<User(id={self.id}, username={self.username})>"
 
     # Relationship
-    tasks = relationship("UserTask", back_populates="user")
-
-
-class TaskStatusEnum(str, Enum):
-    PENDING = "pending"
-    IN_PROGRESS = "in_progress"
-    DONE = "done"
-
-
-class Task(Base):
-    __tablename__ = "tasks"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    description = Column(String, index=True)
-    status = Column(ENUM(TaskStatusEnum), default=TaskStatusEnum.PENDING)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-    )
-
-    # Relationship
-    user = relationship("UserTask", back_populates="tasks")
-
-
-class UserTask(Base):
-    __tablename__ = "user_tasks"
-
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    task_id = Column(Integer, ForeignKey("tasks.id"))
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-    )
-
-    # Relationship
-    user = relationship("User", back_populates="tasks")
-    tasks = relationship("Task", back_populates="user")
+    # tasks = relationship("UserTask", back_populates="user")

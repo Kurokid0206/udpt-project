@@ -30,30 +30,30 @@ class Query:
         return {}
 
     @strawberry.field
-    def get_projects(self, filter: Optional[ProjectUserDTO] = None):
+    def get_projects(self, filter: Optional[ProjectUserDTO] = None) -> HealthCheck:
         return {}
 
     @strawberry.field
-    def get_documents(self):
+    def get_documents(self) -> HealthCheck:
         # TODO: allow get status of assignment in document
         return {}
 
     # Labeler
     @strawberry.field
-    def get_assignments(self):
+    def get_assignments(self) -> HealthCheck:
         return {}
 
     @strawberry.field
-    def get_sentences(self):
+    def get_sentences(self) -> HealthCheck:
         # TODO: allow get labels of sentence
         return {}
 
-    @strawberry.field
-    def get_labels(self, filter: Optional[LabelFilterDTO]):
-        return {}
+    # @strawberry.field
+    # def get_labels(self, filter: Optional[LabelFilterDTO]):
+    #     return {}
 
     @strawberry.field
-    def find_sentence_by_key(self):
+    def find_sentence_by_key(self) -> HealthCheck:
         # TODO: allow get project id and document id
         return {}
 

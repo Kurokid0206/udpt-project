@@ -9,8 +9,11 @@ class UserBase(BaseModel):
 
 
 class UserRoleEnum(str, Enum):
-    ADMIN = "admin"
-    USER = "user"
+    ADMIN = "ADMIN"
+    MANAGER = "MANAGER"
+    USER_LV_1 = "USER_LV_1"
+    USER_LV_2 = "USER_LV_2"
+    USER_LV_3 = "USER_LV_3"
 
 
 class UserCreate(UserBase):

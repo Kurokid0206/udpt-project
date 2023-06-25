@@ -9,6 +9,8 @@ from ..services.user.dto import (
     LoginResponseDTO,
 )
 
+from ..services.user.resolver import resolve_signup
+
 
 @strawberry.type
 class Mutation:
@@ -19,7 +21,9 @@ class Mutation:
 
     @strawberry.mutation
     def signup(self, input: UserInputDTO) -> ResponseDTO[UserResponseDTO]:
-        return {}
+        result = resolve_signup(input)
+        print(result)
+        return result
 
     @strawberry.mutation
     def update_profile(self, input: UserInputDTO) -> ResponseDTO[UserResponseDTO]:
@@ -53,7 +57,7 @@ class Mutation:
         return {}
 
     @strawberry.mutation
-    def add_user_to_project(self):
+    def add_user_to_project(self) -> ResponseDTO[UserResponseDTO]:
         return {}
 
     # Document
@@ -85,7 +89,7 @@ class Mutation:
     def create_sentences(
         self,
         document_id: int,
-        sentences: list[str],
+        sentences: list[str] = [],
     ) -> ResponseDTO[UserResponseDTO]:
         return {}
 
