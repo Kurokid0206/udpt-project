@@ -7,15 +7,15 @@ from fastapi.encoders import jsonable_encoder
 
 
 async def resolve_create_assignment(input: CreateAssignmentInputDTO) -> ResponseDTO[AssignmentResponseDTO]:
-    url = f"{MANAGER_SERVICE_URL}/assignment/create"
+    url = f"{MANAGER_SERVICE_URL}/assignment"
     data = jsonable_encoder(input)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
     return ResponseDTO[AssignmentResponseDTO](**{"data": AssignmentResponseDTO(**response)})
 
 async def resolve_update_assignment(input: UpdateAssignmentInputDTO) -> ResponseDTO[AssignmentResponseDTO]:
-    url = f"{MANAGER_SERVICE_URL}/assignment/update"
+    url = f"{MANAGER_SERVICE_URL}/assignment"
     data = jsonable_encoder(input)
-    response = await call_api(url=url, method=HttpMethod.POST, json=data)
+    response = await call_api(url=url, method=HttpMethod.PATCH, json=data)
     return ResponseDTO[AssignmentResponseDTO](**{"data": AssignmentResponseDTO(**response)})
 
 
