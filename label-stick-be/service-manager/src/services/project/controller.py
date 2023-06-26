@@ -19,8 +19,17 @@ async def create_project(
 @router.patch("/:id", response_model=Project)
 async def create_project(
     id: int,
-    input: ProjectCreate,
+    input: ProjectUpdate,
     session: AsyncSession = Depends(get_session),
 ) -> Project:
     project = project_repository.update(session, db_obj_id=id, obj_in=input)
+    return project
+
+
+@router.delete("/:id", response_model=Project)
+async def create_project(
+    id: int,
+    session: AsyncSession = Depends(get_session),
+) -> Project:
+    project = project_repository.remove(session, id=id)
     return project
