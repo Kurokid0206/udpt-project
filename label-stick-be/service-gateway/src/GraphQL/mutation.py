@@ -50,6 +50,11 @@ from ..services.sentence_label.dto import (
     SentenceLabelResponseDTO,
 )
 
+from ..services.label.dto import (
+    LabelInputDTO,
+    LabelResponseDTO
+)
+
 from ..services.user.resolver import resolve_signup, resolve_update_profile
 from ..services.sentence.resolver import (
     resolve_create_sentences,
@@ -58,6 +63,12 @@ from ..services.sentence.resolver import (
 from ..services.sentence_label.resolver import (
     resolve_create_sentence_label,
     resolve_delete_sentence_label,
+)
+
+from ..services.label.resolver import (
+    resolve_create_label,
+    resolve_update_label,
+    resolve_delete_label,
 )
 
 
@@ -177,4 +188,24 @@ class Mutation:
     @strawberry.mutation
     def delete_sentence_label(self, id: int) -> ResponseDTO[StatusResponseDTO]:
         result = resolve_delete_sentence_label(id)
+        return result
+
+    # Label
+    @strawberry.mutation
+    def create_label(
+        self, input: LabelInputDTO
+    ) -> ResponseDTO[LabelResponseDTO]:
+        result = resolve_create_label(input)
+        return result
+ 
+    @strawberry.mutation
+    def update_label(
+        self, id: int, input: LabelInputDTO
+    ) -> ResponseDTO[StatusResponseDTO]:
+        result = resolve_update_label(id, input)
+        return result
+
+    @strawberry.mutation
+    def delete_label(self, id: int) -> ResponseDTO[StatusResponseDTO]:
+        result = resolve_delete_label(id)
         return result

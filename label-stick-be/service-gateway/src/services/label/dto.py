@@ -2,11 +2,12 @@ import strawberry
 from pydantic import BaseModel
 
 
-@strawberry.type
-class Labeler:
+@strawberry.input
+class LabelInputDTO(BaseModel):
     name: str = None
 
 
-@strawberry.input
-class LabelerFilterDTO:
+@strawberry.type
+class SentenceResponseDTO:
+    id: int = None
     name: str = None
