@@ -1,13 +1,13 @@
-from typing import  Optional
+from typing import Optional
 from strawberry.file_uploads import Upload
 import strawberry
-
 
 
 @strawberry.enum
 class AssignmentTypeEnum:
     LABELING = "LABELING"
     REVIEW = "REVIEW"
+
 
 @strawberry.type
 class AssignmentResponseDTO:
@@ -21,6 +21,7 @@ class AssignmentResponseDTO:
     create_at: str
     create_at: str
 
+
 @strawberry.input
 class CreateAssignmentInputDTO:
     name: str
@@ -30,9 +31,10 @@ class CreateAssignmentInputDTO:
     from_date: str
     to_date: str
 
+
 @strawberry.input
 class UpdateAssignmentInputDTO:
-    id: int
+    # id: int
     name: Optional[str]
     sentence_ids: Optional[list[int]]
     user_id: Optional[int]

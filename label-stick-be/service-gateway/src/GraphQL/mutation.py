@@ -1,7 +1,22 @@
-from ..services.assignment.resolver import resolve_create_assignment, resolve_update_assignment
-from ..services.assignment.dto import AssignmentResponseDTO, CreateAssignmentInputDTO, UpdateAssignmentInputDTO
-from ..services.docment.resolver import resolve_create_document, resolve_delete_document, resolve_update_document
-from ..services.docment.dto import CreateDocumentInputDTO, DocumentResponseDTO, UpdateDocumnetInputDTO
+from ..services.assignment.resolver import (
+    resolve_create_assignment,
+    resolve_update_assignment,
+)
+from ..services.assignment.dto import (
+    AssignmentResponseDTO,
+    CreateAssignmentInputDTO,
+    UpdateAssignmentInputDTO,
+)
+from ..services.document.resolver import (
+    resolve_create_document,
+    resolve_delete_document,
+    resolve_update_document,
+)
+from ..services.document.dto import (
+    CreateDocumentInputDTO,
+    DocumentResponseDTO,
+    UpdateDocumentInputDTO,
+)
 import strawberry
 from strawberry.file_uploads import Upload
 
@@ -66,13 +81,20 @@ class Mutation:
 
     # Document
     @strawberry.mutation
-    def create_document(self, input: CreateDocumentInputDTO) -> ResponseDTO[DocumentResponseDTO]:
+    def create_document(
+        self,
+        input: CreateDocumentInputDTO,
+    ) -> ResponseDTO[DocumentResponseDTO]:
         result = resolve_create_document(input)
         return result
 
     @strawberry.mutation
-    def update_document(self, input: UpdateDocumnetInputDTO) -> ResponseDTO[DocumentResponseDTO]:
-        result = resolve_update_document(input)
+    def update_document(
+        self,
+        id: int,
+        input: UpdateDocumentInputDTO,
+    ) -> ResponseDTO[DocumentResponseDTO]:
+        result = resolve_update_document(id, input)
         return result
 
     @strawberry.mutation
@@ -81,13 +103,17 @@ class Mutation:
         return result
 
     @strawberry.mutation
-    def create_assignment(self, input: CreateAssignmentInputDTO) -> ResponseDTO[AssignmentResponseDTO]:
+    def create_assignment(
+        self, input: CreateAssignmentInputDTO
+    ) -> ResponseDTO[AssignmentResponseDTO]:
         result = resolve_create_assignment(input)
         return result
 
     @strawberry.mutation
-    def update_assignment(self, input: UpdateAssignmentInputDTO) -> ResponseDTO[UserResponseDTO]:
-        result = resolve_update_assignment(input)
+    def update_assignment(
+        self, id: int, input: UpdateAssignmentInputDTO
+    ) -> ResponseDTO[UserResponseDTO]:
+        result = resolve_update_assignment(id, input)
         return result
 
     # TODO: create list of sentences.
