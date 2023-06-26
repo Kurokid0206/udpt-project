@@ -23,9 +23,3 @@ class SentenceLabelResponseDTO:
     sentence_id: int = None
     label_id: int = None
     updated_by: int = None
-
-
-@strawberry.type
-class StatusSentenceLabelResponseDTO:
-    success: bool = True
-    message: str = "OK"

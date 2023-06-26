@@ -1,8 +1,9 @@
+from pydantic import BaseModel
 import strawberry
 
 
 @strawberry.input
-class SentencesInputDTO:
+class SentencesInputDTO(BaseModel):
     document_id: int = None
     contents: list[str] = []
 

@@ -1,10 +1,11 @@
+from enum import Enum
 from typing import Optional
 from strawberry.file_uploads import Upload
 import strawberry
 
 
 @strawberry.enum
-class DocumentTypeEnum:
+class DocumentTypeEnum(Enum):
     TEXT = "TEXT"
     QUESTION = "QUESTION"
     TRANSLATE = "TRANSLATE"

@@ -3,10 +3,9 @@ from fastapi.encoders import jsonable_encoder
 from .dto import (
     SentenceLabelInputDTO,
     SentenceLabelResponseDTO,
-    StatusSentenceLabelResponseDTO,
 )
 from ...configs.base import SENTENCE_SERVICE_URL
-from ...utils.dto import ResponseDTO
+from ...utils.dto import ResponseDTO, StatusResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
 
 
@@ -21,7 +20,7 @@ async def resolve_create_sentence_label(
 
 async def resolve_delete_sentence_label(
     id: int = None,
-) -> ResponseDTO[StatusSentenceLabelResponseDTO]:
+) -> ResponseDTO[StatusResponseDTO]:
     url = f"{SENTENCE_SERVICE_URL}/delete_sentence_label/{id}"
     response = await call_api(url=url, method=HttpMethod.DELETE)
-    return ResponseDTO[StatusSentenceLabelResponseDTO](**response)
+    return ResponseDTO[StatusResponseDTO](**response)

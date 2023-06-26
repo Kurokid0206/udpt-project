@@ -1,3 +1,5 @@
+import strawberry
+
 from ..services.assignment.resolver import (
     resolve_create_assignment,
     resolve_update_assignment,
@@ -17,10 +19,8 @@ from ..services.document.dto import (
     DocumentResponseDTO,
     UpdateDocumentInputDTO,
 )
-import strawberry
-from strawberry.file_uploads import Upload
 
-from ..utils.dto import ResponseDTO
+from ..utils.dto import ResponseDTO, StatusResponseDTO
 from ..services.user.dto import (
     UserResponseDTO,
     LoginDTO,
@@ -37,7 +37,6 @@ from ..services.sentence.dto import (
 from ..services.sentence_label.dto import (
     SentenceLabelInputDTO,
     SentenceLabelResponseDTO,
-    StatusSentenceLabelResponseDTO,
 )
 
 from ..services.user.resolver import resolve_signup, resolve_update_profile
@@ -70,7 +69,7 @@ class Mutation:
 
     # Admin
     @strawberry.mutation
-    def delete_user(self, id: str) -> ResponseDTO[UserResponseDTO]:
+    def delete_user(self, id: str) -> ResponseDTO[StatusResponseDTO]:
         return {}
 
     # Manager
@@ -118,7 +117,7 @@ class Mutation:
         return result
 
     @strawberry.mutation
-    def delete_document(self, id: int) -> ResponseDTO[dict]:
+    def delete_document(self, id: int) -> ResponseDTO[StatusResponseDTO]:
         result = resolve_delete_document(id)
         return result
 
@@ -164,8 +163,6 @@ class Mutation:
         return result
 
     @strawberry.mutation
-    def delete_sentence_label(
-        self, id: int
-    ) -> ResponseDTO[StatusSentenceLabelResponseDTO]:
+    def delete_sentence_label(self, id: int) -> ResponseDTO[StatusResponseDTO]:
         result = resolve_delete_sentence_label(id)
         return result

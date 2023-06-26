@@ -1,10 +1,11 @@
 from typing import Optional
 from strawberry.file_uploads import Upload
 import strawberry
+from enum import Enum
 
 
 @strawberry.enum
-class AssignmentTypeEnum:
+class AssignmentTypeEnum(Enum):
     LABELING = "LABELING"
     REVIEW = "REVIEW"
 
