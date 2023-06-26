@@ -38,7 +38,7 @@ class User(Base):
 
     # Relationship
     projects = relationship("ProjectUser", back_populates="users")
-    assignments = relationship("Assignment", back_populates="users")
+    assignments = relationship("Assignment", back_populates="user")
 
     def __repr__(self):
         return f"<User(id={self.id}, username={self.username})>"
