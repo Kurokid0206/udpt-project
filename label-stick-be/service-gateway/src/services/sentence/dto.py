@@ -13,7 +13,6 @@ class SentenceInputDTO:
     content: str = None
 
 
-
 @strawberry.type
 class SentenceResponseDTO:
     id: int = None

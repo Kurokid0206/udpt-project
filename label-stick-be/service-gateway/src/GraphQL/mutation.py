@@ -12,18 +12,24 @@ from ..services.user.dto import (
 from ..services.sentence.dto import (
     SentenceInputDTO,
     SentencesInputDTO,
-    SentenceResponseDTO
+    SentenceResponseDTO,
 )
 
 from ..services.sentence_label.dto import (
     SentenceLabelInputDTO,
     SentenceLabelResponseDTO,
-    StatusSentenceLabelResponseDTO
+    StatusSentenceLabelResponseDTO,
 )
 
 from ..services.user.resolver import resolve_signup, resolve_update_profile
-from ..services.sentence.resolver import resolve_create_sentences, resolve_update_sentence
-from ..services.sentence_label.resolver import resolve_create_sentence_label, resolve_delete_sentence_label
+from ..services.sentence.resolver import (
+    resolve_create_sentences,
+    resolve_update_sentence,
+)
+from ..services.sentence_label.resolver import (
+    resolve_create_sentence_label,
+    resolve_delete_sentence_label,
+)
 
 
 @strawberry.type
@@ -51,18 +57,18 @@ class Mutation:
     # Manager
     @strawberry.mutation
     def create_project(
-            self,
-            name: str,
-            description: str,
+        self,
+        name: str,
+        description: str,
     ) -> ResponseDTO[UserResponseDTO]:
         return {}
 
     @strawberry.mutation
     def update_project(
-            self,
-            id: str,
-            name: str,
-            description: str,
+        self,
+        id: str,
+        name: str,
+        description: str,
     ) -> ResponseDTO[UserResponseDTO]:
         return {}
 
@@ -101,17 +107,14 @@ class Mutation:
     # 3. call create sentences from list
     @strawberry.mutation
     def create_sentences(
-            self,
-            input: SentencesInputDTO
+        self, input: SentencesInputDTO
     ) -> ResponseDTO[list[SentenceResponseDTO]]:
         result = resolve_create_sentences(input)
         return result
 
     @strawberry.mutation
     def update_sentence(
-            self,
-            id: int,
-            input: SentenceInputDTO
+        self, id: int, input: SentenceInputDTO
     ) -> ResponseDTO[SentenceResponseDTO]:
         # TODO: only manager can update sentence
         result = resolve_update_sentence(id, input)
@@ -120,16 +123,14 @@ class Mutation:
     # Labeler
     @strawberry.mutation
     def create_sentence_label(
-            self,
-            input: SentenceLabelInputDTO
+        self, input: SentenceLabelInputDTO
     ) -> ResponseDTO[SentenceLabelResponseDTO]:
         result = resolve_create_sentence_label(input)
         return result
 
     @strawberry.mutation
     def delete_sentence_label(
-            self,
-            id: int
+        self, id: int
     ) -> ResponseDTO[StatusSentenceLabelResponseDTO]:
         result = resolve_delete_sentence_label(id)
         return result
