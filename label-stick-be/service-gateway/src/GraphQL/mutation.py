@@ -1,5 +1,16 @@
 import strawberry
 
+from ..services.project.resolver import (
+    resolve_create_project,
+    resolve_update_project,
+    resolve_delete_project,
+)
+from ..services.project.dto import (
+    CreateProjectDTO,
+    ProjectResponseDTO,
+    UpdateProjectDTO,
+)
+
 from ..services.assignment.resolver import (
     resolve_create_assignment,
     resolve_update_assignment,
@@ -76,23 +87,24 @@ class Mutation:
     @strawberry.mutation
     def create_project(
         self,
-        name: str,
-        description: str,
+        input: CreateProjectDTO,
     ) -> ResponseDTO[UserResponseDTO]:
-        return {}
+        result = resolve_create_project(input)
+        return result
 
     @strawberry.mutation
     def update_project(
         self,
-        id: str,
-        name: str,
-        description: str,
+        id: int,
+        input: UpdateProjectDTO,
     ) -> ResponseDTO[UserResponseDTO]:
-        return {}
+        result = resolve_update_project(id, input)
+        return result
 
     @strawberry.mutation
-    def delete_project(self, id: str) -> ResponseDTO[UserResponseDTO]:
-        return {}
+    def delete_project(self, id: int) -> ResponseDTO[StatusResponseDTO]:
+        result = resolve_delete_project(id)
+        return result
 
     @strawberry.mutation
     def add_user_to_project(self) -> ResponseDTO[UserResponseDTO]:
