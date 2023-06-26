@@ -32,7 +32,7 @@ def get_url():
     """Function create database connection string"""
     user = os.getenv("POSTGRES_USER", "postgres")
     password = os.getenv("POSTGRES_PASSWORD", "postgres")
-    server = os.getenv("POSTGRES_SERVER", "localhost")
+    server = os.getenv("POSTGRES_SERVER", "103.176.179.83")
     db = os.getenv("POSTGRES_DB", "postgres")
     return f"postgresql://{user}:{password}@{server}/{db}"
 

@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from .services.tasks.controller import router as task_router
+from .services.project.controller import router as project_router
 
 app = FastAPI()
-app.include_router(task_router)
+app.include_router(project_router)
 
 
 @app.get("/")
