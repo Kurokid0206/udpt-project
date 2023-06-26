@@ -8,6 +8,6 @@ class LabelInputDTO(BaseModel):
 
 
 @strawberry.type
-class SentenceResponseDTO:
+class LabelResponseDTO:
     id: int = None
     name: str = None

@@ -6,8 +6,8 @@ from fastapi.encoders import jsonable_encoder
 
 
 async def resolve_create_sentences(
-    sentences: SentenceInputDTO,
-) -> ResponseDTO[SentenceResponseDTO]:
+    sentences: list[SentenceInputDTO],
+) -> ResponseDTO[list[SentenceResponseDTO]]:
     url = f"{SENTENCE_SERVICE_URL}/create_sentences"
     data = jsonable_encoder(sentences)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
@@ -18,7 +18,7 @@ async def resolve_update_sentence(
     id: int,
     sentence: SentenceInputDTO,
 ) -> ResponseDTO[SentenceResponseDTO]:
-    url = f"{SENTENCE_SERVICE_URL}/update_sentence_label/{id}"
+    url = f"{SENTENCE_SERVICE_URL}/update_sentence/{id}"
     data = jsonable_encoder(sentence)
     response = await call_api(url=url, method=HttpMethod.PUT, json=data)
     return ResponseDTO[SentenceResponseDTO](**response)
