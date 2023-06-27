@@ -102,13 +102,19 @@ class ProjectUser(Base):
 
 class DocumentTypeEnum(str, Enum):
     QUESTION = "QUESTION"
+    TEXT = "TEXT"
+    TRANSLATE = "TRANSLATE"
+    ENTITY = "ENTITY"
+    SYNONYMOUS = "SYNONYMOUS"
+    TRUE_FALSE = "TRUE_FALSE"
+    ANSWER = "ANSWER"
 
 
 class Document(Base):
     __tablename__ = "documents"
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
-    document_url = Column(String(50))
+    name = Column(String(255), nullable=False, unique=True)
+    document_url = Column(String(255))
     document_type = Column(
         ENUM(DocumentTypeEnum, name="document_type_enum"), nullable=False
     )

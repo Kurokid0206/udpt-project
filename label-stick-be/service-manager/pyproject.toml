@@ -13,6 +13,8 @@ alembic = "^1.11.1"
 psycopg2-binary = "^2.9.6"
 uvicorn = "^0.22.0"
 pydantic = "^1.10.9"
+minio = "^7.1.15"
+python-multipart = "^0.0.6"
 
 
 [build-system]

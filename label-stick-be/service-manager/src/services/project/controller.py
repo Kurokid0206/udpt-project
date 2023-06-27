@@ -38,7 +38,7 @@ async def create_project(
     return project
 
 
-@router.patch("/:id", response_model=Project)
+@router.patch("/{id}", response_model=Project)
 async def create_project(
     id: int,
     input: ProjectUpdate,
@@ -48,7 +48,7 @@ async def create_project(
     return project
 
 
-@router.delete("/:id", response_model=Project)
+@router.delete("/{id}", response_model=Project)
 async def create_project(
     id: int,
     session: AsyncSession = Depends(get_session),

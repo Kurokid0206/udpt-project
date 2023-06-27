@@ -2,7 +2,7 @@
 
 Revision ID: 1
 Revises: 
-Create Date: 2023-06-27 13:49:32.157087
+Create Date: 2023-06-27 20:42:11.084830
 
 """
 from alembic import op
@@ -67,8 +67,8 @@ def upgrade() -> None:
     op.create_table('documents',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
-    sa.Column('document_url', sa.String(length=50), nullable=True),
-    sa.Column('document_type', postgresql.ENUM('QUESTION', name='document_type_enum'), nullable=False),
+    sa.Column('document_url', sa.String(length=255), nullable=True),
+    sa.Column('document_type', postgresql.ENUM('QUESTION', 'TEXT', 'TRANSLATE', 'ENTITY', 'SYNONYMOUS', 'TRUE_FALSE', 'ANSWER', name='document_type_enum'), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
