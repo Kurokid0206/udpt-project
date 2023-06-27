@@ -21,3 +21,5 @@ ti-pt
 ## DTO for project API
 
 ## DTO for sentence API
+
+seaweedfs URL: localhost:8888
