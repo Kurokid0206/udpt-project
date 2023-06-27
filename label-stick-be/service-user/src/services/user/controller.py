@@ -24,7 +24,7 @@ async def signup_user(
     user_data: UserCreate,
     session: AsyncSession = Depends(get_session),
 ) -> User:
-    return {"username": "string", "email": "string", "user_id": 0}
+    # return {"username": "string", "email": "string", "user_id": 0}
     user = user_repository.create(obj_in=user_data, db=session)
     return user
 
