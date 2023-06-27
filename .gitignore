@@ -30,4 +30,4 @@ dist-ssr
 *.sw?
 
 **/postgres-data
-**/seaweed-fs-data
+**/seaweedfs-data
