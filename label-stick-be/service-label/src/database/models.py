@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.associationproxy import association_proxy
 
 from sqlalchemy.dialects.postgresql import ENUM, JSONB
 from enum import Enum
@@ -36,18 +37,24 @@ class User(Base):
         onupdate=func.now(),
     )
 
+    # Proxy
+    projects = association_proxy("project_users", "projects")
+
     # Relationship
-    projects = relationship("ProjectUser", back_populates="users")
-    assignments = relationship("Assignment", back_populates="users")
+    assignments = relationship("Assignment", back_populates="user")
 
     def __repr__(self):
         return f"<User(id={self.id}, username={self.username})>"
+
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Project(Base):
     __tablename__ = "projects"
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
+    description = Column(String(255), nullable=True)
     max_user = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(
@@ -57,12 +64,17 @@ class Project(Base):
     )
     # project_type = Column(String(50), nullable=False)
 
+    # Proxy
+    users = association_proxy("project_users", "users")
+
     # Relationship
-    users = relationship("ProjectUser", back_populates="projects")
     documents = relationship("Document", back_populates="project")
 
     def __repr__(self):
-        return f"<Project(id={self.id}, project_name={self.name})>"
+        return f"<Project(id={self.id}, project_name={self.name}, users={self.users})>"
+
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class ProjectUser(Base):
@@ -78,22 +90,31 @@ class ProjectUser(Base):
     )
 
     # Relationship
-    projects = relationship("Project", back_populates="users")
-    users = relationship("User", back_populates="projects")
+    projects = relationship("Project", backref="project_users")
+    users = relationship("User", backref="project_users")
 
     def __repr__(self):
         return f"<ProjectUser(id={self.id}, project_id={self.project_id}, user_id={self.user_id})>"
 
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class DocumentTypeEnum(str, Enum):
     QUESTION = "QUESTION"
+    TEXT = "TEXT"
+    TRANSLATE = "TRANSLATE"
+    ENTITY = "ENTITY"
+    SYNONYMOUS = "SYNONYMOUS"
+    TRUE_FALSE = "TRUE_FALSE"
+    ANSWER = "ANSWER"
 
 
 class Document(Base):
     __tablename__ = "documents"
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
-    document_url = Column(String(50))
+    name = Column(String(255), nullable=False, unique=True)
+    document_url = Column(String(255))
     document_type = Column(
         ENUM(DocumentTypeEnum, name="document_type_enum"), nullable=False
     )
@@ -112,6 +133,9 @@ class Document(Base):
     def __repr__(self):
         return f"<Document(id={self.id}, document_name={self.name})>"
 
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Label(Base):
     __tablename__ = "labels"
@@ -124,11 +148,17 @@ class Label(Base):
         onupdate=func.now(),
     )
 
-    # Relationship
-    sentences = relationship("LabelSentence", back_populates="labels")
+    # Proxy
+    sentences = association_proxy("label_sentences", "sentences")
+
+    # # Relationship
+    # sentences = relationship("LabelSentence", back_populates="labels")
 
     def __repr__(self):
         return f"<Label(id={self.id}, label_name={self.name})>"
+
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Sentence(Base):
@@ -144,12 +174,18 @@ class Sentence(Base):
         onupdate=func.now(),
     )
 
+    # Proxy
+    labels = association_proxy("label_sentences", "labels")
+
     # Relationship
     document = relationship("Document", back_populates="sentences")
-    labels = relationship("LabelSentence", back_populates="sentences")
+    # labels = relationship("LabelSentence", back_populates="sentences")
 
     def __repr__(self):
         return f"<Sentence(id={self.id}, sentence_name={self.name})>"
+
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class LabelSentenceStatusEnum(str, Enum):
@@ -176,11 +212,14 @@ class LabelSentence(Base):
     )
 
     # Relationship
-    sentences = relationship("Sentence", back_populates="labels")
-    labels = relationship("Label", back_populates="sentences")
+    sentences = relationship("Sentence", backref="labels")
+    labels = relationship("Label", backref="sentences")
 
     def __repr__(self):
         return f"<LabelSentence(id={self.id}, sentence_id={self.sentence_id}, label_id={self.label_id}, user_id={self.user_id})>"
+
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class AssignmentTypeEnum(str, Enum):
@@ -214,3 +253,6 @@ class Assignment(Base):
 
     def __repr__(self):
         return f"<Assignment(id={self.id}, assignment_name={self.name})>"
+
+    def dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

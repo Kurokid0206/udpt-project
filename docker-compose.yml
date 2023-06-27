@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
 
-  object_storage:
+  object-storage:
     image: chrislusf/seaweedfs:3.47
     container_name: label-stick-object-storage
     command:
@@ -29,8 +29,8 @@ services:
       - 8080:8080
       - 9333:9333
     volumes:
-      - ./data/seaweedfs/data:/data
-      - ./data/seaweedfs/buckets:/buckets
+      - ./data/seaweedfs-data/data:/data
+      - ./data/seaweedfs-data/buckets:/buckets
 
   service-user:
     container_name: label-stick-service-user
@@ -69,6 +69,7 @@ services:
       - ./label-stick-be/service-manager:/app/service-manager
     environment:
       - POSTGRES_SERVER=postgres
+      - STORAGE_HOST=object-storage
     depends_on:
       - postgres
 

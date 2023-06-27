@@ -1,20 +1,16 @@
 [tool.poetry]
-name = "label-stick-be"
+name = "service-worker"
 version = "0.1.0"
 description = ""
 authors = ["Phạm Tân Tị <kurokid0206@gmail.com>"]
 readme = "README.md"
-# packages = [{include = "label_stick_be"}]
+# packages = [{include = "service_worker"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.98.0"
-alembic = "^1.11.1"
-psycopg2-binary = "^2.9.6"
-uvicorn = "^0.22.0"
-pydantic = "^1.10.9"
-minio = "^7.1.15"
-python-multipart = "^0.0.6"
+celery = "^5.3.1"
+redis = "^4.6.0"
+jinja2 = "^3.1.2"
 
 
 [build-system]

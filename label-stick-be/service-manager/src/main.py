@@ -1,12 +1,16 @@
 from fastapi import FastAPI
 from .services.project.controller import router as project_router
+from .services.document.controller import router as document_router
+from .utils.storage import health_check_minio
 
 app = FastAPI()
 app.include_router(project_router)
+app.include_router(document_router)
 
 
 @app.get("/")
 async def health_check():
+    health_check_minio()
     return {"status": 200, "message": "Hello World"}
 
 
