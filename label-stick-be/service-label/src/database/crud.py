@@ -1,9 +1,11 @@
 from typing import Dict, Generic, TypeVar, Type, Any, Optional, List, Union
 
-from .models import Base
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
+from pydantic import BaseModel
+from sqlalchemy import inspect
+from sqlalchemy.orm import Session
+
+from .models import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -18,9 +20,17 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db.query(self.model).filter_by(id=id).first()
 
     def get_multi(
-        self, db: Session, *, skip: int = 0, limit: int = 100
+            self, db: Session, *, skip: int = 0, limit: int = 100
     ) -> List[ModelType]:
         return db.query(self.model).offset(skip).limit(limit).all()
+
+    def get_by_column(self, db: Session, column: str, value: Any) -> List[ModelType]:
+        mapper = inspect(self.model)
+        if column not in mapper.columns:
+            raise ValueError(f"Column '{column}' does not exist in model '{self.model.__name__}'")
+
+        filter_by = {column: value}
+        return db.query(self.model).filter_by(**filter_by).all()
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
@@ -47,11 +57,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db_objs
 
     def update(
-        self,
-        db: Session,
-        *,
-        db_obj_id: int,
-        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+            self,
+            db: Session,
+            *,
+            db_obj_id: int,
+            obj_in: Union[UpdateSchemaType, Dict[str, Any]]
     ) -> ModelType:
         db_obj = db.query(self.model).filter_by(id=db_obj_id).first()
         obj_data = jsonable_encoder(db_obj)
