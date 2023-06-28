@@ -36,7 +36,7 @@ async def create_label(
     return label
 
 
-@router.patch("/update_label/:id", response_model=Label)
+@router.patch("/update_label/{id}", response_model=Label)
 async def update_label(
     id: int,
     input: LabelUpdate,
@@ -46,7 +46,7 @@ async def update_label(
     return label
 
 
-@router.delete("/delete_label/:id", response_model=Label)
+@router.delete("/delete_label/{id}", response_model=Label)
 async def delete_label(
     id: int,
     session: AsyncSession = Depends(get_session),

@@ -49,7 +49,7 @@ async def create_sentence(
     return sentence
 
 
-@router.patch("/update_label_sentence/:id", response_model=LabelSentence)
+@router.patch("/update_label_sentence/{id}", response_model=LabelSentence)
 async def update_sentence(
     id: int,
     input: LabelSentenceUpdate,
@@ -59,7 +59,7 @@ async def update_sentence(
     return sentence
 
 
-@router.delete("/delete_label_sentence/:id", response_model=LabelSentence)
+@router.delete("/delete_label_sentence/{id}", response_model=LabelSentence)
 async def delete_sentence(
     id: int,
     session: AsyncSession = Depends(get_session),

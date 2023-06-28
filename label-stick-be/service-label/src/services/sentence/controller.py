@@ -38,7 +38,7 @@ async def create_sentences(
     return sentences
 
 
-@router.patch("/update_sentence/:id", response_model=Sentence)
+@router.patch("/update_sentence/{id}", response_model=Sentence)
 async def update_sentence(
     id: int,
     input: SentenceUpdate,
@@ -48,7 +48,7 @@ async def update_sentence(
     return sentence
 
 
-@router.delete("/delete_sentence/:id", response_model=Sentence)
+@router.delete("/delete_sentence/{id}", response_model=Sentence)
 async def delete_sentence(
     id: int,
     session: AsyncSession = Depends(get_session),
