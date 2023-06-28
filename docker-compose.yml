@@ -32,6 +32,14 @@ services:
       - ./data/seaweedfs-data/data:/data
       - ./data/seaweedfs-data/buckets:/buckets
 
+  redis:
+    image: redis:6.2.6-alpine
+    container_name: label-stick-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis-data:/data
+
   service-user:
     container_name: label-stick-service-user
     build: ./label-stick-be/service-user
@@ -110,6 +118,18 @@ services:
       - ./label-stick-be/service-gateway:/app/service-gateway
     depends_on:
       - postgres
+
+  service-worker:
+    container_name: service-worker
+    build: ./service-worker
+    ports:
+      - "8011:8011"
+    working_dir: /app/service-worker
+    command: "celery -A tasks worker -P solo -c 4 --loglevel=info"
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
 
   label-stick-fe:
     container_name: label-stick-fe

@@ -9,12 +9,10 @@ def check_connection():
             host=redis_base.host,
             port=redis_base.port,
             db=redis_base.backend_db_name,
-            password=redis_base.password,
         )
         conn.client_list()
     except Exception as e:
-        print(
-            f"Failed to connect to Redis instance at {redis_base.backend_db_name}")
+        print(f"Failed to connect to Redis instance at {redis_base.backend_db_name}")
         print(repr(e))
         return False
     finally:
@@ -29,12 +27,10 @@ def save_to_redis(key, value):
             host=redis_base.host,
             port=redis_base.port,
             db=redis_base.backend_db_name,
-            password=redis_base.password,
         )
         conn.set(key, value)
     except Exception as e:
-        print(
-            f"Failed to connect to Redis instance at {redis_base.backend_db_name}")
+        print(f"Failed to connect to Redis instance at {redis_base.backend_db_name}")
         print(repr(e))
         return False
     finally:
