@@ -1,20 +1,14 @@
 import smtplib
 import logging
-from jinja2 import Template
+from jinja2 import Template, Environment, FileSystemLoader
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.utils import formataddr
 
 SMTP_ENDPOINT = "smtp.ethereal.email"
 SMTP_PORT = 587
 SMTP_USER_NAME = "delphine75@ethereal.email"
 SMTP_PASSWORD = "p8k9wzsgDd27XFptJK"
-# smtp_server = "smtp.ethereal.email"
-# smtp_port = 587
-# user = "delphine75@ethereal.email"  # smtp user
-# password = "p8k9wzsgDd27XFptJK"  # smtp password
-# default_email_from = "delphine75@ethereal.email"
 
 
 log = logging.getLogger(__name__)
@@ -22,19 +16,13 @@ log.setLevel(logging.DEBUG)
 
 
 def send_mail(data: dict):
-    html_template = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <title>My Webpage</title>
-    </head>
-    <body>
-        <h1>Hello, Kuro!</h1>
-    </body>
-    </html>
-    """
-    # template = Template(html_template["Body"].read().decode("utf-8"))
-    template = Template(html_template)
+    import os
+
+    root = os.path.dirname(os.path.abspath(__file__))
+    templates_dir = os.path.join(root, "templates")
+    env = Environment(loader=FileSystemLoader(templates_dir))
+    template = env.get_template("index.html")
+
     send_mail_template(template.render(**data), data)
 
 

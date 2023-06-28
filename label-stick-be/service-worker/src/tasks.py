@@ -27,6 +27,8 @@ app.conf.task_queues = [Queue(name="tasks", routing_key="task.#")]
 def send(self, task_id: str, data: dict):
     logger.info(f"== API_TASK: {task_id} RUNNING...")
     data = json.loads(data)
+    print(data)
+    logger.info(data)
     send_mail(data)
 
     return 1
