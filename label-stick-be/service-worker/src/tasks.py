@@ -6,7 +6,7 @@ from kombu import Queue
 import json
 
 from celery.utils.log import get_task_logger
-from .utils.mail import send_mail
+from utils.mail import send_mail
 from utils.common import save_to_redis
 
 logger = get_task_logger(__name__)
@@ -15,18 +15,21 @@ if not check_connection():
     exit()
 
 app = Celery(
-    "tasks", broker=celery_config.BROKER_URL, backend=celery_config.BACKEND_URL
+    "tasks",
+    broker=celery_config.BROKER_URL,
+    backend=celery_config.BACKEND_URL,
 )
 
 app.conf.task_queues = [Queue(name="tasks", routing_key="task.#")]
 
 
-@app.task(name="tasks.send", bind=True)
-def send(self, msg):
-    data = json.loads(msg)
+@app.task(name="tasks.send_mail", bind=True)
+def send(self, task_id: str, data: dict):
+    logger.info(f"== API_TASK: {task_id} RUNNING...")
+    data = json.loads(data)
     send_mail(data)
 
-    return -1
+    return 1
 
 
 @app.task(name="tasks.health_check", bind=True)

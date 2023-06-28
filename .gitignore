@@ -31,3 +31,4 @@ dist-ssr
 
 **/postgres-data
 **/seaweedfs-data
+**/redis-data
