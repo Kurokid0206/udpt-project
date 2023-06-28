@@ -19,10 +19,7 @@ from ..services.document.resolver import (
     resolve_delete_document,
     resolve_update_document,
 )
-from ..services.label.dto import (
-    LabelInputDTO,
-    LabelResponseDTO
-)
+from ..services.label.dto import LabelInputDTO, LabelResponseDTO
 from ..services.label.resolver import (
     resolve_create_label,
     resolve_update_label,
@@ -88,17 +85,17 @@ class Mutation:
     # Manager
     @strawberry.mutation
     def create_project(
-            self,
-            input: CreateProjectDTO,
+        self,
+        input: CreateProjectDTO,
     ) -> ResponseDTO[UserResponseDTO]:
         result = resolve_create_project(input)
         return result
 
     @strawberry.mutation
     def update_project(
-            self,
-            id: int,
-            input: UpdateProjectDTO,
+        self,
+        id: int,
+        input: UpdateProjectDTO,
     ) -> ResponseDTO[UserResponseDTO]:
         result = resolve_update_project(id, input)
         return result
@@ -115,17 +112,17 @@ class Mutation:
     # Document
     @strawberry.mutation
     def create_document(
-            self,
-            input: CreateDocumentInputDTO,
+        self,
+        input: CreateDocumentInputDTO,
     ) -> ResponseDTO[DocumentResponseDTO]:
         result = resolve_create_document(input)
         return result
 
     @strawberry.mutation
     def update_document(
-            self,
-            id: int,
-            input: UpdateDocumentInputDTO,
+        self,
+        id: int,
+        input: UpdateDocumentInputDTO,
     ) -> ResponseDTO[DocumentResponseDTO]:
         result = resolve_update_document(id, input)
         return result
@@ -137,14 +134,14 @@ class Mutation:
 
     @strawberry.mutation
     def create_assignment(
-            self, input: CreateAssignmentInputDTO
+        self, input: CreateAssignmentInputDTO
     ) -> ResponseDTO[AssignmentResponseDTO]:
         result = resolve_create_assignment(input)
         return result
 
     @strawberry.mutation
     def update_assignment(
-            self, id: int, input: UpdateAssignmentInputDTO
+        self, id: int, input: UpdateAssignmentInputDTO
     ) -> ResponseDTO[UserResponseDTO]:
         result = resolve_update_assignment(id, input)
         return result
@@ -155,14 +152,14 @@ class Mutation:
     # 3. call create sentences from list
     @strawberry.mutation
     def create_sentences(
-            self, input: list[SentenceInputDTO]
+        self, input: list[SentenceInputDTO]
     ) -> ResponseDTO[list[SentenceResponseDTO]]:
         result = resolve_create_sentences(input)
         return result
 
     @strawberry.mutation
     def update_sentence(
-            self, id: int, input: SentenceInputDTO
+        self, id: int, input: SentenceInputDTO
     ) -> ResponseDTO[SentenceResponseDTO]:
         # TODO: only manager can update sentence
         result = resolve_update_sentence(id, input)
@@ -171,7 +168,7 @@ class Mutation:
     # Labeler
     @strawberry.mutation
     def create_label_sentence(
-            self, input: LabelSentenceInputDTO
+        self, input: LabelSentenceInputDTO
     ) -> ResponseDTO[LabelSentenceResponseDTO]:
         result = resolve_create_label_sentence(input)
         return result
@@ -183,15 +180,13 @@ class Mutation:
 
     # Label
     @strawberry.mutation
-    def create_label(
-            self, input: LabelInputDTO
-    ) -> ResponseDTO[LabelResponseDTO]:
+    def create_label(self, input: LabelInputDTO) -> ResponseDTO[LabelResponseDTO]:
         result = resolve_create_label(input)
         return result
 
     @strawberry.mutation
     def update_label(
-            self, id: int, input: LabelInputDTO
+        self, id: int, input: LabelInputDTO
     ) -> ResponseDTO[StatusResponseDTO]:
         result = resolve_update_label(id, input)
         return result
