@@ -1,21 +1,16 @@
-from pydantic import BaseModel
 import strawberry
 
 
 @strawberry.input
-class SentencesInputDTO(BaseModel):
-    document_id: int = None
-    contents: list[str] = []
-
-
-@strawberry.input
 class SentenceInputDTO:
+    name: str = None
+    sentence: str = None
     document_id: int = None
-    content: str = None
 
 
 @strawberry.type
 class SentenceResponseDTO:
     id: int = None
+    name: str = None
+    sentence: str = None
     document_id: int = None
-    content: str = None

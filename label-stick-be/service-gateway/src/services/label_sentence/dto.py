@@ -4,21 +4,21 @@ import strawberry
 
 
 @strawberry.enum
-class SentenceLabelStatusEnum(Enum):
+class LabelSentenceStatusEnum(Enum):
     IN_PROGRESS = "IN_PROGRESS"
     CONFIRMED = "CONFIRMED"
 
 
 @strawberry.input
-class SentenceLabelInputDTO:
+class LabelSentenceInputDTO:
     sentence_id: int = None
     label_id: int = None
-    status: SentenceLabelStatusEnum = SentenceLabelStatusEnum.IN_PROGRESS
+    status: LabelSentenceStatusEnum = LabelSentenceStatusEnum.IN_PROGRESS
     updated_by: int = None
 
 
 @strawberry.type
-class SentenceLabelResponseDTO:
+class LabelSentenceResponseDTO:
     id: int = None
     sentence_id: int = None
     label_id: int = None
