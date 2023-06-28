@@ -41,7 +41,6 @@ class User(Base):
     projects = association_proxy("project_users", "projects")
 
     # Relationship
-    projects = relationship("ProjectUser", back_populates="users")
     assignments = relationship("Assignment", back_populates="user")
 
     def __repr__(self):

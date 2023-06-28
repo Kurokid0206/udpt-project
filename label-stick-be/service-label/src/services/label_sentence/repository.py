@@ -7,7 +7,9 @@ from .schema import LabelSentence, LabelSentenceCreate, LabelSentenceUpdate
 from src.database.models import LabelSentence
 
 
-class CRUDLabelSentence(CRUDBase[LabelSentence, LabelSentenceCreate, LabelSentenceUpdate]):
+class CRUDLabelSentence(
+    CRUDBase[LabelSentence, LabelSentenceCreate, LabelSentenceUpdate]
+):
     pass
 
 

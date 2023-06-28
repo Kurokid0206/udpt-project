@@ -10,8 +10,8 @@ router = APIRouter(prefix="/label", tags=["label"])
 
 @router.get("/get_label/{id}", response_model=Label)
 async def get_label(
-        id: int = 0,
-        session: AsyncSession = Depends(get_session),
+    id: int = 0,
+    session: AsyncSession = Depends(get_session),
 ) -> Label:
     label = label_repository.get(db=session, id=id)
     return label
@@ -19,8 +19,8 @@ async def get_label(
 
 @router.get("/get_list_label", response_model=list[Label])
 async def get_list_label(
-        page: int = 0,
-        session: AsyncSession = Depends(get_session),
+    page: int = 0,
+    session: AsyncSession = Depends(get_session),
 ) -> list[Label]:
     skip = page * 100
     labels = label_repository.get_multi(db=session, skip=skip, limit=100)
@@ -29,8 +29,8 @@ async def get_list_label(
 
 @router.post("/create_label", response_model=Label)
 async def create_label(
-        input: LabelCreate,
-        session: AsyncSession = Depends(get_session),
+    input: LabelCreate,
+    session: AsyncSession = Depends(get_session),
 ) -> Label:
     label = label_repository.create(session, obj_in=input)
     return label
@@ -38,9 +38,9 @@ async def create_label(
 
 @router.patch("/update_label/:id", response_model=Label)
 async def update_label(
-        id: int,
-        input: LabelUpdate,
-        session: AsyncSession = Depends(get_session),
+    id: int,
+    input: LabelUpdate,
+    session: AsyncSession = Depends(get_session),
 ) -> Label:
     label = label_repository.update(session, db_obj_id=id, obj_in=input)
     return label
@@ -48,8 +48,8 @@ async def update_label(
 
 @router.delete("/delete_label/:id", response_model=Label)
 async def delete_label(
-        id: int,
-        session: AsyncSession = Depends(get_session),
+    id: int,
+    session: AsyncSession = Depends(get_session),
 ) -> Label:
     label = label_repository.remove(session, id=id)
     return label

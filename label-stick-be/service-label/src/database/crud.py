@@ -20,14 +20,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db.query(self.model).filter_by(id=id).first()
 
     def get_multi(
-            self, db: Session, *, skip: int = 0, limit: int = 100
+        self, db: Session, *, skip: int = 0, limit: int = 100
     ) -> List[ModelType]:
         return db.query(self.model).offset(skip).limit(limit).all()
 
     def get_by_column(self, db: Session, column: str, value: Any) -> List[ModelType]:
         mapper = inspect(self.model)
         if column not in mapper.columns:
-            raise ValueError(f"Column '{column}' does not exist in model '{self.model.__name__}'")
+            raise ValueError(
+                f"Column '{column}' does not exist in model '{self.model.__name__}'"
+            )
 
         filter_by = {column: value}
         return db.query(self.model).filter_by(**filter_by).all()
@@ -40,7 +42,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def create_many(self, db: Session, obj_list: List[CreateSchemaType]) -> List[ModelType]:
+    def create_many(
+        self, db: Session, obj_list: List[CreateSchemaType]
+    ) -> List[ModelType]:
         db_objs = []
 
         for obj_in in obj_list:
@@ -57,11 +61,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db_objs
 
     def update(
-            self,
-            db: Session,
-            *,
-            db_obj_id: int,
-            obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+        self,
+        db: Session,
+        *,
+        db_obj_id: int,
+        obj_in: Union[UpdateSchemaType, Dict[str, Any]],
     ) -> ModelType:
         db_obj = db.query(self.model).filter_by(id=db_obj_id).first()
         obj_data = jsonable_encoder(db_obj)
