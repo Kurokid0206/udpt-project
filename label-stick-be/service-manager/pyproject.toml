@@ -8,11 +8,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.98.0"
 alembic = "^1.11.1"
-psycopg2-binary = "^2.9.6"
+fastapi = "^0.98.0"
+pydantic = {extras = ["email"], version = "^1.10.9"}
 uvicorn = "^0.22.0"
-pydantic = "^1.10.9"
+psycopg2-binary = "^2.9.6"
+pyjwt = {extras = ["crypto"], version = "^2.7.0"}
 minio = "^7.1.15"
 python-multipart = "^0.0.6"
 

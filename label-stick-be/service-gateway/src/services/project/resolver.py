@@ -5,6 +5,12 @@ from ...configs.base import MANAGER_SERVICE_URL
 from fastapi.encoders import jsonable_encoder
 
 
+async def resolve_get_projects() -> ResponseDTO[list[ProjectResponseDTO]]:
+    url = f"{MANAGER_SERVICE_URL}/project"
+    response = await call_api(url=url, method=HttpMethod.GET)
+    return ResponseDTO[list[ProjectResponseDTO]](**{"data": []})
+
+
 async def resolve_create_project(
     input: CreateProjectDTO,
 ) -> ResponseDTO[ProjectResponseDTO]:

@@ -2,7 +2,8 @@ from typing import Optional
 import strawberry
 
 from ..utils.dto import ResponseDTO
-from ..services.label.dto import LabelerFilterDTO, Labeler
+
+# from ..services.label.dto import LabelerFilterDTO, Labeler
 
 from ..services.project.dto import ProjectUserDTO
 
@@ -25,8 +26,8 @@ class Query:
     @strawberry.field
     def get_labelers(
         self,
-        filter: Optional[LabelerFilterDTO] = None,
-    ) -> ResponseDTO[list[Labeler]]:
+        # filter: Optional[LabelerFilterDTO] = None,
+    ) -> ResponseDTO[list[HealthCheck]]:
         return {}
 
     @strawberry.field

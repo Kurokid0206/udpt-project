@@ -17,6 +17,6 @@ RUN  poetry config virtualenvs.create false \
 FROM python:3.10-slim
 COPY --from=build-venv /venv /venv
 ENV PATH="/venv/bin:$PATH"
-COPY . /app/service-user
-WORKDIR /app/service-user
-ENTRYPOINT ["uvicorn", "src.main", "--host", "0.0.0.0", "--port", "8010", "--reload"]
+COPY . /app/service-label
+WORKDIR /app/service-label
+ENTRYPOINT ["uvicorn", "src.main", "--host", "0.0.0.0", "--port", "8030", "--reload"]

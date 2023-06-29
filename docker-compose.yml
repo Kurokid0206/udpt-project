@@ -3,7 +3,7 @@ version: '3'
 services:
   postgres:
     image: postgres:14.6-alpine
-    container_name: label-stick-db
+    container_name: label-stick-postgres
     ports:
       - "5432:5432"
     volumes:
@@ -64,14 +64,14 @@ services:
     container_name: label-stick-service-manager
     build: ./label-stick-be/service-manager
     ports:
-      - "8010:8010"
+      - "8020:8020"
     entrypoint:
       - "/venv/bin/uvicorn"
       - "src.main:app"
       - "--host"
       - "0.0.0.0"
       - "--port"
-      - "8010"
+      - "8020"
       - "--reload"
     volumes:
       - ./label-stick-be/service-manager:/app/service-manager
@@ -85,14 +85,14 @@ services:
     container_name: label-stick-service-label
     build: ./label-stick-be/service-label
     ports:
-      - "8010:8010"
+      - "8030:8030"
     entrypoint:
       - "/venv/bin/uvicorn"
       - "src.main:app"
       - "--host"
       - "0.0.0.0"
       - "--port"
-      - "8010"
+      - "8030"
       - "--reload"
     volumes:
       - ./label-stick-be/service-label:/app/service-label
@@ -121,18 +121,17 @@ services:
 
   service-worker:
     container_name: service-worker
-    build: ./service-worker
-    ports:
-      - "8011:8011"
+    build: ./label-stick-be/service-worker
     working_dir: /app/service-worker
     command: "celery -A tasks worker -P solo -c 4 --loglevel=info"
     environment:
       - REDIS_HOST=redis
+      - BROKER_URL=redis://redis:6379/0
+      - BACKEND_URL=redis://redis:6379/1
     depends_on:
       - redis
-
-  label-stick-fe:
-    container_name: label-stick-fe
-    build: ./label-stick-fe
-    ports:
-      - "3000:3000"
+  # label-stick-fe:
+  #   container_name: label-stick-fe
+  #   build: ./label-stick-fe
+  #   ports:
+  #     - "3000:3000"
