@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
+import Drawer from "@mui/material/Drawer";
+import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
@@ -10,90 +10,81 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import MenuIcon from "@mui/icons-material/Menu";
+import { NavLink } from "react-router-dom";
 
-type Anchor = "top" | "left" | "bottom" | "right";
+const drawerWidth = 240;
+const sideBarList: NavBarElement[] = [
+  {
+    name: "Manager",
+    path: "/manager",
+    icon: <InboxIcon />,
+  },
+  {
+    name: "User",
+    path: "/user",
+    icon: <MailIcon />,
+  },
+  {
+    name: "Admin",
+    path: "/admin",
+    icon: <InboxIcon />,
+  },
+  {
+    name: "Login",
+    path: "/login",
+    icon: <InboxIcon />,
+  },
+];
 
-export default function SwipeableTemporaryDrawer() {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
-
-  const toggleDrawer =
-    (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-
-      setState({ ...state, [anchor]: open });
-    };
-
-  const list = (anchor: Anchor) => (
-    <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+export default function SideBar() {
+  return (
+    <Drawer
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: drawerWidth,
+          boxSizing: "border-box",
+        },
+      }}
+      variant="permanent"
+      anchor="left"
     >
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <Toolbar />
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
+        {sideBarList.map((item) => (
+          <ListItem
+            key={item.name}
+            disablePadding
+            sx={{
+              "& .active": {
+                backgroundColor: "rgba(0, 0, 0, 0.04)",
+                span: {
+                  fontWeight: "bold",
+                },
+              },
+            }}
+          >
+            <NavLink
+              to={item.path}
+              className={({ isActive, isPending }) =>
+                isPending ? "pending" : isActive ? "active" : ""
+              }
+              style={{
+                width: "100%",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <ListItemButton>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            </NavLink>
           </ListItem>
         ))}
       </List>
-    </Box>
-  );
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
-    >
-      {(["left"] as const).map((anchor) => (
-        <React.Fragment key={anchor}>
-          <MenuIcon onClick={toggleDrawer(anchor, true)}></MenuIcon>
-          <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
-    </Box>
+    </Drawer>
   );
 }
