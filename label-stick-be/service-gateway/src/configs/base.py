@@ -1,4 +1,5 @@
-USER_SERVICE_URL = "http://localhost:8010/user"
-MANAGER_SERVICE_URL = "http://localhost:8020/manager"
-LABEL_SERVICE_URL = "http://localhost:8030/label"
-SENTENCE_SERVICE_URL = "http://localhost:8030/sentence"
+import os
+
+os.environ.get("USER_SERVICE_URL", "http://localhost:8010")
+os.environ.get("MANAGER_SERVICE_URL", "http://localhost:8020")
+os.environ.get("LABEL_SERVICE_URL", "http://localhost:8030")
