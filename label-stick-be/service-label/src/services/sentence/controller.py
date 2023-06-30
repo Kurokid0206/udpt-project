@@ -10,7 +10,7 @@ from ...database.sessions import get_session
 router = APIRouter(prefix="/sentence", tags=["sentence"])
 
 
-@router.get("/get_sentence/{id}", response_model=Sentence)
+@router.get("/{id}", response_model=Sentence)
 async def get_sentence(
     id: int = 0,
     session: AsyncSession = Depends(get_session),
@@ -19,7 +19,7 @@ async def get_sentence(
     return sentence
 
 
-@router.get("/get_list_sentence", response_model=list[Sentence])
+@router.get("", response_model=list[Sentence])
 async def get_list_sentence(
     page: int = 0,
     session: AsyncSession = Depends(get_session),
@@ -29,7 +29,21 @@ async def get_list_sentence(
     return sentences
 
 
-@router.post("/create_sentences", response_model=List[Sentence])
+@router.post("/get-by-ids", response_model=list[Sentence])
+async def get_list_sentence(
+    session: AsyncSession = Depends(get_session),
+    ids: list[int] = [],
+    page: int = 0,
+    limit: int = 100,
+) -> list[Sentence]:
+    skip = page * limit
+    sentences = sentence_repository.get_by_ids(
+        db=session, ids=ids, skip=skip, limit=limit
+    )
+    return sentences
+
+
+@router.post("", response_model=List[Sentence])
 async def create_sentences(
     input: List[SentenceCreate],
     session: AsyncSession = Depends(get_session),
@@ -38,7 +52,7 @@ async def create_sentences(
     return sentences
 
 
-@router.patch("/update_sentence/{id}", response_model=Sentence)
+@router.patch("/{id}", response_model=Sentence)
 async def update_sentence(
     id: int,
     input: SentenceUpdate,
@@ -48,7 +62,7 @@ async def update_sentence(
     return sentence
 
 
-@router.delete("/delete_sentence/{id}", response_model=Sentence)
+@router.delete("/{id}", response_model=Sentence)
 async def delete_sentence(
     id: int,
     session: AsyncSession = Depends(get_session),

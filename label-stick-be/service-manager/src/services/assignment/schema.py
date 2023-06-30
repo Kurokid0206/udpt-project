@@ -1,6 +1,8 @@
 from enum import Enum
 from pydantic import BaseModel, Field
 from typing import Optional
+from datetime import datetime, time, timedelta
+
 
 class AssignmentTypeEnum(str, Enum):
     LABEL = "LABEL"
@@ -9,33 +11,39 @@ class AssignmentTypeEnum(str, Enum):
 
 
 class AssignmentBase(BaseModel):
-    name: str = Field(alias='name')
-    sentence_ids: list[int] = Field(alias='sentence_ids') 
-    user_id: int = Field(alias='user_id') 
-    assign_type: AssignmentTypeEnum = Field( AssignmentTypeEnum.LABEL, alias='assign_type')
-    from_date: str = Field(alias='from_date')
-    to_date: str = Field(alias='to_date')
+    name: str = Field(alias="name")
+    sentence_ids: list[int] = Field(alias="sentence_ids")
+    user_id: int = Field(alias="user_id")
+    assign_type: AssignmentTypeEnum = Field(
+        AssignmentTypeEnum.LABEL, alias="assign_type"
+    )
+    from_date: datetime = Field(alias="from_date")
+    to_date: datetime = Field(alias="to_date")
 
 
 class AssignmentCreate(AssignmentBase):
-    name: str = Field(alias='name')
-    sentence_ids: list[int] = Field(alias='sentence_ids') 
-    user_id: int = Field(alias='user_id') 
-    assign_type: AssignmentTypeEnum = Field(AssignmentTypeEnum.LABEL, alias='assign_type')
-    from_date: str = Field(alias='from_date')
-    to_date: str = Field(alias='to_date')
+    name: str = Field(alias="name")
+    sentence_ids: list[int] = Field(alias="sentence_ids")
+    user_id: int = Field(alias="user_id")
+    assign_type: AssignmentTypeEnum = Field(
+        AssignmentTypeEnum.LABEL, alias="assign_type"
+    )
+    from_date: datetime = Field(alias="from_date")
+    to_date: datetime = Field(alias="to_date")
 
     class Config:
         allow_population_by_field_name = True
 
 
 class AssignmentUpdate(AssignmentBase):
-    name: str = Field(alias='name')
-    sentence_ids: list[int] = Field(alias='sentence_ids') 
-    user_id: int = Field(alias='user_id') 
-    assign_type: AssignmentTypeEnum = Field(AssignmentTypeEnum.LABEL, alias='assign_type')
-    from_date: str = Field(alias='from_date')
-    to_date: str = Field(alias='to_date')
+    name: str = Field(alias="name")
+    sentence_ids: list[int] = Field(alias="sentence_ids")
+    user_id: int = Field(alias="user_id")
+    assign_type: AssignmentTypeEnum = Field(
+        AssignmentTypeEnum.LABEL, alias="assign_type"
+    )
+    from_date: datetime = Field(alias="from_date")
+    to_date: datetime = Field(alias="to_date")
 
     class Config:
         allow_population_by_field_name = True

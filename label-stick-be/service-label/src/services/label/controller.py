@@ -8,7 +8,7 @@ from ...database.sessions import get_session
 router = APIRouter(prefix="/label", tags=["label"])
 
 
-@router.get("/get_label/{id}", response_model=Label)
+@router.get("/{id}", response_model=Label)
 async def get_label(
     id: int = 0,
     session: AsyncSession = Depends(get_session),
@@ -17,7 +17,7 @@ async def get_label(
     return label
 
 
-@router.get("/get_list_label", response_model=list[Label])
+@router.get("", response_model=list[Label])
 async def get_list_label(
     page: int = 0,
     session: AsyncSession = Depends(get_session),
@@ -27,7 +27,7 @@ async def get_list_label(
     return labels
 
 
-@router.post("/create_label", response_model=Label)
+@router.post("", response_model=Label)
 async def create_label(
     input: LabelCreate,
     session: AsyncSession = Depends(get_session),
@@ -36,7 +36,7 @@ async def create_label(
     return label
 
 
-@router.patch("/update_label/{id}", response_model=Label)
+@router.patch("/{id}", response_model=Label)
 async def update_label(
     id: int,
     input: LabelUpdate,
@@ -46,7 +46,7 @@ async def update_label(
     return label
 
 
-@router.delete("/delete_label/{id}", response_model=Label)
+@router.delete("/{id}", response_model=Label)
 async def delete_label(
     id: int,
     session: AsyncSession = Depends(get_session),

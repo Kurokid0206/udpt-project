@@ -10,11 +10,15 @@ router = APIRouter(prefix="/document", tags=["document"])
 
 @router.get("", response_model=list[Document])
 async def get_documents(
+    project_id: int = 1,
     page: int = 0,
+    limit: int = 100,
     session: AsyncSession = Depends(get_session),
 ) -> list[Document]:
     skip = page * 100
-    documents = document_repository.get_multi(db=session, skip=skip, limit=100)
+    documents = document_repository.get_by_project(
+        db=session, project_id=project_id, skip=skip, limit=limit
+    )
     return documents
 
 

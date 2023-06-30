@@ -29,6 +29,24 @@ async def get_project(
     return response
 
 
+@router.get("/by-user/{user_id}", response_model=list[Project])
+async def get_user_project(
+    user_id: int = 0,
+    page: int = 0,
+    limit: int = 100,
+    session: AsyncSession = Depends(get_session),
+) -> list[Project]:
+    projects = project_repository.get_user_project(
+        db=session, user_id=user_id, skip=page * limit, limit=limit
+    )
+    # print("====================")
+    # print(projects)
+    # print(type(projects))
+    # print("====================")
+
+    return [Project(**project.dict()) for project in projects]
+
+
 @router.post("", response_model=Project)
 async def create_project(
     input: ProjectCreate,

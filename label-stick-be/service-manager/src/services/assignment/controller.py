@@ -1,19 +1,25 @@
-from fastapi import APIRouter, Depends, UploadFile, Form, File
+from fastapi import APIRouter, Depends
 from .schema import Assignment, AssignmentCreate, AssignmentUpdate
 from .repository import assignment_repository
 from sqlalchemy.ext.asyncio import AsyncSession
 from ...database.sessions import get_session
-from ...utils.storage import put_object
+from ...utils.mail import send_mail, SendMailDTO
 
 router = APIRouter(prefix="/assignment", tags=["assignment"])
 
+
 @router.get("", response_model=list[Assignment])
 async def get_assignments(
+    user_id: int = 1,
     page: int = 0,
+    limit: int = 100,
     session: AsyncSession = Depends(get_session),
 ) -> list[Assignment]:
     skip = page * 100
-    assignments = assignment_repository.get_multi(db=session, skip=skip, limit=100)
+    assignments = assignment_repository.get_by_user_id(
+        db=session, user_id=user_id, skip=skip, limit=limit
+    )
+
     return assignments
 
 
@@ -28,11 +34,22 @@ async def get_assignment(
 
 @router.post("", response_model=Assignment)
 async def create_assignment(
-    input: str = Form(...),
+    input: AssignmentCreate,
     session: AsyncSession = Depends(get_session),
 ) -> Assignment:
-    data = AssignmentCreate.parse_raw(input)
-    assignment = assignment_repository.create(session, obj_in=data)
+    # data = AssignmentCreate.parse_raw(input)
+    assignment = assignment_repository.create(session, obj_in=input)
+    user = assignment.user
+    mail_data = {
+        "to_email": user.email,
+        "subject": assignment.name,
+        "username": user.username,
+        "project_name": "demo",
+        "task_type": assignment.assign_type,
+        "deadline": str(assignment.to_date),
+    }
+    mail_data = SendMailDTO(**mail_data)
+    await send_mail(mail_data)
     return assignment
 
 

@@ -12,6 +12,7 @@ class DocumentBase(BaseModel):
     document_type: DocumentTypeEnum = Field(
         DocumentTypeEnum.QUESTION, alias="document_type"
     )
+    document_url: str = Field(None, alias="document_url")
     project_id: int = Field(alias="project_id")
 
 

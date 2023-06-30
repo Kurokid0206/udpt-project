@@ -7,7 +7,21 @@ from src.database.models import Assignment
 
 
 class CRUDAssignment(CRUDBase[Assignment, AssignmentCreate, AssignmentUpdate]):
-    pass
+    def get_by_user_id(
+        self,
+        db: Session,
+        user_id: int,
+        skip: int,
+        limit: int,
+    ) -> list[Assignment]:
+        results = (
+            db.query(self.model)
+            .filter_by(user_id=user_id)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+        return results
 
 
 assignment_repository = CRUDAssignment(Assignment)

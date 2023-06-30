@@ -36,7 +36,7 @@ async def send_mail(data: SendMailDTO):
     )
     celery_worker.send_task(
         name="tasks.send_mail",
-        kwargs={"task_id": "2", "data": tmp},
+        kwargs={"task_id": "2", "data": json.dumps(data.dict())},
         queue="tasks",
     )
     return {"status": 200, "message": "Mail sent successfully"}
