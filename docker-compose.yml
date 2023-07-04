@@ -1,47 +1,47 @@
 version: '3'
 
 services:
-  postgres:
-    image: postgres:14.6-alpine
-    container_name: label-stick-postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./data/postgres-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: postgres
+  # postgres:
+  #   image: postgres:14.6-alpine
+  #   container_name: label-stick-postgres
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - ./data/postgres-data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres
 
-  object-storage:
-    image: chrislusf/seaweedfs:3.47
-    container_name: label-stick-object-storage
-    command:
-      [
-        "server",
-        "-s3",
-        "-volume.max",
-        "8",
-        "-master.volumeSizeLimitMB",
-        "10"
-      ]
-    ports:
-      - 8333:8333
-      - 8888:8888
-      - 8080:8080
-      - 9333:9333
-    volumes:
-      - ./data/seaweedfs-data/data:/data
-      - ./data/seaweedfs-data/buckets:/buckets
+  # object-storage:
+  #   image: chrislusf/seaweedfs:3.47
+  #   container_name: label-stick-object-storage
+  #   command:
+  #     [
+  #       "server",
+  #       "-s3",
+  #       "-volume.max",
+  #       "8",
+  #       "-master.volumeSizeLimitMB",
+  #       "10"
+  #     ]
+  #   ports:
+  #     - 8333:8333
+  #     - 8888:8888
+  #     - 8080:8080
+  #     - 9333:9333
+  #   volumes:
+  #     - ./data/seaweedfs-data/data:/data
+  #     - ./data/seaweedfs-data/buckets:/buckets
 
-  redis:
-    image: redis:6.2.6-alpine
-    container_name: label-stick-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./data/redis-data:/data
+  # redis:
+  #   image: redis:6.2.6-alpine
+  #   container_name: label-stick-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - ./data/redis-data:/data
 
   service-user:
-    container_name: label-stick-service-user
+    container_name: service-user
     build: ./label-stick-be/service-user
     ports:
       - "8010:8010"
@@ -56,12 +56,12 @@ services:
     volumes:
       - ./label-stick-be/service-user:/app/service-user
     environment:
-      - POSTGRES_SERVER=postgres
-    depends_on:
-      - postgres
+      - POSTGRES_SERVER=103.176.179.83
+    # depends_on:
+    #   - postgres
 
   service-manager:
-    container_name: label-stick-service-manager
+    container_name: service-manager
     build: ./label-stick-be/service-manager
     ports:
       - "8020:8020"
@@ -76,13 +76,13 @@ services:
     volumes:
       - ./label-stick-be/service-manager:/app/service-manager
     environment:
-      - POSTGRES_SERVER=postgres
-      - STORAGE_HOST=object-storage
-    depends_on:
-      - postgres
+      - POSTGRES_SERVER=103.176.179.83
+      - STORAGE_HOST=103.176.179.83
+    # depends_on:
+    #   - postgres
 
   service-label:
-    container_name: label-stick-service-label
+    container_name: service-label
     build: ./label-stick-be/service-label
     ports:
       - "8030:8030"
@@ -97,12 +97,10 @@ services:
     volumes:
       - ./label-stick-be/service-label:/app/service-label
     environment:
-      - POSTGRES_SERVER=postgres
-    depends_on:
-      - postgres
+      - POSTGRES_SERVER=103.176.179.83
 
   service-gateway:
-    container_name: label-stick-service-gateway
+    container_name: service-gateway
     build: ./label-stick-be/service-gateway
     ports:
       - "8000:8000"
@@ -116,8 +114,10 @@ services:
       - "--reload"
     volumes:
       - ./label-stick-be/service-gateway:/app/service-gateway
-    depends_on:
-      - postgres
+    environment:
+      - USER_SERVICE_URL=http://service-user:8010
+      - MANAGER_SERVICE_URL=http://service-manager:8020
+      - LABEL_SERVICE_URL=http://service-label:8030
 
   service-worker:
     container_name: service-worker
@@ -125,11 +125,9 @@ services:
     working_dir: /app/service-worker
     command: "celery -A tasks worker -P solo -c 4 --loglevel=info"
     environment:
-      - REDIS_HOST=redis
-      - BROKER_URL=redis://redis:6379/0
-      - BACKEND_URL=redis://redis:6379/1
-    depends_on:
-      - redis
+      - REDIS_HOST=103.176.179.83
+      - BROKER_URL=redis://103.176.179.83:6379/0
+      - BACKEND_URL=redis://103.176.179.83:6379/1
   # label-stick-fe:
   #   container_name: label-stick-fe
   #   build: ./label-stick-fe

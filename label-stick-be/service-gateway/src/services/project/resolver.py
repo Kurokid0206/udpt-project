@@ -1,14 +1,26 @@
-from .dto import CreateProjectDTO, ProjectResponseDTO, UpdateProjectDTO
+from .dto import CreateProjectDTO, ProjectResponseDTO, ProjectUserDTO, UpdateProjectDTO
 from ...utils.dto import ResponseDTO, StatusResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
 from ...configs.base import MANAGER_SERVICE_URL
 from fastapi.encoders import jsonable_encoder
 
 
-async def resolve_get_projects() -> ResponseDTO[list[ProjectResponseDTO]]:
+async def resolve_get_projects(
+    filter: ProjectUserDTO = None,
+) -> ResponseDTO[list[ProjectResponseDTO]]:
     url = f"{MANAGER_SERVICE_URL}/project"
-    response = await call_api(url=url, method=HttpMethod.GET)
-    return ResponseDTO[list[ProjectResponseDTO]](**{"data": []})
+    response = await call_api(
+        url=url,
+        method=HttpMethod.GET,
+        params=jsonable_encoder(filter),
+    )
+    return ResponseDTO[list[response]](
+        **{
+            "status_code": 200,
+            "message": "success",
+            "data": [ProjectResponseDTO(**item) for item in response],
+        }
+    )
 
 
 async def resolve_create_project(

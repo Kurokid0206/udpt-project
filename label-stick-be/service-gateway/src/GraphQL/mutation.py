@@ -35,6 +35,7 @@ from ..services.label_sentence.resolver import (
 )
 from ..services.project.dto import (
     CreateProjectDTO,
+    ProjectResponseDTO,
     UpdateProjectDTO,
 )
 from ..services.project.resolver import (
@@ -87,7 +88,7 @@ class Mutation:
     def create_project(
         self,
         input: CreateProjectDTO,
-    ) -> ResponseDTO[UserResponseDTO]:
+    ) -> ResponseDTO[ProjectResponseDTO]:
         result = resolve_create_project(input)
         return result
 
@@ -96,12 +97,12 @@ class Mutation:
         self,
         id: int,
         input: UpdateProjectDTO,
-    ) -> ResponseDTO[UserResponseDTO]:
+    ) -> ResponseDTO[ProjectResponseDTO]:
         result = resolve_update_project(id, input)
         return result
 
     @strawberry.mutation
-    def delete_project(self, id: int) -> ResponseDTO[StatusResponseDTO]:
+    def delete_project(self, id: int) -> ResponseDTO[ProjectResponseDTO]:
         result = resolve_delete_project(id)
         return result
 

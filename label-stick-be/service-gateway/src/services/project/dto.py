@@ -1,17 +1,16 @@
 from typing import Optional
-from pydantic import BaseModel
 import strawberry
 
 
 @strawberry.input
-class CreateProjectDTO(BaseModel):
+class CreateProjectDTO:
     name: str = None
     description: str = None
     max_user: int = 10
 
 
 @strawberry.input
-class UpdateProjectDTO(BaseModel):
+class UpdateProjectDTO:
     name: Optional[str] = None
     description: Optional[str] = None
     max_user: Optional[int] = 10
@@ -26,5 +25,6 @@ class ProjectResponseDTO:
 
 
 @strawberry.input
-class ProjectUserDTO(BaseModel):
-    ids: list[int] = []
+class ProjectUserDTO:
+    ids: list[int] = None
+    page: int = 0

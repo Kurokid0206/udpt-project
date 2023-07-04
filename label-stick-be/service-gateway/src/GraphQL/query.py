@@ -1,11 +1,13 @@
-from typing import Optional
+from typing import Any, Optional
 import strawberry
 
 from ..utils.dto import ResponseDTO
 
 # from ..services.label.dto import LabelerFilterDTO, Labeler
 
-from ..services.project.dto import ProjectUserDTO
+from ..services.project.dto import ProjectResponseDTO, ProjectUserDTO
+
+from ..services.project.resolver import resolve_get_projects
 
 
 @strawberry.type
@@ -31,8 +33,11 @@ class Query:
         return {}
 
     @strawberry.field
-    def get_projects(self, filter: Optional[ProjectUserDTO] = None) -> HealthCheck:
-        return {}
+    def get_projects(
+        self, filter: Optional[ProjectUserDTO] = None
+    ) -> ResponseDTO[list[ProjectResponseDTO]]:
+        result = resolve_get_projects(filter)
+        return result
 
     @strawberry.field
     def get_documents(self) -> HealthCheck:

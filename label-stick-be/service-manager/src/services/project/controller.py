@@ -52,6 +52,7 @@ async def create_project(
     input: ProjectCreate,
     session: AsyncSession = Depends(get_session),
 ) -> Project:
+    print("input", input)
     project = project_repository.create(session, obj_in=input)
     return project
 

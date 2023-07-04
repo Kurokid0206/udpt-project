@@ -5,11 +5,13 @@ from typing import Optional, Any, List
 class ProjectBase(BaseModel):
     # id: str = Field(alias="id")
     name: str = Field(alias="name")
+    description: str = Field(alias="description")
     max_user: str = Field(alias="max_user")
 
 
 class ProjectCreate(ProjectBase):
     name: str = Field(alias="name")
+    description: str = Field(alias="description")
     max_user: int = Field(alias="max_user")
 
     class Config:
@@ -18,6 +20,7 @@ class ProjectCreate(ProjectBase):
 
 class ProjectUpdate(ProjectBase):
     name: Optional[str] = Field(alias="name")
+    description: str = Field(alias="description")
     max_user: Optional[int] = Field(alias="max_user")
 
     class Config:
