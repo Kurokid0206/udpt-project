@@ -1,4 +1,5 @@
 from .dto import (
+    AssignmentFilterInputDTO,
     CreateAssignmentInputDTO,
     AssignmentResponseDTO,
     UpdateAssignmentInputDTO,
@@ -10,10 +11,15 @@ import strawberry
 from fastapi.encoders import jsonable_encoder
 
 
-async def resolve_get_assignments() -> ResponseDTO[AssignmentResponseDTO]:
+async def resolve_get_assignments(
+    input: AssignmentFilterInputDTO,
+) -> ResponseDTO[list[AssignmentResponseDTO]]:
     url = f"{MANAGER_SERVICE_URL}/assignment"
-    response = await call_api(url=url, method=HttpMethod.GET)
-    return ResponseDTO[AssignmentResponseDTO](**{"data": response})
+    data = jsonable_encoder(input)
+    response = await call_api(url=url, method=HttpMethod.GET, json=data)
+    return ResponseDTO[AssignmentResponseDTO](
+        **{"data": [AssignmentResponseDTO(**item) for item in response]}
+    )
 
 
 async def resolve_create_assignment(

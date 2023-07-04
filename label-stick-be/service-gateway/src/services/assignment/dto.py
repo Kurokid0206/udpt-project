@@ -6,7 +6,7 @@ from enum import Enum
 
 @strawberry.enum
 class AssignmentTypeEnum(Enum):
-    LABELING = "LABELING"
+    LABEL = "LABEL"
     REVIEW = "REVIEW"
 
 
@@ -19,8 +19,8 @@ class AssignmentResponseDTO:
     assign_type: AssignmentTypeEnum
     from_date: str
     to_date: str
-    create_at: str
-    create_at: str
+    # create_at: str
+    # create_at: str
 
 
 @strawberry.input
@@ -42,3 +42,10 @@ class UpdateAssignmentInputDTO:
     assign_type: Optional[AssignmentTypeEnum]
     from_date: Optional[str]
     to_date: Optional[str]
+
+
+@strawberry.input
+class AssignmentFilterInputDTO:
+    user_id: Optional[int] = None
+    page: Optional[int] = 1
+    limit: Optional[int] = None
