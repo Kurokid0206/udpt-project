@@ -13,7 +13,7 @@ class AssignmentTypeEnum(str, Enum):
 
 
 class SendMailDTO(BaseModel):
-    from_email: str = "19120674@student.hcmus.edu.vn"
+    from_email: str = "hungtyvuive@gmail.com"
     to_email: Union[str, List[str]]
     subject: str = "Label Stick - Notification"
     username: str
@@ -25,7 +25,7 @@ class SendMailDTO(BaseModel):
 async def send_mail(data: SendMailDTO):
     tmp = json.dumps(
         {
-            "from_email": "19120674@student.hcmus.edu.vn",
+            "from_email": "hungtyvuive@gmail.com",
             "to_email": "kurokid0206@gmail.com",
             "subject": "Test",
             "username": "Kurokid",
