@@ -12,12 +12,16 @@ from ..services.project.dto import (
 )
 from ..services.document.dto import DocumentFilterInputDTO, DocumentResponseDTO
 from ..services.assignment.dto import AssignmentFilterInputDTO, AssignmentResponseDTO
+from ..services.label.dto import LabelResponseDTO
+from ..services.sentence.dto import SentenceResponseDTO
 from ..services.project.resolver import (
     resolve_get_projects,
     resolve_get_projects_by_user,
 )
 from ..services.document.resolver import resolve_get_documents
 from ..services.assignment.resolver import resolve_get_assignments
+from ..services.label.resolver import resolve_get_labels
+from ..services.sentence.resolver import resolve_get_sentences_by_ids
 
 
 @strawberry.type
@@ -73,13 +77,17 @@ class Query:
         return result
 
     @strawberry.field
-    def get_sentences(self) -> HealthCheck:
+    def get_sentences_by_ids(
+        self, ids: list[int]
+    ) -> ResponseDTO[list[SentenceResponseDTO]]:
         # TODO: allow get labels of sentence
-        return {}
+        result = resolve_get_sentences_by_ids(ids)
+        return result
 
-    # @strawberry.field
-    # def get_labels(self, filter: Optional[LabelFilterDTO]):
-    #     return {}
+    @strawberry.field
+    def get_labels(self) -> ResponseDTO[list[LabelResponseDTO]]:
+        result = resolve_get_labels()
+        return result
 
     @strawberry.field
     def find_sentence_by_key(self) -> HealthCheck:
