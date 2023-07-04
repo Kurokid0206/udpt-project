@@ -1,4 +1,10 @@
-from .dto import CreateProjectDTO, ProjectResponseDTO, ProjectUserDTO, UpdateProjectDTO
+from .dto import (
+    CreateProjectDTO,
+    ProjectResponseDTO,
+    ProjectUserDTO,
+    ProjectUserFilterDTO,
+    UpdateProjectDTO,
+)
 from ...utils.dto import ResponseDTO, StatusResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
 from ...configs.base import MANAGER_SERVICE_URL
@@ -61,3 +67,21 @@ async def resolve_add_user_to_project(
     data = jsonable_encoder(input)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
     return ResponseDTO[ProjectResponseDTO](**{"data": ProjectResponseDTO(**response)})
+
+
+async def resolve_get_projects_by_user(
+    filter: ProjectUserFilterDTO,
+) -> ResponseDTO[list[ProjectResponseDTO]]:
+    url = f"{MANAGER_SERVICE_URL}/project/by-user/{filter.user_id}"
+    response = await call_api(
+        url=url,
+        method=HttpMethod.GET,
+        params=jsonable_encoder(filter),
+    )
+    return ResponseDTO[list[ProjectResponseDTO]](
+        **{
+            "status_code": 200,
+            "message": "success",
+            "data": [ProjectResponseDTO(**item) for item in response],
+        }
+    )

@@ -34,3 +34,10 @@ class ProjectUserDTO:
 class AddProjectUserDTO:
     project_id: int = None
     user_ids: list[int] = None
+
+
+@strawberry.input
+class ProjectUserFilterDTO:
+    user_id: int = 1
+    page: int = 0
+    limit: int = 10

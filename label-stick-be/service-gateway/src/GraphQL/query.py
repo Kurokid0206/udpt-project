@@ -5,10 +5,17 @@ from ..utils.dto import ResponseDTO
 
 # from ..services.label.dto import LabelerFilterDTO, Labeler
 
-from ..services.project.dto import ProjectResponseDTO, ProjectUserDTO
+from ..services.project.dto import (
+    ProjectResponseDTO,
+    ProjectUserDTO,
+    ProjectUserFilterDTO,
+)
 from ..services.document.dto import DocumentFilterInputDTO, DocumentResponseDTO
 from ..services.assignment.dto import AssignmentFilterInputDTO, AssignmentResponseDTO
-from ..services.project.resolver import resolve_get_projects
+from ..services.project.resolver import (
+    resolve_get_projects,
+    resolve_get_projects_by_user,
+)
 from ..services.document.resolver import resolve_get_documents
 from ..services.assignment.resolver import resolve_get_assignments
 
@@ -40,6 +47,13 @@ class Query:
         self, filter: Optional[ProjectUserDTO] = None
     ) -> ResponseDTO[list[ProjectResponseDTO]]:
         result = resolve_get_projects(filter)
+        return result
+
+    @strawberry.field
+    def get_projects_by_user_id(
+        self, filter: ProjectUserFilterDTO
+    ) -> ResponseDTO[list[ProjectResponseDTO]]:
+        result = resolve_get_projects_by_user(filter)
         return result
 
     @strawberry.field

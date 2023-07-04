@@ -78,6 +78,7 @@ services:
     environment:
       - POSTGRES_SERVER=103.176.179.83
       - STORAGE_HOST=103.176.179.83
+      - REDIS_HOST=103.176.179.83
     # depends_on:
     #   - postgres
 
