@@ -7,7 +7,7 @@ class LabelSentenceBase(BaseModel):
     sentence_id: int = Field(alias="sentence_id")
     label_id: int = Field(alias="label_id")
     labeled_by: int = Field(alias="labeled_by")
-    reviewed_by: int = Field(alias="reviewed_by")
+    reviewed_by: Optional[int] = Field(None, alias="reviewed_by")
     status: str = Field(alias="status")
 
 

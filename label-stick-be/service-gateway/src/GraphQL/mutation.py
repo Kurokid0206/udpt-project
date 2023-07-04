@@ -50,6 +50,7 @@ from ..services.sentence.dto import (
     SentenceResponseDTO,
 )
 from ..services.sentence.resolver import (
+    resolve_add_labels_to_sentence,
     resolve_create_sentences,
     resolve_update_sentence,
 )
@@ -200,4 +201,11 @@ class Mutation:
     @strawberry.mutation
     def delete_label(self, id: int) -> ResponseDTO[StatusResponseDTO]:
         result = resolve_delete_label(id)
+        return result
+
+    @strawberry.mutation
+    def add_labels_to_sentence(
+        self, input: LabelSentenceInputDTO
+    ) -> ResponseDTO[list[LabelSentenceResponseDTO]]:
+        result = resolve_add_labels_to_sentence(input)
         return result

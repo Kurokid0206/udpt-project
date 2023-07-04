@@ -11,10 +11,10 @@ class LabelSentenceStatusEnum(Enum):
 
 @strawberry.input
 class LabelSentenceInputDTO:
-    sentence_id: int = None
-    label_id: int = None
+    id: int = None
+    label_ids: list[int] = None
     status: LabelSentenceStatusEnum = LabelSentenceStatusEnum.IN_PROGRESS
-    updated_by: int = None
+    user_id: int = None
 
 
 @strawberry.type
@@ -22,4 +22,6 @@ class LabelSentenceResponseDTO:
     id: int = None
     sentence_id: int = None
     label_id: int = None
-    updated_by: int = None
+    labeled_by: int = None
+    reviewed_by: int = None
+    status: str = None

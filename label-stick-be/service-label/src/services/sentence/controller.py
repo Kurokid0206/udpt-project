@@ -4,7 +4,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .repository import sentence_repository
-from .schema import Sentence, SentenceCreate, SentenceUpdate
+from ..label_sentence.repository import label_sentence_repository
+from ..label_sentence.schema import LabelSentence
+from .schema import Sentence, SentenceCreate, SentenceUpdate, SentenceLabelsDTO
 from ...database.sessions import get_session
 
 router = APIRouter(prefix="/sentence", tags=["sentence"])
@@ -69,3 +71,23 @@ async def delete_sentence(
 ) -> Sentence:
     sentence = sentence_repository.remove(session, id=id)
     return sentence
+
+
+@router.post("/add-labels", response_model=list[LabelSentence])
+async def add_labels(
+    input: SentenceLabelsDTO, session: AsyncSession = Depends(get_session)
+) -> list[LabelSentence]:
+    for label_id in input.label_ids:
+        label_sentence_repository.create(
+            session,
+            obj_in={
+                "label_id": label_id,
+                "sentence_id": input.id,
+                "labeled_by": input.user_id,
+                "status": "IN_PROGRESS",
+            },
+        )
+    result = label_sentence_repository.get_by_sentence_id(
+        db=session, sentence_id=input.id
+    )
+    return result

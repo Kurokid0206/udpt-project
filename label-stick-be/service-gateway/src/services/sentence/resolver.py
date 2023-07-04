@@ -1,4 +1,5 @@
 from .dto import SentenceInputDTO, SentenceResponseDTO
+from ..label_sentence.dto import LabelSentenceInputDTO, LabelSentenceResponseDTO
 from ...utils.dto import ResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
 from ...configs.base import LABEL_SERVICE_URL
@@ -32,4 +33,16 @@ async def resolve_get_sentences_by_ids(
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
     return ResponseDTO[list[SentenceResponseDTO]](
         **{"data": [SentenceResponseDTO(**item) for item in response]}
+    )
+
+
+async def resolve_add_labels_to_sentence(
+    input: LabelSentenceInputDTO,
+) -> ResponseDTO[list[LabelSentenceResponseDTO]]:
+    url = f"{LABEL_SERVICE_URL}/sentence/add-labels"
+    data = jsonable_encoder(input)
+    response = await call_api(url=url, method=HttpMethod.POST, json=data)
+    print(response)
+    return ResponseDTO[list[LabelSentenceResponseDTO]](
+        **{"data": [LabelSentenceResponseDTO(**item) for item in response]}
     )
