@@ -1,48 +1,37 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "@layouts/main";
-import Home from "@views/home/home";
 import NotFound from "@views/notFound/notFound";
+import ManagerHomePage from "@views/manager/managerHomePage";
+import UserHomePage from "@views/user/userHomePage";
+import AdminHomePage from "@views/admin/adminHomePage";
+import LoginPage from "@views/login/loginPage";
 
-interface RouterElement {
-  path: string;
-  element: React.ReactNode;
-  childs: RouterElement[] | [];
-}
 const NavigationRouter: React.FC = () => {
+  //define your all page below
   const pathList: RouterElement[] = [
     {
-      path: "/",
-      element: <MainLayout />,
-      childs: [
-        {
-          path: "/",
-          element: <Home />,
-          childs: [],
-        },
-      ],
+      path: "/manager",
+      element: <ManagerHomePage />,
     },
     {
-      path: "*",
-      element: <NotFound />,
-      childs: [],
+      path: "/user",
+      element: <UserHomePage />,
+    },
+    {
+      path: "/admin",
+      element: <AdminHomePage />,
     },
   ];
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
+          {pathList.map((item) => (
+            <Route path={item.path} element={item.element} key={item.path} />
+          ))}
         </Route>
+        <Route path="/login" element={<LoginPage />}></Route>
         <Route path="*" element={<NotFound />}></Route>
-        {pathList.map((item) => {
-          return (
-            <Route path={item.path} element={item.element}>
-              {item.childs.map((itemChild) => (
-                <Route path={itemChild.path} element={itemChild.element} />
-              ))}
-            </Route>
-          );
-        })}
       </Routes>
     </BrowserRouter>
   );

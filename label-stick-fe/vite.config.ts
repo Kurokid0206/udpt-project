@@ -21,6 +21,10 @@ export default defineConfig({
         find: "@apolloClient",
         replacement: resolve(__dirname, "./src/services/apollo"),
       },
+      {
+        find: "@assets",
+        replacement: resolve(__dirname, "./src/assets"),
+      },
     ],
   },
   server: {
