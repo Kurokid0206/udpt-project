@@ -37,11 +37,13 @@ from ..services.project.dto import (
     CreateProjectDTO,
     ProjectResponseDTO,
     UpdateProjectDTO,
+    AddProjectUserDTO,
 )
 from ..services.project.resolver import (
     resolve_create_project,
     resolve_update_project,
     resolve_delete_project,
+    resolve_add_user_to_project,
 )
 from ..services.sentence.dto import (
     SentenceInputDTO,
@@ -107,8 +109,11 @@ class Mutation:
         return result
 
     @strawberry.mutation
-    def add_user_to_project(self) -> ResponseDTO[UserResponseDTO]:
-        return {}
+    def add_user_to_project(
+        self, input: AddProjectUserDTO
+    ) -> ResponseDTO[ProjectResponseDTO]:
+        result = resolve_add_user_to_project(input)
+        return result
 
     # Document
     @strawberry.mutation

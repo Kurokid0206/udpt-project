@@ -52,3 +52,12 @@ async def resolve_delete_project(id: int) -> StatusResponseDTO:
     url = f"{MANAGER_SERVICE_URL}/project/{id}"
     response = await call_api(url=url, method=HttpMethod.DELETE)
     return ResponseDTO[StatusResponseDTO](**response)
+
+
+async def resolve_add_user_to_project(
+    input: ProjectUserDTO,
+) -> ResponseDTO[ProjectResponseDTO]:
+    url = f"{MANAGER_SERVICE_URL}/project/add-users"
+    data = jsonable_encoder(input)
+    response = await call_api(url=url, method=HttpMethod.POST, json=data)
+    return ResponseDTO[ProjectResponseDTO](**{"data": ProjectResponseDTO(**response)})

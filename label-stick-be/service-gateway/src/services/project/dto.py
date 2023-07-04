@@ -28,3 +28,9 @@ class ProjectResponseDTO:
 class ProjectUserDTO:
     ids: list[int] = None
     page: int = 0
+
+
+@strawberry.input
+class AddProjectUserDTO:
+    project_id: int = None
+    user_ids: list[int] = None
