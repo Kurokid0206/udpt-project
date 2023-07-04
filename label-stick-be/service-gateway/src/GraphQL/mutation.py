@@ -60,7 +60,11 @@ from ..services.user.dto import (
     UserInputDTO,
     LoginResponseDTO,
 )
-from ..services.user.resolver import resolve_signup, resolve_update_profile
+from ..services.user.resolver import (
+    resolve_signup,
+    resolve_update_profile,
+    resolve_login,
+)
 from ..utils.dto import ResponseDTO, StatusResponseDTO
 
 
@@ -68,8 +72,9 @@ from ..utils.dto import ResponseDTO, StatusResponseDTO
 class Mutation:
     # Common
     @strawberry.mutation
-    def login(self, input: LoginDTO) -> ResponseDTO[LoginResponseDTO]:
-        return {}
+    def login(self, input: LoginDTO) -> ResponseDTO[UserResponseDTO]:
+        result = resolve_login(input)
+        return result
 
     @strawberry.mutation
     def signup(self, input: UserInputDTO) -> ResponseDTO[UserResponseDTO]:

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from .schema import User, UserCreate, UserUpdate
+from .schema import User, UserCreate, UserUpdate, LoginDTO
 from .repository import user_repository
 from sqlalchemy.ext.asyncio import AsyncSession
 from ...database.sessions import get_session
@@ -29,6 +29,10 @@ async def signup_user(
     return user
 
 
-@router.put("/")
-def update_user():
-    return {}
+@router.post("/login", status_code=200, response_model=User)
+async def login_user(
+    login_data: LoginDTO,
+    session: AsyncSession = Depends(get_session),
+) -> User:
+    user = user_repository.login(obj_in=login_data, db=session)
+    return user

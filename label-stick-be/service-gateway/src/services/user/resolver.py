@@ -1,4 +1,4 @@
-from .dto import UserInputDTO, UserResponseDTO
+from .dto import LoginDTO, UserInputDTO, UserResponseDTO
 from ...utils.dto import ResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
 from ...configs.base import USER_SERVICE_URL
@@ -24,3 +24,10 @@ async def resolve_update_profile(user: UserInputDTO) -> ResponseDTO[UserResponse
     data = jsonable_encoder(user)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
     return ResponseDTO[UserResponseDTO](**response)
+
+
+async def resolve_login(user: LoginDTO) -> ResponseDTO[UserResponseDTO]:
+    url = f"{USER_SERVICE_URL}/user/login"
+    data = jsonable_encoder(user)
+    response = await call_api(url=url, method=HttpMethod.POST, json=data)
+    return ResponseDTO[UserResponseDTO](**{"data": UserResponseDTO(**response)})
