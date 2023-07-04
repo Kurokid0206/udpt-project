@@ -1,7 +1,8 @@
+import fetchGetProjectsByUserId from "@apolloClient/query/project/getProjectByUserId";
 import { AccountCircle } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
 import { Box, Button, InputAdornment, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 const LoginPage: React.FC = () => {

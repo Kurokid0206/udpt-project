@@ -15,7 +15,7 @@ import { NavLink } from "react-router-dom";
 const drawerWidth = 240;
 const sideBarList: NavBarElement[] = [
   {
-    name: "Manager",
+    name: "View project",
     path: "/manager",
     icon: <InboxIcon />,
   },
