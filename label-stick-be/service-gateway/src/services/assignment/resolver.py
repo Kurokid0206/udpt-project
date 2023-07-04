@@ -10,6 +10,12 @@ import strawberry
 from fastapi.encoders import jsonable_encoder
 
 
+async def resolve_get_assignments() -> ResponseDTO[AssignmentResponseDTO]:
+    url = f"{MANAGER_SERVICE_URL}/assignment"
+    response = await call_api(url=url, method=HttpMethod.GET)
+    return ResponseDTO[AssignmentResponseDTO](**{"data": response})
+
+
 async def resolve_create_assignment(
     input: CreateAssignmentInputDTO,
 ) -> ResponseDTO[AssignmentResponseDTO]:

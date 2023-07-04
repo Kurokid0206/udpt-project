@@ -6,8 +6,9 @@ from ..utils.dto import ResponseDTO
 # from ..services.label.dto import LabelerFilterDTO, Labeler
 
 from ..services.project.dto import ProjectResponseDTO, ProjectUserDTO
-
+from ..services.document.dto import DocumentFilterInputDTO, DocumentResponseDTO
 from ..services.project.resolver import resolve_get_projects
+from ..services.document.resolver import resolve_get_documents
 
 
 @strawberry.type
@@ -40,9 +41,12 @@ class Query:
         return result
 
     @strawberry.field
-    def get_documents(self) -> HealthCheck:
+    def get_documents(
+        self, filter: Optional[DocumentFilterInputDTO] = None
+    ) -> ResponseDTO[list[DocumentResponseDTO]]:
         # TODO: allow get status of assignment in document
-        return {}
+        result = resolve_get_documents(filter)
+        return result
 
     # Labeler
     @strawberry.field

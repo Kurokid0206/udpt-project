@@ -5,6 +5,12 @@ from typing import Optional
 
 class DocumentTypeEnum(str, Enum):
     QUESTION = "QUESTION"
+    TEXT = "TEXT"
+    TRANSLATE = "TRANSLATE"
+    ENTITY = "ENTITY"
+    SYNONYMOUS = "SYNONYMOUS"
+    TRUE_FALSE = "TRUE_FALSE"
+    ANSWER = "ANSWER"
 
 
 class DocumentBase(BaseModel):

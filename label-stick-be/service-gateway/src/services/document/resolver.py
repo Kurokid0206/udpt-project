@@ -1,8 +1,24 @@
-from .dto import CreateDocumentInputDTO, DocumentResponseDTO, UpdateDocumentInputDTO
+from .dto import (
+    CreateDocumentInputDTO,
+    DocumentFilterInputDTO,
+    DocumentResponseDTO,
+    UpdateDocumentInputDTO,
+)
 from ...utils.dto import ResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
 from ...configs.base import MANAGER_SERVICE_URL
 from fastapi.encoders import jsonable_encoder
+
+
+async def resolve_get_documents(
+    filter: DocumentFilterInputDTO,
+) -> ResponseDTO[DocumentResponseDTO]:
+    url = f"{MANAGER_SERVICE_URL}/document"
+    data = jsonable_encoder(filter)
+    response = await call_api(url=url, method=HttpMethod.GET, params=data)
+    return ResponseDTO[list[DocumentResponseDTO]](
+        **{"data": [DocumentResponseDTO(**item) for item in response]}
+    )
 
 
 async def resolve_create_document(

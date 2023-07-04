@@ -4,6 +4,13 @@ from strawberry.file_uploads import Upload
 import strawberry
 
 
+@strawberry.input
+class DocumentFilterInputDTO:
+    project_id: Optional[int] = None
+    page: Optional[int] = 1
+    limit: Optional[int] = None
+
+
 @strawberry.enum
 class DocumentTypeEnum(Enum):
     TEXT = "TEXT"
@@ -22,8 +29,8 @@ class DocumentResponseDTO:
     document_url: str
     document_type: DocumentTypeEnum
     project_id: int
-    create_at: str
-    create_at: str
+    # create_at: str
+    # create_at: str
 
 
 @strawberry.input
