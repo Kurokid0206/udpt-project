@@ -14,7 +14,6 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,17 +22,18 @@ import { useEffect, useState } from "react";
 import fetchDocuments from "@apolloClient/query/document/getDocumentByProjectId";
 import fetchCreateDocument from "@apolloClient/mutaion/document/createDocument";
 
-const initDocument: Document = {
+const initDocument: IDocument = {
   id: 0,
   name: "",
   documentUrl: "",
   documentType: "",
   projectId: 1,
 };
+
 const DocumentPage: React.FC = () => {
-  const [documents, setDocuments] = useState<Document[]>([]);
+  const [documents, setDocuments] = useState<IDocument[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [nowDocument, setNowDocument] = useState<Document>(initDocument);
+  const [nowDocument, setNowDocument] = useState<IDocument>(initDocument);
 
   const createDocument = () => {
     fetchCreateDocument(
@@ -60,8 +60,8 @@ const DocumentPage: React.FC = () => {
   };
   useEffect(() => {
     fetchDocuments().then((response) => {
-      let documents_data: Document[] = [];
-      response.data?.forEach((item: Document) => {
+      let documents_data: IDocument[] = [];
+      response.data?.forEach((item: IDocument) => {
         documents_data.push({
           id: item.id,
           name: item.name,

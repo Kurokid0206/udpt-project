@@ -21,7 +21,7 @@ interface Label {
   name: string;
 }
 
-interface Document {
+interface IDocument {
   id: number;
   name: string;
   documentUrl: string;
