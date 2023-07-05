@@ -21,6 +21,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import fetchDocuments from "@apolloClient/query/document/getDocumentByProjectId";
 import fetchCreateDocument from "@apolloClient/mutaion/document/createDocument";
+import { create } from "domain";
+import createSentences from "@apolloClient/mutaion/sentence/createSentences";
 
 const initDocument: IDocument = {
   id: 0,
@@ -34,6 +36,7 @@ const DocumentPage: React.FC = () => {
   const [documents, setDocuments] = useState<IDocument[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [nowDocument, setNowDocument] = useState<IDocument>(initDocument);
+  const [sentences, setSentences] = useState<string[]>([]);
 
   const createDocument = () => {
     fetchCreateDocument(
@@ -43,20 +46,52 @@ const DocumentPage: React.FC = () => {
       nowDocument.documentUrl
     ).then((response) => {
       console.log(response);
+      const documentId = response.data.id;
+      const sentencesOfDocument = sentences.map((sentence) => {
+        return {
+          name: sentence,
+          sentence: sentence,
+          documentId: documentId,
+        };
+      });
+
+      createSentences(sentencesOfDocument).then((response) => {
+        console.log(response);
+        setIsOpenModal(false);
+      });
     });
   };
   const handleUploadFile = (file: File) => {
     const data = new FormData();
+    console.log(file);
     data.append("file", file ?? new File([], ""));
     data.append("project_id", nowDocument.projectId.toString());
 
-    fetch("http://103.176.179.83:8000/upload-file", {
-      method: "POST",
-      body: data,
-    }).then((response) => {
-      const data = response;
-      nowDocument.documentUrl = data.url.toString();
-    });
+    // Đọc nội dung của tệp tin .txt
+    if (file.type === "text/plain") {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const content = reader.result;
+        if (content != null) {
+          setSentences((content as string).split(/(?<=[.?!])\s+/));
+        }
+      };
+
+      // Đọc nội dung của tệp tin
+      reader.readAsText(file);
+    } else {
+      console.log(
+        "Định dạng tệp tin không được hỗ trợ. Vui lòng chọn tệp tin .txt."
+      );
+    }
+
+    // fetch("http://103.176.179.83:8000/upload-file", {
+    //   method: "POST",
+    //   body: data,
+    // }).then((response) => {
+    //   const data = response;
+    //   nowDocument.documentUrl = data.url.toString();
+    // });
   };
   useEffect(() => {
     fetchDocuments().then((response) => {
@@ -145,6 +180,7 @@ const DocumentPage: React.FC = () => {
 
       <Modal
         open={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
