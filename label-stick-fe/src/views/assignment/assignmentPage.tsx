@@ -27,13 +27,13 @@ import {
   Typography,
 } from "@mui/material";
 import fetchGetAssignments from "@apolloClient/query/assignment/getAssignments";
-import createAssignments from "@apolloClient/query/assignment/createAssignments";
+import createAssignment from "@apolloClient/mutaion/assignment/createAssignment";
 
 const AssignmentPage: React.FC = () => {
   const [assignments, setAssignments] = useState<any>([]);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
-  const [assignmentName, setAssignmentName] = useState<string>("");
-  const [addSentences, setAddSentences] = useState<number[]>([]);
+  const [assignName, setAssignName] = useState<string>("");
+  const [assignSentences, setassignSentences] = useState<number[]>([]);
   const [assignToUser, setAssignToUser] = useState<number>(-1);
   const [assignType, setAssignType] = useState<string>("");
 
@@ -60,8 +60,8 @@ const AssignmentPage: React.FC = () => {
     { id: 2, name: "sentence 2" },
   ];
 
-  const handleChange = (event: SelectChangeEvent<typeof addSentences>) => {
-    setAddSentences(event.target.value as number[]);
+  const handleChange = (event: SelectChangeEvent<typeof assignSentences>) => {
+    setassignSentences(event.target.value as number[]);
   };
 
   const handleChangeUserSelect = (event: SelectChangeEvent) => {
@@ -69,26 +69,41 @@ const AssignmentPage: React.FC = () => {
   };
 
   const handleAddAssignment = () => {
-    console.log(assignmentName);
-    console.log(addSentences);
+    console.log(assignName);
+    console.log(assignSentences);
     console.log(assignToUser);
     console.log(assignType);
     if (
-      assignmentName === "" ||
+      assignName === "" ||
       assignToUser <= 0 ||
-      addSentences.length === 0
+      assignSentences.length === 0 ||
+      assignType === ""
     ) {
       alert("Please input assignment name");
       return;
     }
 
-    // createAssignments(assignmentName, addSentences, assignToUser).then();
-    // setOpenAddModal(false);
+    const fromDate = new Date().toISOString();
+    const toDate = new Date().toISOString();
+
+    console.log(fromDate);
+
+    createAssignment(
+      assignName,
+      assignSentences,
+      assignToUser,
+      assignType,
+      fromDate,
+      toDate
+    ).then((res) => {
+      console.log(res);
+      setOpenAddModal(false);
+    });
   };
 
   return (
     <Container>
-      <h1>Document manager</h1>
+      <h1>Assignment manager</h1>
       <TableContainer component={Paper} sx={{ marginTop: 1 }}>
         <Table sx={{ minWidth: 650 }} aria-label="caption table">
           <TableHead>
@@ -127,7 +142,7 @@ const AssignmentPage: React.FC = () => {
         <AddIcon />
       </Fab>
 
-      {/* Model add document */}
+      {/* Model add Assignment */}
       <Modal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
@@ -141,13 +156,13 @@ const AssignmentPage: React.FC = () => {
             component="h2"
             sx={{ mb: 4 }}
           >
-            Add Document
+            Add Assignment
           </Typography>
           <Box>
             <FormControl defaultValue="" required sx={{ mb: 3, width: "100%" }}>
               <TextField
-                value={assignmentName}
-                onChange={(e) => setAssignmentName(e.target.value)}
+                value={assignName}
+                onChange={(e) => setAssignName(e.target.value)}
                 id="outlined-basic"
                 label="Name"
                 variant="outlined"
@@ -162,7 +177,7 @@ const AssignmentPage: React.FC = () => {
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
-                value={addSentences}
+                value={assignSentences}
                 onChange={(e) => handleChange(e)}
                 input={<OutlinedInput label="Sentences" />}
                 renderValue={(selected) => selected.join(", ")}
@@ -170,7 +185,7 @@ const AssignmentPage: React.FC = () => {
                 {sentences.map((sentence) => (
                   <MenuItem key={sentence?.id} value={sentence?.id}>
                     <Checkbox
-                      checked={addSentences.indexOf(sentence.id) > -1}
+                      checked={assignSentences.indexOf(sentence.id) > -1}
                     />
                     <ListItemText primary={sentence.name} />
                   </MenuItem>
@@ -190,9 +205,7 @@ const AssignmentPage: React.FC = () => {
                 autoWidth
                 label="Assign to user"
               >
-                <MenuItem value={10}>Twenty</MenuItem>
-                <MenuItem value={21}>Twenty one</MenuItem>
-                <MenuItem value={22}>Twenty one and a half</MenuItem>
+                <MenuItem value={1}>User 1</MenuItem>
               </Select>
             </FormControl>
             {/* assign type */}

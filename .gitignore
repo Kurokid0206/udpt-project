@@ -32,3 +32,4 @@ dist-ssr
 **/postgres-data
 **/seaweedfs-data
 **/redis-data
+label-stick-fe/.env

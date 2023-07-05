@@ -1,9 +1,9 @@
 import gql from "graphql-tag";
 import client from "../../client";
 
-const CREATE_ASSIGNMENTS = gql`
-  mutation createAssignments($input: CreateAssignmentInputDTO!) {
-    createAssignments(input: $input) {
+const CREATE_ASSIGNMENT = gql`
+  mutation createAssignment($input: CreateAssignmentInputDTO!) {
+    createAssignment(input: $input) {
       statusCode
       message
       data {
@@ -19,16 +19,16 @@ const CREATE_ASSIGNMENTS = gql`
   }
 `;
 
-const createAssignments = async (
+const createAssignment = async (
   name: string,
-  sentenceIds: [number],
+  sentenceIds: number[],
   userId: number,
   assignType: string,
-  fromDate: Date,
-  toDate: Date
+  fromDate: string,
+  toDate: string
 ) => {
   const result = await client.mutate({
-    mutation: CREATE_ASSIGNMENTS,
+    mutation: CREATE_ASSIGNMENT,
     variables: {
       input: {
         name: name,
@@ -45,4 +45,4 @@ const createAssignments = async (
   return getAssignments;
 };
 
-export default createAssignments;
+export default createAssignment;
