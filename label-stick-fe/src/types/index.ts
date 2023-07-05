@@ -28,3 +28,10 @@ interface Document {
   documentType: string;
   projectId: number;
 }
+
+interface Sentence {
+  id: number;
+  name: string;
+  sentence: string;
+  documentId: number;
+}

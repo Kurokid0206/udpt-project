@@ -140,7 +140,7 @@ const ManagerHomePage: React.FC = () => {
       </Box>
       <TableContainer component={Paper} sx={{ height: 500 }}>
         <Table
-          sx={{ minWidth: 650, height: 500 }}
+          sx={{ minWidth: 650, maxHeight: 500 }}
           aria-label="simple table"
           stickyHeader={true}
         >
