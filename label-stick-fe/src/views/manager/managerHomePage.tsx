@@ -1,4 +1,3 @@
-import fetchGetProjectsByUserId from "@apolloClient/query/project/getProjectByUserId";
 import {
   Box,
   Button,
@@ -20,6 +19,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import fetchCreateProject from "@apolloClient/mutaion/project/createProject";
+import fetchGetProjects from "@apolloClient/query/project/getProjects";
+import fetchUpdateProject from "@apolloClient/mutaion/project/updateProject";
 
 const initProject: Project = {
   id: 0,
@@ -48,20 +49,57 @@ const ManagerHomePage: React.FC = () => {
   };
   const handleSaveProject = () => {
     if (isEdit) {
-      console.log("update call");
+      fetchUpdateProject(
+        nowProject.id,
+        nowProject.name,
+        nowProject.description,
+        nowProject.maxUser
+      ).then((response) => {
+        if (response.statusCode === 200) {
+          let list_temp_ = projects.map((item) => {
+            if (item.id === nowProject.id) {
+              let temp: Project = {
+                id: item.id,
+                name: response.data.name,
+                description: response.data.description,
+                maxUser: response.data.maxUser,
+              };
+              return temp;
+            }
+            return item;
+          });
+          setProjects(list_temp_);
+          onCloseModal();
+        } else {
+          console.log(response.message);
+        }
+      });
     } else {
       fetchCreateProject(
         nowProject.name,
         nowProject.description,
         nowProject.maxUser
       ).then((response) => {
-        console.log(response);
+        if (response.statusCode === 200) {
+          let temp: Project = {
+            id: response.data.id,
+            maxUser: response.data.maxUser,
+            description: response.data.description,
+            name: response.data.name,
+          };
+          let list_temp = structuredClone(projects);
+          list_temp.push(temp);
+          setProjects(list_temp);
+          onCloseModal();
+        } else {
+          console.log(response.message);
+        }
       });
     }
   };
 
   useEffect(() => {
-    fetchGetProjectsByUserId(1).then((response) => {
+    fetchGetProjects().then((response) => {
       let project_data: Project[] = [];
       response.data?.forEach((item: Project) => {
         project_data.push({
@@ -100,15 +138,27 @@ const ManagerHomePage: React.FC = () => {
           Add project
         </Fab>
       </Box>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableContainer component={Paper} sx={{ height: 500 }}>
+        <Table
+          sx={{ minWidth: 650, height: 500 }}
+          aria-label="simple table"
+          stickyHeader={true}
+        >
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Max user</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell sx={{ backgroundColor: "#ebebeb" }}>ID</TableCell>
+              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
+                Name
+              </TableCell>
+              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
+                Description
+              </TableCell>
+              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
+                Max user
+              </TableCell>
+              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
+                Action
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
