@@ -50,7 +50,7 @@ const DocumentPage: React.FC = () => {
     data.append("file", file ?? new File([], ""));
     data.append("project_id", nowDocument.projectId.toString());
 
-    fetch("http://localhost:8000/upload-file", {
+    fetch("http://103.176.179.83:8000/upload-file", {
       method: "POST",
       body: data,
     }).then((response) => response.json());
