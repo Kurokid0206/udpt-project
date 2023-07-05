@@ -6,6 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -15,6 +16,7 @@ import {
   Fab,
   FormControl,
   FormLabel,
+  IconButton,
   Input,
   InputLabel,
   ListItemText,
@@ -28,10 +30,16 @@ import {
 } from "@mui/material";
 import fetchGetAssignments from "@apolloClient/query/assignment/getAssignments";
 import createAssignment from "@apolloClient/mutaion/assignment/createAssignment";
+import fetchGetLabelers from "@apolloClient/query/user/getUsers";
+import fetchGetSentenceByDocumentId from "@apolloClient/query/sentence/getSentenceByDocumentId";
 
 const AssignmentPage: React.FC = () => {
   const [assignments, setAssignments] = useState<any>([]);
+  const [sentences, setSentences] = useState<any>([]);
+  const [users, setUsers] = useState<any>([]);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+
   const [assignName, setAssignName] = useState<string>("");
   const [assignSentences, setassignSentences] = useState<number[]>([]);
   const [assignToUser, setAssignToUser] = useState<number>(-1);
@@ -41,6 +49,8 @@ const AssignmentPage: React.FC = () => {
 
   useEffect(() => {
     fetchGetAssignments().then((res) => setAssignments(res.data));
+    fetchGetLabelers().then((res) => setUsers(res.data));
+    fetchGetSentenceByDocumentId(1).then((res) => setSentences(res.data));
   }, []);
 
   const styleModal = {
@@ -57,11 +67,6 @@ const AssignmentPage: React.FC = () => {
     py: 3,
   };
 
-  const sentences = [
-    { id: 1, name: "sentence 1" },
-    { id: 2, name: "sentence 2" },
-  ];
-
   const handleChange = (event: SelectChangeEvent<typeof assignSentences>) => {
     setassignSentences(event.target.value as number[]);
   };
@@ -71,11 +76,6 @@ const AssignmentPage: React.FC = () => {
   };
 
   const handleAddAssignment = () => {
-    console.log(assignName);
-    console.log(assignSentences);
-    console.log(assignToUser);
-    console.log(assignType);
-
     if (
       assignName === "" ||
       assignToUser <= 0 ||
@@ -87,19 +87,46 @@ const AssignmentPage: React.FC = () => {
       alert("Please input assignment name");
       return;
     }
+    if (isEdit) {
+      console.log("edit");
+    } else {
+      createAssignment(
+        assignName,
+        assignSentences,
+        assignToUser,
+        assignType,
+        new Date(assignFromDate).toISOString(),
+        new Date(assignToDate).toISOString()
+      ).then((res) => {
+        setAssignments([...assignments, res.data]);
+        console.log(res);
+        setOpenAddModal(false);
+      });
+    }
+  };
 
-    createAssignment(
-      assignName,
-      assignSentences,
-      assignToUser,
-      assignType,
-      new Date(assignFromDate).toISOString(),
-      new Date(assignToDate).toISOString()
-    ).then((res) => {
-      setAssignments([...assignments, res.data]);
-      console.log(res);
-      setOpenAddModal(false);
-    });
+  const onClickAddAssignment = () => {
+    setAssignName("");
+    setassignSentences([]);
+    setAssignToUser(-1);
+    setAssignType("");
+    setAssignFromDate("");
+    setAssignToDate("");
+    setIsEdit(false);
+    setOpenAddModal(true);
+  };
+
+  const onClickEditAssignment = (id: number) => {
+    const nowEdit = assignments.filter((item: any) => item.id === id);
+
+    setAssignName(nowEdit[0].name);
+    setassignSentences(nowEdit[0].sentenceIds);
+    setAssignToUser(nowEdit[0].userId);
+    setAssignType(nowEdit[0].assignType);
+    setAssignFromDate(nowEdit[0].fromDate.slice(0, 10));
+    setAssignToDate(nowEdit[0].toDate.slice(0, 10));
+    setIsEdit(true);
+    setOpenAddModal(true);
   };
 
   return (
@@ -132,6 +159,25 @@ const AssignmentPage: React.FC = () => {
                     {row.fromDate.slice(0, 10)}
                   </TableCell>
                   <TableCell align="right">{row.toDate.slice(0, 10)}</TableCell>
+                  <TableCell align="right">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "8px",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <Box>
+                        <IconButton
+                          onClick={() => {
+                            onClickEditAssignment(row.id);
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -141,7 +187,7 @@ const AssignmentPage: React.FC = () => {
         color="primary"
         aria-label="add"
         sx={{ position: "fixed", bottom: "42px", right: "56px" }}
-        onClick={() => setOpenAddModal(true)}
+        onClick={onClickAddAssignment}
       >
         <AddIcon />
       </Fab>
@@ -186,14 +232,15 @@ const AssignmentPage: React.FC = () => {
                 input={<OutlinedInput label="Sentences" />}
                 renderValue={(selected) => selected.join(", ")}
               >
-                {sentences.map((sentence) => (
-                  <MenuItem key={sentence?.id} value={sentence?.id}>
-                    <Checkbox
-                      checked={assignSentences.indexOf(sentence.id) > -1}
-                    />
-                    <ListItemText primary={sentence.name} />
-                  </MenuItem>
-                ))}
+                {sentences &&
+                  sentences.map((sentence: any) => (
+                    <MenuItem key={sentence?.id} value={sentence?.id}>
+                      <Checkbox
+                        checked={assignSentences.indexOf(sentence.id) > -1}
+                      />
+                      <ListItemText primary={sentence.name} />
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
             {/* userid */}
@@ -209,7 +256,14 @@ const AssignmentPage: React.FC = () => {
                 autoWidth
                 label="Assign to user"
               >
-                <MenuItem value={1}>User 1</MenuItem>
+                {users &&
+                  users.map((user: any) => {
+                    return (
+                      <MenuItem key={user.userId} value={Number(user.userId)}>
+                        {user.username}
+                      </MenuItem>
+                    );
+                  })}
               </Select>
             </FormControl>
             {/* assign type */}
@@ -226,6 +280,7 @@ const AssignmentPage: React.FC = () => {
                 label="Assign type"
               >
                 <MenuItem value={"LABEL"}>LABEL</MenuItem>
+                <MenuItem value={"REVIEW"}>REVIEW</MenuItem>
               </Select>
             </FormControl>
             <FormControl sx={{ mb: 3, width: "100%" }}>
@@ -252,7 +307,7 @@ const AssignmentPage: React.FC = () => {
 
           <Box sx={{ display: "flex" }}>
             <Button variant="contained" onClick={handleAddAssignment}>
-              Contained
+              {isEdit ? "Edit" : "Add"}
             </Button>
           </Box>
         </Box>
