@@ -15,3 +15,8 @@ interface Project {
   description: string;
   maxUser: number;
 }
+
+interface Label {
+  id: number;
+  name: string;
+}

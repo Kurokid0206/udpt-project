@@ -115,6 +115,7 @@ const AssignmentPage: React.FC = () => {
               <TableCell align="right">Assign type</TableCell>
               <TableCell align="right">from date</TableCell>
               <TableCell align="right">to date</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

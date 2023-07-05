@@ -9,6 +9,7 @@ import DocumentPage from "@views/document/documentPage";
 import AssignmentPage from "@views/assignment/assignmentPage";
 import AssignMePage from "@views/user/assignMePage";
 import UserLabeling from "@views/user/userLabeling";
+import ManagerLabelPage from "@views/manager/managerLabelPage";
 
 const NavigationRouter: React.FC = () => {
   //define your all page below
@@ -16,6 +17,10 @@ const NavigationRouter: React.FC = () => {
     {
       path: "/manager",
       element: <ManagerHomePage />,
+    },
+    {
+      path: "/manager/label",
+      element: <ManagerLabelPage />,
     },
     {
       path: "/user",
