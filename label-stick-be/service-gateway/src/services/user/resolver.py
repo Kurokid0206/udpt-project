@@ -31,3 +31,11 @@ async def resolve_login(user: LoginDTO) -> ResponseDTO[UserResponseDTO]:
     data = jsonable_encoder(user)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
     return ResponseDTO[UserResponseDTO](**{"data": UserResponseDTO(**response)})
+
+
+async def resolve_get_labelers() -> ResponseDTO[list[UserResponseDTO]]:
+    url = f"{USER_SERVICE_URL}/user/list-labeler"
+    response = await call_api(url=url, method=HttpMethod.GET)
+    return ResponseDTO[list[UserResponseDTO]](
+        **{"data": [UserResponseDTO(**user) for user in response]}
+    )

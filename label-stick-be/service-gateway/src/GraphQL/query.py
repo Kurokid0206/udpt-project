@@ -14,6 +14,8 @@ from ..services.document.dto import DocumentFilterInputDTO, DocumentResponseDTO
 from ..services.assignment.dto import AssignmentFilterInputDTO, AssignmentResponseDTO
 from ..services.label.dto import LabelResponseDTO
 from ..services.sentence.dto import SentenceResponseDTO
+from ..services.user.dto import UserResponseDTO
+
 from ..services.project.resolver import (
     resolve_get_projects,
     resolve_get_projects_by_user,
@@ -22,6 +24,7 @@ from ..services.document.resolver import resolve_get_documents
 from ..services.assignment.resolver import resolve_get_assignments
 from ..services.label.resolver import resolve_get_labels
 from ..services.sentence.resolver import resolve_get_sentences_by_ids
+from ..services.user.resolver import resolve_get_labelers
 
 
 @strawberry.type
@@ -42,9 +45,9 @@ class Query:
     @strawberry.field
     def get_labelers(
         self,
-        # filter: Optional[LabelerFilterDTO] = None,
-    ) -> ResponseDTO[list[HealthCheck]]:
-        return {}
+    ) -> ResponseDTO[list[UserResponseDTO]]:
+        result = resolve_get_labelers()
+        return result
 
     @strawberry.field
     def get_projects(

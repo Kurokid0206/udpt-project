@@ -19,5 +19,13 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
         return db_obj
 
+    def get_labelers(self, *, db: Session) -> list[User]:
+        list_role = ["USER_LV_1", "USER_LV_2", "USER_LV_3"]
+        db_obj = db.query(self.model).filter(self.model.role.in_(list_role)).all()
+        if not db_obj:
+            return []
+
+        return db_obj
+
 
 user_repository = CRUDUser(User)
