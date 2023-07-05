@@ -91,3 +91,11 @@ async def add_labels(
         db=session, sentence_id=input.id
     )
     return result
+
+
+@router.get("/get-by-document/{document_id}", response_model=list[Sentence])
+async def get_list_sentence_by_document_id(
+    document_id: int = 1,
+) -> list[Sentence]:
+    sentences = sentence_repository.get_by_document_id(document_id=document_id)
+    return sentences
