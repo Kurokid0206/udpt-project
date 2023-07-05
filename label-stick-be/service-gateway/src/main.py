@@ -15,7 +15,6 @@ origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://udpt.ti-pt.info",
-    "*",
 ]
 
 app.add_middleware(

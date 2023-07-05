@@ -53,7 +53,10 @@ const DocumentPage: React.FC = () => {
     fetch("http://103.176.179.83:8000/upload-file", {
       method: "POST",
       body: data,
-    }).then((response) => response.json());
+    }).then((response) => {
+      const data = response.json();
+      nowDocument.documentUrl = data?.url;
+    });
   };
   useEffect(() => {
     fetchDocuments().then((response) => {
