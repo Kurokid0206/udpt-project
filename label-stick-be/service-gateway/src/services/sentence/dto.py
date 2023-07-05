@@ -1,3 +1,4 @@
+from enum import Enum
 import strawberry
 
 
@@ -14,3 +15,17 @@ class SentenceResponseDTO:
     name: str = None
     sentence: str = None
     document_id: int = None
+
+
+@strawberry.enum
+class LabelStatus(str, Enum):
+    IN_PROGRESS = "IN_PROGRESS"
+    CONFIRMED = "CONFIRMED"
+
+
+@strawberry.input
+class addLabelInputDTO:
+    sentence_id: int = None
+    label_id: int = None
+    user_id: int = None
+    status: LabelStatus = LabelStatus.IN_PROGRESS

@@ -38,3 +38,4 @@ class UserResponseDTO:
     user_id: str = None
     username: str = None
     email: str = None
+    role: UserRoleEnum = UserRoleEnum.USER_LV_1

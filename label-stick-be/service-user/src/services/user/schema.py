@@ -3,6 +3,11 @@ from typing import Optional, Any, List
 from enum import Enum
 
 
+class LoginDTO(BaseModel):
+    username: str = Field(alias="username")
+    password: str = Field(alias="password")
+
+
 class UserBase(BaseModel):
     username: str = Field(alias="username")
     email: str = Field(alias="email")
@@ -54,4 +59,5 @@ class UserInDBBase(UserBase):
 
 
 class User(UserInDBBase):
+    role: UserRoleEnum = Field(alias="role")
     ...

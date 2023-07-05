@@ -5,11 +5,15 @@ from jinja2 import Template, Environment, FileSystemLoader
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-SMTP_ENDPOINT = "smtp.ethereal.email"
-SMTP_PORT = 587
-SMTP_USER_NAME = "delphine75@ethereal.email"
-SMTP_PASSWORD = "p8k9wzsgDd27XFptJK"
+# SMTP_ENDPOINT = "smtp.ethereal.email"
+# SMTP_PORT = 587
+# SMTP_USER_NAME = "delphine75@ethereal.email"
+# SMTP_PASSWORD = "p8k9wzsgDd27XFptJK"
 
+SMTP_ENDPOINT = "smtp.gmail.com"
+SMTP_PORT = 465
+SMTP_USER_NAME = "hungtyvuive@gmail.com"
+SMTP_PASSWORD = "gvnvnwhieibtdrjj"
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -39,8 +43,8 @@ def send_mail_template(template, data: dict):
     msg.attach(html_part)
     log.info("Sending email to %s", data["to_email"])
     try:
-        smtp_server = smtplib.SMTP(host=SMTP_ENDPOINT, port=SMTP_PORT)
-        smtp_server.starttls()
+        smtp_server = smtplib.SMTP_SSL(host=SMTP_ENDPOINT, port=SMTP_PORT)
+        # smtp_server.starttls()
         smtp_server.login(user=SMTP_USER_NAME, password=SMTP_PASSWORD)
         smtp_server.sendmail(data["from_email"], data["to_email"], msg.as_string())
         smtp_server.quit()

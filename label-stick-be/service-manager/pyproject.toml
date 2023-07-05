@@ -17,6 +17,7 @@ pyjwt = {extras = ["crypto"], version = "^2.7.0"}
 minio = "^7.1.15"
 python-multipart = "^0.0.6"
 celery = "^5.3.1"
+redis = "^4.6.0"
 
 
 [build-system]

@@ -3,6 +3,13 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
+class SentenceLabelsDTO(BaseModel):
+    label_ids: list[int] = []
+    id: int
+    user_id: int
+    status: str
+
+
 class SentenceBase(BaseModel):
     name: str = Field(alias="name")
     sentence: str = Field(alias="sentence")
