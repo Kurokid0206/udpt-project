@@ -3,6 +3,7 @@ import fetchGetSentenceByIds from "@apolloClient/query/sentence/getSentenceById"
 import {
   Autocomplete,
   Box,
+  Chip,
   IconButton,
   Paper,
   Stack,
@@ -15,6 +16,7 @@ import {
   TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import fetchGetLabels from "@apolloClient/query/label/getLabels";
@@ -27,8 +29,41 @@ const UserLabeling: React.FC = () => {
     { sentenceId: number; labels: string[]; nowLabelSelect: string | "" }[]
   >([]);
 
+  const renderLabel = (sentencesID: number) => {
+    let sentenceSlect = labelSentence.filter(
+      (item) => item.sentenceId == sentencesID
+    );
+    return sentenceSlect[0].labels.map((item) => (
+      <Chip
+        key={`${sentencesID}_${item}`}
+        label={item}
+        color="primary"
+        size="small"
+      />
+    ));
+  };
+
   const addLabelToSentence = (sentenceId: number) => {
-    let nowData = labelSentence.filter((item) => item.sentenceId == sentenceId);
+    let nowData = structuredClone(labelSentence).filter(
+      (item) => item.sentenceId == sentenceId
+    );
+    if (nowData[0].nowLabelSelect == "") {
+      return;
+    }
+    if (nowData[0].labels.includes(nowData[0].nowLabelSelect)) {
+      return;
+    }
+    let selectedLabels = structuredClone(nowData[0].labels);
+    selectedLabels.push(nowData[0].nowLabelSelect);
+    let nowList = structuredClone(labelSentence).map((item) => {
+      if (item.sentenceId == sentenceId) {
+        return { ...item, labels: selectedLabels };
+      }
+      return item;
+    });
+
+    console.log(nowList);
+    setLabelSentence(nowList);
   };
 
   useEffect(() => {
@@ -130,17 +165,24 @@ const UserLabeling: React.FC = () => {
         >
           <TableHead>
             <TableRow>
-              <TableCell sx={{ backgroundColor: "#ebebeb" }}>ID</TableCell>
-              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
-                Name
+              <TableCell sx={{ backgroundColor: "#ebebeb" }} width={20}>
+                ID
               </TableCell>
-              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
+              <TableCell align="left" sx={{ backgroundColor: "#ebebeb" }}>
                 Sentences
               </TableCell>
-              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
+              <TableCell
+                align="left"
+                sx={{ backgroundColor: "#ebebeb" }}
+                width={300}
+              >
                 Label
               </TableCell>
-              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
+              <TableCell
+                align="right"
+                sx={{ backgroundColor: "#ebebeb" }}
+                width={100}
+              >
                 Action
               </TableCell>
             </TableRow>
@@ -148,24 +190,36 @@ const UserLabeling: React.FC = () => {
           <TableBody>
             {sentences.map((sentence, idx) => (
               <TableRow
-                key={sentence.id + idx}
+                key={String(sentence.id) + idx}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {sentence.id}
                 </TableCell>
-                <TableCell align="right">{sentence.name}</TableCell>
-                <TableCell align="right">{sentence.sentence}</TableCell>
-                <TableCell align="right">No labels</TableCell>
+                <TableCell align="left">{sentence.sentence}</TableCell>
+                <TableCell align="left">
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      flexWrap: "wrap",
+                      gap: "8px",
+                    }}
+                  >
+                    {renderLabel(sentence.id)}
+                  </Box>
+                </TableCell>
                 <TableCell align="right">
                   <Box
                     sx={{
                       display: "flex",
                       gap: "8px",
                       justifyContent: "flex-end",
+                      alignItems: "center",
                     }}
                   >
-                    <Stack spacing={2} sx={{ width: 300 }}>
+                    <Stack spacing={2} sx={{ width: 175 }}>
                       <Autocomplete
                         id={"select_label_" + sentence.id}
                         freeSolo
@@ -175,16 +229,17 @@ const UserLabeling: React.FC = () => {
                           )[0].nowLabelSelect
                         }
                         onChange={(event: any, newValue: string | null) => {
-                          let newList = labelSentence.map((item) => {
-                            if (item.sentenceId == sentence.id) {
-                              return {
-                                ...item,
-                                nowLabelSelect: newValue ? newValue : "",
-                              };
+                          let newList = structuredClone(labelSentence).map(
+                            (item) => {
+                              if (item.sentenceId == sentence.id) {
+                                return {
+                                  ...item,
+                                  nowLabelSelect: newValue ? newValue : "",
+                                };
+                              }
+                              return item;
                             }
-                            return item;
-                          });
-                          console.log(newList);
+                          );
                           setLabelSentence(newList);
                         }}
                         options={labels.map((label) => label.name)}
@@ -198,8 +253,9 @@ const UserLabeling: React.FC = () => {
                         onClick={() => {
                           addLabelToSentence(sentence.id);
                         }}
+                        color="secondary"
                       >
-                        <EditIcon />
+                        <TurnedInNotIcon />
                       </IconButton>
                     </Box>
                   </Box>
