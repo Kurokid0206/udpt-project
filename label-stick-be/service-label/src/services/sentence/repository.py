@@ -24,5 +24,17 @@ class CRUDSentence(CRUDBase[Sentence, SentenceCreate, SentenceUpdate]):
         result = db.query(self.model).filter_by(document_id=document_id).all()
         return result
 
+    def create_many(
+        self, db: Session, *, obj_list: list[SentenceCreate]
+    ) -> list[Sentence]:
+        result = []
+        for obj in obj_list:
+            db_obj = self.model(**obj.dict())
+            db.add(db_obj)
+            db.commit()
+            db.refresh(db_obj)
+            result.append(db_obj)
+        return result
+
 
 sentence_repository = CRUDSentence(Sentence)
