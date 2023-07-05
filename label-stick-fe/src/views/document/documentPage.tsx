@@ -28,25 +28,33 @@ const initDocument: Document = {
   name: "",
   documentUrl: "",
   documentType: "",
-  projectId: 0,
+  projectId: 1,
 };
 const DocumentPage: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [nowDocument, setNowDocument] = useState<Document>(initDocument);
-  const [nowFile, setNowFile] = useState<File | null>(null);
 
   const createDocument = () => {
     fetchCreateDocument(
       nowDocument.name,
       nowDocument.documentType,
       nowDocument.projectId,
-      nowFile
+      nowDocument.documentUrl
     ).then((response) => {
       console.log(response);
     });
   };
+  const handleUploadFile = (file: File) => {
+    const data = new FormData();
+    data.append("file", file ?? new File([], ""));
+    data.append("project_id", nowDocument.projectId.toString());
 
+    fetch("http://localhost:8000/upload-file", {
+      method: "POST",
+      body: data,
+    }).then((response) => response.json());
+  };
   useEffect(() => {
     fetchDocuments().then((response) => {
       let documents_data: Document[] = [];
@@ -153,7 +161,13 @@ const DocumentPage: React.FC = () => {
             gap: "12px",
           }}
         >
-          <TextField label="Name" variant="outlined" />
+          <TextField
+            label="Name"
+            variant="outlined"
+            onChange={(event) => {
+              nowDocument.name = (event.target.value ?? "") as string;
+            }}
+          />
           <Select
             onChange={(event) => {
               nowDocument.documentType = (event.target.value ??
@@ -167,12 +181,17 @@ const DocumentPage: React.FC = () => {
             <MenuItem value={"TRUE_FALSE"}>TRUE_FALSE</MenuItem>
             <MenuItem value={"ANSWER"}>ANSWER</MenuItem>
           </Select>
-          <TextField label="project_id" variant="outlined" />
+          <TextField
+            label="project_id"
+            variant="outlined"
+            onChange={(event) => {
+              nowDocument.projectId = Number(event.target.value ?? 1);
+            }}
+          />
           <input
             type="file"
             onChange={(e) => {
-              setNowFile(e.target.files![0]);
-              console.log(e.target.files![0]);
+              handleUploadFile(e.target.files![0]);
             }}
           />
 

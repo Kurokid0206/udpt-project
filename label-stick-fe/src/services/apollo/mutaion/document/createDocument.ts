@@ -21,7 +21,7 @@ const fetchCreateDocument = async (
   name: string,
   documentType: string,
   projectId: number,
-  file: File | null
+  documentUrl: string
 ) => {
   const result = await client.mutate({
     mutation: CREATE_PROJECT,
@@ -30,7 +30,7 @@ const fetchCreateDocument = async (
         name: name,
         documentType: documentType,
         projectId: projectId,
-        file: file,
+        documentUrl: documentUrl,
       },
     },
   });
