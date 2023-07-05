@@ -46,3 +46,13 @@ async def resolve_add_labels_to_sentence(
     return ResponseDTO[list[LabelSentenceResponseDTO]](
         **{"data": [LabelSentenceResponseDTO(**item) for item in response]}
     )
+
+
+async def resolve_get_sentences_by_document_id(
+    document_id: int,
+) -> ResponseDTO[list[SentenceResponseDTO]]:
+    url = f"{LABEL_SERVICE_URL}/sentence/get-by-document/{document_id}"
+    response = await call_api(url=url, method=HttpMethod.GET)
+    return ResponseDTO[list[SentenceResponseDTO]](
+        **{"data": [SentenceResponseDTO(**item) for item in response]}
+    )

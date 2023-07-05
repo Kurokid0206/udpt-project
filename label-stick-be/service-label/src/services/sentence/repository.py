@@ -20,5 +20,9 @@ class CRUDSentence(CRUDBase[Sentence, SentenceCreate, SentenceUpdate]):
         )
         return result
 
+    def get_by_document_id(self, db: Session, *, document_id: int) -> list[Sentence]:
+        result = db.query(self.model).filter_by(document_id=document_id).all()
+        return result
+
 
 sentence_repository = CRUDSentence(Sentence)

@@ -23,7 +23,10 @@ from ..services.project.resolver import (
 from ..services.document.resolver import resolve_get_documents
 from ..services.assignment.resolver import resolve_get_assignments
 from ..services.label.resolver import resolve_get_labels
-from ..services.sentence.resolver import resolve_get_sentences_by_ids
+from ..services.sentence.resolver import (
+    resolve_get_sentences_by_ids,
+    resolve_get_sentences_by_document_id,
+)
 from ..services.user.resolver import resolve_get_labelers
 
 
@@ -90,6 +93,13 @@ class Query:
     @strawberry.field
     def get_labels(self) -> ResponseDTO[list[LabelResponseDTO]]:
         result = resolve_get_labels()
+        return result
+
+    @strawberry.field
+    def get_sentences_by_document_id(
+        self, document_id: int
+    ) -> ResponseDTO[list[SentenceResponseDTO]]:
+        result = resolve_get_sentences_by_document_id(document_id)
         return result
 
     @strawberry.field

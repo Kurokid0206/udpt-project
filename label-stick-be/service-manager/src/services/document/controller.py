@@ -33,15 +33,14 @@ async def get_document(
 
 @router.post("", response_model=Document)
 async def create_document(
-    input: str = Form(...),
-    file: UploadFile = File(...),
+    input: DocumentCreate,
     session: AsyncSession = Depends(get_session),
 ) -> Document:
     try:
-        data = DocumentCreate.parse_raw(input)
-        file_url = put_object(key=data.project_id, file=file)
-        data.document_url = file_url
-        document = document_repository.create(session, obj_in=data)
+        # data = DocumentCreate.parse_raw(input)
+        # file_url = put_object(key=data.project_id, file=file)
+        # data.document_url = file_url
+        document = document_repository.create(session, obj_in=input)
 
     except Exception as e:
         print(f"error: {e}")

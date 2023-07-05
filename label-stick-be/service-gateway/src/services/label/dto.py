@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 @strawberry.input
-class LabelInputDTO(BaseModel):
+class LabelInputDTO:
     name: str = None
 
 

@@ -1,106 +1,214 @@
-import fetchGetDocuments from "@apolloClient/query/documents/getDocuments";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
 import {
   Box,
-  Container,
+  Button,
   Fab,
-  FormControl,
-  FormLabel,
-  Input,
+  IconButton,
+  MenuItem,
   Modal,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
-import { Label } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import { useEffect, useState } from "react";
+import fetchDocuments from "@apolloClient/query/document/getDocumentByProjectId";
+import fetchCreateDocument from "@apolloClient/mutaion/document/createDocument";
 
+const initDocument: Document = {
+  id: 0,
+  name: "",
+  documentUrl: "",
+  documentType: "",
+  projectId: 1,
+};
 const DocumentPage: React.FC = () => {
-  const [documents, setDocuments] = useState<any>([]);
-  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [nowDocument, setNowDocument] = useState<Document>(initDocument);
 
+  const createDocument = () => {
+    fetchCreateDocument(
+      nowDocument.name,
+      nowDocument.documentType,
+      nowDocument.projectId,
+      nowDocument.documentUrl
+    ).then((response) => {
+      console.log(response);
+    });
+  };
+  const handleUploadFile = (file: File) => {
+    const data = new FormData();
+    data.append("file", file ?? new File([], ""));
+    data.append("project_id", nowDocument.projectId.toString());
+
+    fetch("http://103.176.179.83:8000/upload-file", {
+      method: "POST",
+      body: data,
+    }).then((response) => {
+      const data = response;
+      nowDocument.documentUrl = data.url.toString();
+    });
+  };
   useEffect(() => {
-    fetchGetDocuments().then((res) => setDocuments(res.data));
+    fetchDocuments().then((response) => {
+      let documents_data: Document[] = [];
+      response.data?.forEach((item: Document) => {
+        documents_data.push({
+          id: item.id,
+          name: item.name,
+          documentUrl: item.documentUrl,
+          documentType: item.documentType,
+          projectId: item.projectId,
+        });
+      });
+      setDocuments(documents_data);
+    });
   }, []);
 
-  const styleModal = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    boxShadow: 24,
-    px: 4,
-    py: 3,
-  };
-
   return (
-    <Container>
-      <h1>Document manager</h1>
-      <TableContainer component={Paper} sx={{ marginTop: 1 }}>
-        <Table sx={{ minWidth: 650 }} aria-label="caption table">
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "32px",
+        padding: "16px",
+      }}
+    >
+      <Box sx={{ width: "100%", display: "flex" }}>
+        <Box sx={{ flex: 1 }}>
+          <h1>Document</h1>
+        </Box>
+        <Fab
+          color="primary"
+          aria-label="add"
+          variant="extended"
+          onClick={() => {
+            setIsOpenModal(true);
+          }}
+        >
+          <AddIcon />
+          Add document
+        </Fab>
+      </Box>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="right">Document Name</TableCell>
-              <TableCell align="right">Document URL</TableCell>
-              <TableCell align="right">Type</TableCell>
-              <TableCell align="right">Project</TableCell>
+              <TableCell align="right">Name</TableCell>
+              <TableCell align="right">Description</TableCell>
+              <TableCell align="right">Max user</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {documents &&
-              documents.map((row: any) => (
-                <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="right">{row.name}</TableCell>
-                  <TableCell align="right">{row.documentUrl}</TableCell>
-                  <TableCell align="right">{row.documentType}</TableCell>
-                  <TableCell align="right">{row.projectId}</TableCell>
-                </TableRow>
-              ))}
+            {documents.map((document, idx) => (
+              <TableRow
+                key={document.id + idx}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {document.id}
+                </TableCell>
+                <TableCell align="right">{document.name}</TableCell>
+                <TableCell align="right">{document.documentType}</TableCell>
+                <TableCell align="right">{document.documentUrl}</TableCell>
+                <TableCell align="right">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: "8px",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <Box>
+                      <IconButton onClick={() => {}}>
+                        <EditIcon />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{ position: "fixed", bottom: "42px", right: "56px" }}
-        onClick={() => setOpenAddModal(true)}
-      >
-        <AddIcon />
-      </Fab>
 
-      {/* Model add document */}
       <Modal
-        open={openAddModal}
-        onClose={() => setOpenAddModal(false)}
+        open={isOpenModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={styleModal}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Add Document
-          </Typography>
-          <Box>
-            <FormControl defaultValue="" required>
-              <FormLabel>Name test</FormLabel>
-              <Input placeholder="Type in here…" />
-            </FormControl>
-          </Box>
+        <Box
+          sx={{
+            position: "absolute" as "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 600,
+            bgcolor: "#fff",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          <TextField
+            label="Name"
+            variant="outlined"
+            onChange={(event) => {
+              nowDocument.name = (event.target.value ?? "") as string;
+            }}
+          />
+          <Select
+            onChange={(event) => {
+              nowDocument.documentType = (event.target.value ??
+                "QUESTION") as string;
+            }}
+          >
+            <MenuItem value={"QUESTION"}>QUESTION</MenuItem>
+            <MenuItem value={"TRANSLATE"}>TRANSLATE</MenuItem>
+            <MenuItem value={"ENTITY"}>ENTITY</MenuItem>
+            <MenuItem value={"SYNONYMOUS"}>SYNONYMOUS</MenuItem>
+            <MenuItem value={"TRUE_FALSE"}>TRUE_FALSE</MenuItem>
+            <MenuItem value={"ANSWER"}>ANSWER</MenuItem>
+          </Select>
+          <TextField
+            label="project_id"
+            variant="outlined"
+            onChange={(event) => {
+              nowDocument.projectId = Number(event.target.value ?? 1);
+            }}
+          />
+          <input
+            type="file"
+            onChange={(e) => {
+              handleUploadFile(e.target.files![0]);
+            }}
+          />
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              createDocument();
+            }}
+          >
+            Add
+          </Button>
         </Box>
       </Modal>
-    </Container>
+    </Box>
   );
 };
 export default DocumentPage;

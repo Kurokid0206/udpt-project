@@ -11,7 +11,7 @@ async def resolve_create_label(
     url = f"{LABEL_SERVICE_URL}/label"
     data = jsonable_encoder(input)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
-    return ResponseDTO[LabelResponseDTO](**response)
+    return ResponseDTO[LabelResponseDTO](**{"data": LabelResponseDTO(**response)})
 
 
 async def resolve_update_label(
@@ -21,7 +21,7 @@ async def resolve_update_label(
     url = f"{LABEL_SERVICE_URL}/label/{id}"
     data = jsonable_encoder(input)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
-    return ResponseDTO[LabelResponseDTO](**response)
+    return ResponseDTO[LabelResponseDTO](**{"data": LabelResponseDTO(**response)})
 
 
 async def resolve_delete_label(id: int) -> StatusResponseDTO:
