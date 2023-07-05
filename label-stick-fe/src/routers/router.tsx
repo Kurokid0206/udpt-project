@@ -7,6 +7,7 @@ import AdminHomePage from "@views/admin/adminHomePage";
 import LoginPage from "@views/login/loginPage";
 import DocumentPage from "@views/document/documentPage";
 import AssignmentPage from "@views/assignment/assignmentPage";
+import AssignMePage from "@views/user/assignMePage";
 
 const NavigationRouter: React.FC = () => {
   //define your all page below
@@ -30,6 +31,10 @@ const NavigationRouter: React.FC = () => {
     {
       path: "/assignment",
       element: <AssignmentPage />,
+    },
+    {
+      path: "user/assign",
+      element: <AssignMePage />,
     },
   ];
   return (

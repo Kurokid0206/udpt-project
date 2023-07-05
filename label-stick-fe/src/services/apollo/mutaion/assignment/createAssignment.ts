@@ -41,8 +41,8 @@ const createAssignment = async (
     },
   });
   const { data } = result;
-  const { getAssignments } = data;
-  return getAssignments;
+  const { createAssignment } = data;
+  return createAssignment;
 };
 
 export default createAssignment;

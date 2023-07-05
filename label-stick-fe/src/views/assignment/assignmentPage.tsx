@@ -36,6 +36,8 @@ const AssignmentPage: React.FC = () => {
   const [assignSentences, setassignSentences] = useState<number[]>([]);
   const [assignToUser, setAssignToUser] = useState<number>(-1);
   const [assignType, setAssignType] = useState<string>("");
+  const [assignFromDate, setAssignFromDate] = useState<string>("");
+  const [assignToDate, setAssignToDate] = useState<string>("");
 
   useEffect(() => {
     fetchGetAssignments().then((res) => setAssignments(res.data));
@@ -73,29 +75,28 @@ const AssignmentPage: React.FC = () => {
     console.log(assignSentences);
     console.log(assignToUser);
     console.log(assignType);
+
     if (
       assignName === "" ||
       assignToUser <= 0 ||
       assignSentences.length === 0 ||
-      assignType === ""
+      assignType === "" ||
+      assignFromDate === "" ||
+      assignToDate === ""
     ) {
       alert("Please input assignment name");
       return;
     }
-
-    const fromDate = new Date().toISOString();
-    const toDate = new Date().toISOString();
-
-    console.log(fromDate);
 
     createAssignment(
       assignName,
       assignSentences,
       assignToUser,
       assignType,
-      fromDate,
-      toDate
+      new Date(assignFromDate).toISOString(),
+      new Date(assignToDate).toISOString()
     ).then((res) => {
+      setAssignments([...assignments, res.data]);
       console.log(res);
       setOpenAddModal(false);
     });
@@ -126,8 +127,10 @@ const AssignmentPage: React.FC = () => {
                   <TableCell align="right">{row.name}</TableCell>
                   <TableCell align="right">{row.userId}</TableCell>
                   <TableCell align="right">{row.assignType}</TableCell>
-                  <TableCell align="right">{row.fromDate}</TableCell>
-                  <TableCell align="right">{row.toDate}</TableCell>
+                  <TableCell align="right">
+                    {row.fromDate.slice(0, 10)}
+                  </TableCell>
+                  <TableCell align="right">{row.toDate.slice(0, 10)}</TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -224,7 +227,28 @@ const AssignmentPage: React.FC = () => {
                 <MenuItem value={"LABEL"}>LABEL</MenuItem>
               </Select>
             </FormControl>
+            <FormControl sx={{ mb: 3, width: "100%" }}>
+              <span>From date</span>
+              <Input
+                type="date"
+                value={assignFromDate}
+                onChange={(e) => {
+                  setAssignFromDate(e.target.value);
+                }}
+              />
+            </FormControl>
+            <FormControl sx={{ mb: 3, width: "100%" }}>
+              <span>To date</span>
+              <Input
+                type="date"
+                value={assignToDate}
+                onChange={(e) => {
+                  setAssignToDate(e.target.value);
+                }}
+              />
+            </FormControl>
           </Box>
+
           <Box sx={{ display: "flex" }}>
             <Button variant="contained" onClick={handleAddAssignment}>
               Contained
