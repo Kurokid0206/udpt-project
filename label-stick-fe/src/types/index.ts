@@ -15,3 +15,11 @@ interface Project {
   description: string;
   maxUser: number;
 }
+
+interface Document {
+  id: number;
+  name: string;
+  documentUrl: string;
+  documentType: string;
+  projectId: number;
+}

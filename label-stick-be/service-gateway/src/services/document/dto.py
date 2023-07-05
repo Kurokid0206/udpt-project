@@ -37,8 +37,9 @@ class DocumentResponseDTO:
 class CreateDocumentInputDTO:
     name: str
     document_type: DocumentTypeEnum
+    document_url: str
     project_id: int
-    file: Upload
+    # file: Upload
 
 
 @strawberry.input
