@@ -16,6 +16,11 @@ interface Project {
   maxUser: number;
 }
 
+interface Label {
+  id: number;
+  name: string;
+}
+
 interface Document {
   id: number;
   name: string;

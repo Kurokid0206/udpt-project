@@ -6,6 +6,11 @@ import UserHomePage from "@views/user/userHomePage";
 import AdminHomePage from "@views/admin/adminHomePage";
 import LoginPage from "@views/login/loginPage";
 import DocumentPage from "@views/document/documentPage";
+import AssignmentPage from "@views/assignment/assignmentPage";
+import AssignMePage from "@views/user/assignMePage";
+import UserLabeling from "@views/user/userLabeling";
+import ManagerLabelPage from "@views/manager/managerLabelPage";
+import AddSentencesPage from "@views/document/addSentencesPage";
 
 const NavigationRouter: React.FC = () => {
   //define your all page below
@@ -15,8 +20,16 @@ const NavigationRouter: React.FC = () => {
       element: <ManagerHomePage />,
     },
     {
+      path: "/manager/label",
+      element: <ManagerLabelPage />,
+    },
+    {
       path: "/user",
       element: <UserHomePage />,
+    },
+    {
+      path: "/user/labeling/:assignmentId",
+      element: <UserLabeling />,
     },
     {
       path: "/admin",
@@ -25,6 +38,18 @@ const NavigationRouter: React.FC = () => {
     {
       path: "/document",
       element: <DocumentPage />,
+    },
+    {
+      path: "/document/add-sentences",
+      element: <AddSentencesPage />,
+    },
+    {
+      path: "/assignment",
+      element: <AssignmentPage />,
+    },
+    {
+      path: "user/assign",
+      element: <AssignMePage />,
     },
   ];
   return (

@@ -18,78 +18,63 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import fetchCreateProject from "@apolloClient/mutaion/project/createProject";
-import fetchGetProjects from "@apolloClient/query/project/getProjects";
-import fetchUpdateProject from "@apolloClient/mutaion/project/updateProject";
+import createLabel from "@apolloClient/mutaion/label/createLabel";
+import fetchGetLabels from "@apolloClient/query/label/getLabels";
+import updateLabel from "@apolloClient/mutaion/label/updateLabel";
 
-const initProject: Project = {
+const initLabel: Label = {
   id: 0,
   name: "",
-  description: "",
-  maxUser: 0,
 };
 
-const ManagerHomePage: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+const ManagerLabelPage: React.FC = () => {
+  const [Labels, setLabels] = useState<Label[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [nowProject, setNowProject] = useState<Project>(initProject);
+  const [nowLabel, setNowLabel] = useState<Label>(initLabel);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   // event handler
-  const onClickEditProject = (projectId: number) => {
-    let nowEdit = projects.filter((item) => item.id === projectId);
-    setNowProject(nowEdit[0]);
+  const onClickEditLabel = (LabelId: number) => {
+    const nowEdit: Label[] = Labels.filter((item) => item.id === LabelId);
+    setNowLabel(nowEdit[0]);
     setIsEdit(true);
     setIsOpenModal(true);
   };
   const onCloseModal = () => {
-    setNowProject(initProject);
+    setNowLabel(initLabel);
     setIsEdit(false);
     setIsOpenModal(false);
   };
-  const handleSaveProject = () => {
+  const handleSaveLabel = () => {
     if (isEdit) {
-      fetchUpdateProject(
-        nowProject.id,
-        nowProject.name,
-        nowProject.description,
-        nowProject.maxUser
-      ).then((response) => {
+      updateLabel(nowLabel.id, nowLabel.name).then((response) => {
         if (response.statusCode === 200) {
-          let list_temp_ = projects.map((item) => {
-            if (item.id === nowProject.id) {
-              let temp: Project = {
+          const list_temp_ = Labels.map((item) => {
+            if (item.id === nowLabel.id) {
+              const temp: Label = {
                 id: item.id,
                 name: response.data.name,
-                description: response.data.description,
-                maxUser: response.data.maxUser,
               };
               return temp;
             }
             return item;
           });
-          setProjects(list_temp_);
+          setLabels(list_temp_);
           onCloseModal();
         } else {
           console.log(response.message);
         }
       });
     } else {
-      fetchCreateProject(
-        nowProject.name,
-        nowProject.description,
-        nowProject.maxUser
-      ).then((response) => {
+      createLabel(nowLabel.name).then((response) => {
         if (response.statusCode === 200) {
-          let temp: Project = {
+          const temp: Label = {
             id: response.data.id,
-            maxUser: response.data.maxUser,
-            description: response.data.description,
             name: response.data.name,
           };
-          let list_temp = structuredClone(projects);
+          const list_temp = structuredClone(Labels);
           list_temp.push(temp);
-          setProjects(list_temp);
+          setLabels(list_temp);
           onCloseModal();
         } else {
           console.log(response.message);
@@ -99,17 +84,15 @@ const ManagerHomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchGetProjects().then((response) => {
-      let project_data: Project[] = [];
-      response.data?.forEach((item: Project) => {
-        project_data.push({
+    fetchGetLabels().then((response) => {
+      const Label_data: Label[] = [];
+      response.data?.forEach((item: Label) => {
+        Label_data.push({
           id: item.id,
-          description: item.description,
-          maxUser: item.maxUser,
           name: item.name,
         });
       });
-      setProjects(project_data);
+      setLabels(Label_data);
     });
   }, []);
 
@@ -124,7 +107,7 @@ const ManagerHomePage: React.FC = () => {
     >
       <Box sx={{ width: "100%", display: "flex" }}>
         <Box sx={{ flex: 1 }}>
-          <h1>Project</h1>
+          <h1>Label</h1>
         </Box>
         <Fab
           color="primary"
@@ -135,7 +118,7 @@ const ManagerHomePage: React.FC = () => {
           }}
         >
           <AddIcon />
-          Add project
+          Add Label
         </Fab>
       </Box>
       <TableContainer component={Paper} sx={{ height: 500 }}>
@@ -148,13 +131,7 @@ const ManagerHomePage: React.FC = () => {
             <TableRow>
               <TableCell sx={{ backgroundColor: "#ebebeb" }}>ID</TableCell>
               <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
-                Name
-              </TableCell>
-              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
-                Description
-              </TableCell>
-              <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
-                Max user
+                Label Name
               </TableCell>
               <TableCell align="right" sx={{ backgroundColor: "#ebebeb" }}>
                 Action
@@ -162,17 +139,15 @@ const ManagerHomePage: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {projects.map((project, idx) => (
+            {Labels.map((Label, idx) => (
               <TableRow
-                key={project.id + idx}
+                key={Label.id + idx}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {project.id}
+                  {Label.id}
                 </TableCell>
-                <TableCell align="right">{project.name}</TableCell>
-                <TableCell align="right">{project.description}</TableCell>
-                <TableCell align="right">{project.maxUser}</TableCell>
+                <TableCell align="right">{Label.name}</TableCell>
                 <TableCell align="right">
                   <Box
                     sx={{
@@ -184,7 +159,7 @@ const ManagerHomePage: React.FC = () => {
                     <Box>
                       <IconButton
                         onClick={() => {
-                          onClickEditProject(project.id);
+                          onClickEditLabel(Label.id);
                         }}
                       >
                         <EditIcon />
@@ -205,7 +180,7 @@ const ManagerHomePage: React.FC = () => {
       >
         <Box
           sx={{
-            position: "absolute" as "absolute",
+            position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
@@ -227,7 +202,7 @@ const ManagerHomePage: React.FC = () => {
             }}
           >
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Add new project
+              Add new Label
             </Typography>
             <IconButton
               onClick={onCloseModal}
@@ -238,45 +213,22 @@ const ManagerHomePage: React.FC = () => {
           </Box>
           <TextField
             id="name"
-            label="Project name"
+            label="Label name"
             fullWidth
-            value={nowProject.name}
+            value={nowLabel.name}
             onChange={(e) => {
-              let temp = structuredClone(nowProject);
+              const temp = structuredClone(nowLabel);
               temp.name = e.target.value;
-              setNowProject(temp);
-            }}
-          />
-          <TextField
-            id="description"
-            label="Project description"
-            fullWidth
-            value={nowProject.description}
-            onChange={(e) => {
-              let temp = structuredClone(nowProject);
-              temp.description = e.target.value;
-              setNowProject(temp);
-            }}
-          />
-          <TextField
-            id="maxUser"
-            label="Project max user"
-            type="number"
-            fullWidth
-            value={nowProject.maxUser}
-            onChange={(e) => {
-              let temp = structuredClone(nowProject);
-              temp.maxUser = Number(e.target.value);
-              setNowProject(temp);
+              setNowLabel(temp);
             }}
           />
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Button
               variant="outlined"
               sx={{ textTransform: "capitalize" }}
-              onClick={handleSaveProject}
+              onClick={handleSaveLabel}
             >
-              {isEdit ? "Update" : "Add Project"}
+              {isEdit ? "Update" : "Add Label"}
             </Button>
           </Box>
         </Box>
@@ -284,4 +236,4 @@ const ManagerHomePage: React.FC = () => {
     </Box>
   );
 };
-export default ManagerHomePage;
+export default ManagerLabelPage;
