@@ -24,7 +24,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(50), nullable=False, unique=True)
+    username = Column(String(50), nullable=False)
     password = Column(String(50), nullable=False)
     email = Column(String(50), nullable=False, unique=True)
     first_name = Column(String(50), nullable=False)
@@ -53,7 +53,7 @@ class User(Base):
 class Project(Base):
     __tablename__ = "projects"
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
+    name = Column(String(50), nullable=False)
     description = Column(String(255), nullable=True)
     max_user = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -140,7 +140,7 @@ class Document(Base):
 class Label(Base):
     __tablename__ = "labels"
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
+    name = Column(String(50), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(
         DateTime(timezone=True),
@@ -164,7 +164,7 @@ class Label(Base):
 class Sentence(Base):
     __tablename__ = "sentences"
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
+    name = Column(String(50), nullable=False)
     sentence = Column(String(1000), nullable=False)
     document_id = Column(Integer, ForeignKey("documents.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -231,7 +231,7 @@ class AssignmentTypeEnum(str, Enum):
 class Assignment(Base):
     __tablename__ = "assignments"
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False, unique=True)
+    name = Column(String(50), nullable=False)
     sentence_ids = Column(JSONB, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     assign_type = Column(

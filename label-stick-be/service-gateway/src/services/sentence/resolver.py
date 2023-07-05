@@ -9,20 +9,22 @@ from fastapi.encoders import jsonable_encoder
 async def resolve_create_sentences(
     sentences: list[SentenceInputDTO],
 ) -> ResponseDTO[list[SentenceResponseDTO]]:
-    url = f"{LABEL_SERVICE_URL}/sentence/create_sentences"
+    url = f"{LABEL_SERVICE_URL}/sentence"
     data = jsonable_encoder(sentences)
     response = await call_api(url=url, method=HttpMethod.POST, json=data)
-    return ResponseDTO[list[SentenceResponseDTO]](**response)
+    return ResponseDTO[list[SentenceResponseDTO]](
+        **{"data": [SentenceResponseDTO(**item) for item in response]}
+    )
 
 
 async def resolve_update_sentence(
     id: int,
     sentence: SentenceInputDTO,
 ) -> ResponseDTO[SentenceResponseDTO]:
-    url = f"{LABEL_SERVICE_URL}/sentence/update_sentence/{id}"
+    url = f"{LABEL_SERVICE_URL}/sentence/{id}"
     data = jsonable_encoder(sentence)
     response = await call_api(url=url, method=HttpMethod.PUT, json=data)
-    return ResponseDTO[SentenceResponseDTO](**response)
+    return ResponseDTO[SentenceResponseDTO](**{"data": response})
 
 
 async def resolve_get_sentences_by_ids(

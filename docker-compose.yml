@@ -76,7 +76,7 @@ services:
     volumes:
       - ./label-stick-be/service-manager:/app/service-manager
     environment:
-      - POSTGRES_SERVER=103.176.179.83
+      - POSTGRES_SERVER=postgres
       - STORAGE_HOST=object-storage
       - REDIS_HOST=redis
       - BROKER_URL=redis://redis:6379/0
