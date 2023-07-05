@@ -54,8 +54,8 @@ const DocumentPage: React.FC = () => {
       method: "POST",
       body: data,
     }).then((response) => {
-      const data = response.json();
-      nowDocument.documentUrl = data?.url;
+      const data = response;
+      nowDocument.documentUrl = data.url.toString();
     });
   };
   useEffect(() => {
