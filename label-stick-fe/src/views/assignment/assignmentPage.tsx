@@ -29,7 +29,7 @@ import {
   Typography,
 } from "@mui/material";
 import fetchGetAssignments from "@apolloClient/query/assignment/getAssignments";
-import createAssignment from "@apolloClient/mutaion/assignment/createAssignment";
+import createAssignment from "@apolloClient/mutation/assignment/createAssignment";
 import fetchGetLabelers from "@apolloClient/query/user/getUsers";
 import fetchGetSentenceByDocumentId from "@apolloClient/query/sentence/getSentenceByDocumentId";
 
@@ -41,7 +41,7 @@ const AssignmentPage: React.FC = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const [assignName, setAssignName] = useState<string>("");
-  const [assignSentences, setassignSentences] = useState<number[]>([]);
+  const [assignSentences, setAssignSentences] = useState<number[]>([]);
   const [assignToUser, setAssignToUser] = useState<number>(-1);
   const [assignType, setAssignType] = useState<string>("");
   const [assignFromDate, setAssignFromDate] = useState<string>("");
@@ -68,7 +68,7 @@ const AssignmentPage: React.FC = () => {
   };
 
   const handleChange = (event: SelectChangeEvent<typeof assignSentences>) => {
-    setassignSentences(event.target.value as number[]);
+    setAssignSentences(event.target.value as number[]);
   };
 
   const handleChangeUserSelect = (event: SelectChangeEvent) => {
@@ -107,7 +107,7 @@ const AssignmentPage: React.FC = () => {
 
   const onClickAddAssignment = () => {
     setAssignName("");
-    setassignSentences([]);
+    setAssignSentences([]);
     setAssignToUser(-1);
     setAssignType("");
     setAssignFromDate("");
@@ -120,7 +120,7 @@ const AssignmentPage: React.FC = () => {
     const nowEdit = assignments.filter((item: any) => item.id === id);
 
     setAssignName(nowEdit[0].name);
-    setassignSentences(nowEdit[0].sentenceIds);
+    setAssignSentences(nowEdit[0].sentenceIds);
     setAssignToUser(nowEdit[0].userId);
     setAssignType(nowEdit[0].assignType);
     setAssignFromDate(nowEdit[0].fromDate.slice(0, 10));

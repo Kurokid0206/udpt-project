@@ -20,9 +20,9 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import fetchDocuments from "@apolloClient/query/document/getDocumentByProjectId";
-import fetchCreateDocument from "@apolloClient/mutaion/document/createDocument";
+import fetchCreateDocument from "@apolloClient/mutation/document/createDocument";
 // import { create } from "domain";
-import createSentences from "@apolloClient/mutaion/sentence/createSentences";
+import createSentences from "@apolloClient/mutation/sentence/createSentences";
 import { useParams } from "react-router-dom";
 
 const DocumentPage: React.FC = () => {

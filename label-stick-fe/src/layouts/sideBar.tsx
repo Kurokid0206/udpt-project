@@ -1,5 +1,3 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
@@ -29,11 +27,11 @@ const sideBarList: NavBarElement[] = [
     path: "/admin",
     icon: <InboxIcon />,
   },
-  {
-    name: "Document",
-    path: "/document",
-    icon: <InboxIcon />,
-  },
+  // {
+  //   name: "Document",
+  //   path: "/document",
+  //   icon: <InboxIcon />,
+  // },
   {
     name: "Login",
     path: "/login",

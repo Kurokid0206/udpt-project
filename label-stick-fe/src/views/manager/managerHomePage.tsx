@@ -18,9 +18,9 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import fetchCreateProject from "@apolloClient/mutaion/project/createProject";
+import fetchCreateProject from "@apolloClient/mutation/project/createProject";
 import fetchGetProjects from "@apolloClient/query/project/getProjects";
-import fetchUpdateProject from "@apolloClient/mutaion/project/updateProject";
+import fetchUpdateProject from "@apolloClient/mutation/project/updateProject";
 import SourceIcon from "@mui/icons-material/Source";
 import { useNavigate } from "react-router-dom";
 

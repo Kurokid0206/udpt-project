@@ -18,9 +18,9 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import createLabel from "@apolloClient/mutaion/label/createLabel";
+import createLabel from "@apolloClient/mutation/label/createLabel";
 import fetchGetLabels from "@apolloClient/query/label/getLabels";
-import updateLabel from "@apolloClient/mutaion/label/updateLabel";
+import updateLabel from "@apolloClient/mutation/label/updateLabel";
 
 const initLabel: Label = {
   id: 0,
