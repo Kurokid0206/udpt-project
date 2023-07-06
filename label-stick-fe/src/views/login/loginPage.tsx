@@ -1,18 +1,41 @@
+import login from "@apolloClient/mutation/user/login";
 import fetchGetProjectsByUserId from "@apolloClient/query/project/getProjectByUserId";
 import { AccountCircle } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
 import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { setUser } from "@redux/slices/userSlice";
+import { useAppDispatch } from "@redux/store";
+import { useAppSelector } from "@redux/hooks";
 
 const LoginPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector((store) => store.user);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
   //event handlers
   const handleLogin = () => {
-    console.log({ username, password });
+    if (username !== "" && password !== "") {
+      login(username, password).then((res) => {
+        if (res.statusCode === 200) {
+          const user = {
+            userId: Number(res.data.userId),
+            userName: res.data.username,
+            email: res.data.email,
+          };
+          dispatch(setUser(user));
+          // navigate("/");
+        }
+      });
+    }
   };
+
+  useEffect(() => {
+    console.log(userState);
+  }, [userState]);
 
   return (
     <div
@@ -74,11 +97,9 @@ const LoginPage: React.FC = () => {
             ),
           }}
         />
-        <NavLink to="/manager">
-          <Button variant="outlined" onClick={handleLogin}>
-            Login
-          </Button>
-        </NavLink>
+        <Button variant="outlined" onClick={handleLogin}>
+          Login
+        </Button>
       </Box>
     </div>
   );
