@@ -6,15 +6,20 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
-import { Container, Link } from "@mui/material";
+import { Box, Container, IconButton, Link } from "@mui/material";
+import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import fetchGetAssignmentByUserId from "@apolloClient/query/assignment/getAssignmentByUserID";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AssignMePage: React.FC = () => {
+  const { userId } = useParams();
+  const navigate = useNavigate();
   const [assignments, setAssignments] = useState<any>([]);
 
   useEffect(() => {
-    const userId = 1;
-    fetchGetAssignmentByUserId(userId).then((res) => setAssignments(res.data));
+    fetchGetAssignmentByUserId(parseInt(userId)).then((res) =>
+      setAssignments(res.data)
+    );
   }, []);
 
   return (
@@ -46,7 +51,21 @@ const AssignMePage: React.FC = () => {
                   </TableCell>
                   <TableCell align="right">{row.toDate.slice(0, 10)}</TableCell>
                   <TableCell align="right">
-                    <Link href="/user">View assign</Link>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "8px",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <IconButton
+                        onClick={() => {
+                          navigate(`/user/labeling/${row.id}`);
+                        }}
+                      >
+                        <DocumentScannerIcon />
+                      </IconButton>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}
