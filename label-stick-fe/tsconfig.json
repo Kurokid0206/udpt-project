@@ -27,7 +27,9 @@
       "@utils/*": ["./utils/*"],
       "@layouts/*": ["./layouts/*"],
       "@routers/*": ["./routers/*"],
-      "@apolloClient/*": ["./services/apollo/*"]
+      "@apolloClient/*": ["./services/apollo/*"],
+      "@assets/*": ["./assets/*"],
+      "@redux/*": ["./redux/*"]
     }
   },
   "include": ["src"],
