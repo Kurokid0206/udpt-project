@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import client from "../../client";
 
-const GET_ASSIGNMEMTS = gql`
+const GET_ASSIGNMENTS = gql`
   query getAssignments($filter: AssignmentFilterInputDTO!) {
     getAssignments(filter: $filter) {
       statusCode
@@ -21,11 +21,11 @@ const GET_ASSIGNMEMTS = gql`
 
 const fetchGetAssignmentByUserId = async (
   userId: number,
-  page = null as null | number,
-  limit = null as null | number
+  page: number = 0,
+  limit: number = 100
 ) => {
   const result = await client.query({
-    query: GET_ASSIGNMEMTS,
+    query: GET_ASSIGNMENTS,
     variables: {
       filter: {
         userId: userId,

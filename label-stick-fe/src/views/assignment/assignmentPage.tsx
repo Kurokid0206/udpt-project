@@ -27,12 +27,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import fetchGetAssignments from "@apolloClient/query/assignment/getAssignments";
+import fetchGetAssignmentByUserId from "@apolloClient/query/assignment/getAssignmentByUserID";
 import createAssignment from "@apolloClient/mutation/assignment/createAssignment";
 import fetchGetLabelers from "@apolloClient/query/user/getUsers";
 import fetchGetSentenceByDocumentId from "@apolloClient/query/sentence/getSentenceByDocumentId";
+import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
+import { useNavigate } from "react-router-dom";
 
 const AssignmentPage: React.FC = () => {
+  const navigate = useNavigate();
   const [assignments, setAssignments] = useState<any>([]);
   const [sentences, setSentences] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
@@ -47,7 +50,7 @@ const AssignmentPage: React.FC = () => {
   const [assignToDate, setAssignToDate] = useState<string>("");
 
   useEffect(() => {
-    fetchGetAssignments().then((res) => setAssignments(res.data));
+    fetchGetAssignmentByUserId(1).then((res) => setAssignments(res.data));
     fetchGetLabelers().then((res) => setUsers(res.data));
     fetchGetSentenceByDocumentId(1).then((res) => setSentences(res.data));
   }, []);
@@ -167,6 +170,13 @@ const AssignmentPage: React.FC = () => {
                       }}
                     >
                       <Box>
+                        <IconButton
+                          onClick={() => {
+                            navigate(`/user/labeling/${row.id}`);
+                          }}
+                        >
+                          <DocumentScannerIcon />
+                        </IconButton>
                         <IconButton
                           onClick={() => {
                             onClickEditAssignment(row.id);
