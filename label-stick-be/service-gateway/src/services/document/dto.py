@@ -6,9 +6,9 @@ import strawberry
 
 @strawberry.input
 class DocumentFilterInputDTO:
-    project_id: Optional[int] = None
-    page: Optional[int] = 1
-    limit: Optional[int] = None
+    project_id: Optional[int] = 0
+    page: Optional[int] = 0
+    limit: Optional[int] = 100
 
 
 @strawberry.enum

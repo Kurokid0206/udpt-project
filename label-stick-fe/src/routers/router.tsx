@@ -36,7 +36,7 @@ const NavigationRouter: React.FC = () => {
       element: <AdminHomePage />,
     },
     {
-      path: "/document",
+      path: "/project/:projectId/document",
       element: <DocumentPage />,
     },
     {

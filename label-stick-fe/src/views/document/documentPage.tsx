@@ -16,26 +16,26 @@ import {
   TextField,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import fetchDocuments from "@apolloClient/query/document/getDocumentByProjectId";
 import fetchCreateDocument from "@apolloClient/mutaion/document/createDocument";
-import { create } from "domain";
+// import { create } from "domain";
 import createSentences from "@apolloClient/mutaion/sentence/createSentences";
-
-const initDocument: IDocument = {
-  id: 0,
-  name: "",
-  documentUrl: "",
-  documentType: "",
-  projectId: 1,
-};
+import { useParams } from "react-router-dom";
 
 const DocumentPage: React.FC = () => {
+  const { projectId } = useParams();
   const [documents, setDocuments] = useState<IDocument[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [nowDocument, setNowDocument] = useState<IDocument>(initDocument);
+  const [nowDocument, setNowDocument] = useState<IDocument>({
+    id: 0,
+    name: "",
+    documentUrl: "",
+    documentType: "",
+    projectId: Number(projectId),
+  });
   const [sentences, setSentences] = useState<string[]>([]);
 
   const createDocument = () => {
@@ -94,7 +94,7 @@ const DocumentPage: React.FC = () => {
     // });
   };
   useEffect(() => {
-    fetchDocuments().then((response) => {
+    fetchDocuments(Number(projectId)).then((response) => {
       let documents_data: IDocument[] = [];
       response.data?.forEach((item: IDocument) => {
         documents_data.push({

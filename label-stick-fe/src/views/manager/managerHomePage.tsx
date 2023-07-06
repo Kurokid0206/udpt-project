@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 import fetchCreateProject from "@apolloClient/mutaion/project/createProject";
 import fetchGetProjects from "@apolloClient/query/project/getProjects";
 import fetchUpdateProject from "@apolloClient/mutaion/project/updateProject";
+import SourceIcon from "@mui/icons-material/Source";
+import { useNavigate } from "react-router-dom";
 
 const initProject: Project = {
   id: 0,
@@ -30,6 +32,7 @@ const initProject: Project = {
 };
 
 const ManagerHomePage: React.FC = () => {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [nowProject, setNowProject] = useState<Project>(initProject);
@@ -182,6 +185,13 @@ const ManagerHomePage: React.FC = () => {
                     }}
                   >
                     <Box>
+                      <IconButton
+                        onClick={() => {
+                          navigate(`/project/${project.id}/document`);
+                        }}
+                      >
+                        <SourceIcon />
+                      </IconButton>
                       <IconButton
                         onClick={() => {
                           onClickEditProject(project.id);

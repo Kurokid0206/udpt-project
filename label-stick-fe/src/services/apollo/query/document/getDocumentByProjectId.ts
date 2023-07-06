@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 import client from "../../client";
 
 const GET_DOCUMENTS = gql`
-  query getDocuments {
-    getDocuments {
+  query getDocuments($filter: DocumentFilterInputDTO) {
+    getDocuments(filter: $filter) {
       statusCode
       message
       data {
@@ -17,9 +17,14 @@ const GET_DOCUMENTS = gql`
   }
 `;
 
-const fetchDocuments = async () => {
+const fetchDocuments = async (projectId: number) => {
   const result = await client.query({
     query: GET_DOCUMENTS,
+    variables: {
+      filter: {
+        projectId: projectId,
+      },
+    },
   });
   const { data } = result;
   const { getDocuments } = data;
