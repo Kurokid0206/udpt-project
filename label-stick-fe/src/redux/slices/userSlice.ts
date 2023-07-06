@@ -6,6 +6,7 @@ interface UserState {
   userId: number | undefined;
   userName: string | undefined;
   email: string | undefined;
+  role: string | undefined;
 }
 
 //get last session user from localstorage
@@ -17,6 +18,7 @@ const getLastSessionLangKey = (): UserState => {
     userId: undefined,
     userName: undefined,
     email: undefined,
+    role: undefined,
   };
 };
 
@@ -36,6 +38,7 @@ export const userSlice = createSlice({
       state.email = action.payload.email;
       state.userId = action.payload.userId;
       state.userName = action.payload.userName;
+      state.role = action.payload.role;
     },
   },
 });

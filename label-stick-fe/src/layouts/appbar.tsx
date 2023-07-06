@@ -12,6 +12,9 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import SwipeableTemporaryDrawer from "./sideBar";
+import { useAppDispatch, useAppSelector } from "@redux/hooks";
+import { setUser } from "@redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -39,6 +42,8 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <AppBar
@@ -147,11 +152,25 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Box
+                    onClick={() => {
+                      dispatch(
+                        setUser({
+                          email: undefined,
+                          role: undefined,
+                          userId: undefined,
+                          userName: undefined,
+                        })
+                      );
+                      navigate("/");
+                    }}
+                  >
+                    Logout
+                  </Box>
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

@@ -9,42 +9,51 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { NavLink } from "react-router-dom";
+import { useAppSelector } from "@redux/hooks";
 
 const drawerWidth = 240;
-const sideBarList: NavBarElement[] = [
-  {
-    name: "View project",
-    path: "/manager",
-    icon: <InboxIcon />,
-  },
-  {
-    name: "User",
-    path: "/user",
-    icon: <MailIcon />,
-  },
-  {
-    name: "Admin",
-    path: "/admin",
-    icon: <InboxIcon />,
-  },
-  {
-    name: "Assignment",
-    path: "/assignment",
-    icon: <InboxIcon />,
-  },
-  {
-    name: "Label",
-    path: "/label",
-    icon: <InboxIcon />,
-  },
-  {
-    name: "Login",
-    path: "/login",
-    icon: <InboxIcon />,
-  },
-];
 
 export default function SideBar() {
+  const user = useAppSelector((store) => store.user);
+  let sideBarList: NavBarElement[] = [];
+  if (user.role == "MANAGER") {
+    sideBarList = [
+      {
+        name: "View project",
+        path: "/manager",
+        icon: <InboxIcon />,
+      },
+      {
+        name: "User",
+        path: "/user",
+        icon: <MailIcon />,
+      },
+      {
+        name: "Admin",
+        path: "/admin",
+        icon: <InboxIcon />,
+      },
+      {
+        name: "Assignment",
+        path: "/assignment",
+        icon: <InboxIcon />,
+      },
+      {
+        name: "Label",
+        path: "/label",
+        icon: <InboxIcon />,
+      },
+    ];
+  }
+  if (user.role == "USER_LV_1") {
+    sideBarList = [
+      {
+        name: "Assignment",
+        path: `user/:${user.userId}/assign`,
+        icon: <InboxIcon />,
+      },
+    ];
+  }
   return (
     <Drawer
       sx={{
