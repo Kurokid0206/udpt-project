@@ -46,6 +46,6 @@ class UpdateAssignmentInputDTO:
 
 @strawberry.input
 class AssignmentFilterInputDTO:
-    user_id: Optional[int] = None
-    page: Optional[int] = 1
-    limit: Optional[int] = None
+    user_id: Optional[int] = 1
+    page: Optional[int] = 0
+    limit: Optional[int] = 100

@@ -10,7 +10,7 @@ router = APIRouter(prefix="/assignment", tags=["assignment"])
 
 @router.get("", response_model=list[Assignment])
 async def get_assignments(
-    user_id: int = 1,
+    user_id: int = 0,
     page: int = 0,
     limit: int = 100,
     session: AsyncSession = Depends(get_session),
