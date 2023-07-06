@@ -210,6 +210,7 @@ const ManagerHomePage: React.FC = () => {
 
       <Modal
         open={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

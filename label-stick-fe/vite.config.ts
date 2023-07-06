@@ -25,6 +25,10 @@ export default defineConfig({
         find: "@assets",
         replacement: resolve(__dirname, "./src/assets"),
       },
+      {
+        find: "@redux",
+        replacement: resolve(__dirname, "./src/redux"),
+      },
     ],
   },
   server: {
