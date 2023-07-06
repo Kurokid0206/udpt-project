@@ -31,9 +31,11 @@ export const userSlice = createSlice({
     setUser: (state, action: PayloadAction<UserState>) => {
       //Lưu user vào localstorage hay session ...
       //your code here
-
+      console.log(action.payload);
       //sau đó set lại state
-      state = action.payload;
+      state.email = action.payload.email;
+      state.userId = action.payload.userId;
+      state.userName = action.payload.userName;
     },
   },
 });
