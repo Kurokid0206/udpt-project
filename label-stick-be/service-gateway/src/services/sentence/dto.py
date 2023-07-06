@@ -33,6 +33,7 @@ class addLabelInputDTO:
 
 @strawberry.type
 class SentenceLabelResponseDTO:
+    id: int = None
     sentence_id: int = None
     label_id: int = None
     labeled_by: int = None
