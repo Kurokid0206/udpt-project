@@ -3,6 +3,7 @@ import fetchGetSentenceByIds from "@apolloClient/query/sentence/getSentenceById"
 import {
   Autocomplete,
   Box,
+  Button,
   Chip,
   IconButton,
   Paper,
@@ -15,11 +16,14 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import fetchGetLabels from "@apolloClient/query/label/getLabels";
+import fetchGetAssignments from "@apolloClient/query/assignment/getAssignments";
+import { useAppSelector } from "@redux/hooks";
+import fetchAddLabelsToSentence from "@apolloClient/mutation/label/addLabelsToSentence";
+import fetchGetSentenceLabels from "@apolloClient/query/label/getLabelBySentenceId";
 
 const UserLabeling: React.FC = () => {
   let { assignmentId } = useParams();
@@ -28,12 +32,17 @@ const UserLabeling: React.FC = () => {
   const [labelSentence, setLabelSentence] = useState<
     { sentenceId: number; labels: string[]; nowLabelSelect: string | "" }[]
   >([]);
+  const userState = useAppSelector((store) => store.user);
+  const arrayData = useRef<
+    { sentenceId: number; labels: string[]; nowLabelSelect: string | "" }[]
+  >([]);
+  const [forceRender, setForceRender] = useState<boolean>(true);
 
   const renderLabel = (sentencesID: number) => {
     let sentenceSlect = labelSentence.filter(
       (item) => item.sentenceId == sentencesID
     );
-    return sentenceSlect[0].labels.map((item) => (
+    return sentenceSlect[0]?.labels.map((item) => (
       <Chip
         key={`${sentencesID}_${item}`}
         label={item}
@@ -66,8 +75,39 @@ const UserLabeling: React.FC = () => {
     setLabelSentence(nowList);
   };
 
+  const handleAddLabelsToSentences = () => {
+    labelSentence.forEach((element) => {
+      let listLabels = labels.filter((label) =>
+        element.labels.includes(label.name)
+      );
+      let listLabelsIds = listLabels.map((label) => label.id);
+      fetchAddLabelsToSentence(element.sentenceId, listLabelsIds, 1).then(
+        (res) => {
+          console.log(res);
+        }
+      );
+    });
+  };
+
   useEffect(() => {
-    fetchGetAssignmentByUserId(1)
+    fetchGetLabels().then((response) => {
+      if (response.statusCode === 200) {
+        let nowLabels: Label[] = [];
+        response.data.forEach((element: { id: any; name: any }) => {
+          nowLabels.push({
+            id: element.id,
+            name: element.name,
+          });
+        });
+        setLabels(nowLabels);
+      } else {
+        console.log(response.message);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchGetAssignments()
       .then((response) => {
         if (response.statusCode === 200) {
           let nowSentenceIds: string[] = [];
@@ -125,23 +165,6 @@ const UserLabeling: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    fetchGetLabels().then((response) => {
-      if (response.statusCode === 200) {
-        let nowLabels: Label[] = [];
-        response.data.forEach((element: { id: any; name: any }) => {
-          nowLabels.push({
-            id: element.id,
-            name: element.name,
-          });
-        });
-        setLabels(nowLabels);
-      } else {
-        console.log(response.message);
-      }
-    });
-  }, []);
-
   return (
     <Box
       sx={{
@@ -151,10 +174,21 @@ const UserLabeling: React.FC = () => {
         padding: "16px",
       }}
     >
-      <Box sx={{ width: "100%", display: "flex" }}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Box sx={{ flex: 1 }}>
           <h1>Label for sentences</h1>
         </Box>
+        <Button variant="contained" onClick={handleAddLabelsToSentences}>
+          Save
+        </Button>
       </Box>
 
       <TableContainer component={Paper} sx={{ height: 500 }}>
@@ -226,7 +260,7 @@ const UserLabeling: React.FC = () => {
                         value={
                           labelSentence.filter(
                             (item) => item.sentenceId == sentence.id
-                          )[0].nowLabelSelect
+                          )[0]?.nowLabelSelect
                         }
                         onChange={(event: any, newValue: string | null) => {
                           let newList = structuredClone(labelSentence).map(
