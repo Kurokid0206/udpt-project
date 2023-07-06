@@ -60,7 +60,7 @@ const AssignmentPage: React.FC = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 600,
     bgcolor: "background.paper",
     border: "1px solid #ccc",
     borderRadius: "8px",
@@ -132,10 +132,34 @@ const AssignmentPage: React.FC = () => {
   };
 
   return (
-    <Container>
-      <h1>Assignment manager</h1>
-      <TableContainer component={Paper} sx={{ marginTop: 1 }}>
-        <Table sx={{ minWidth: 650 }} aria-label="caption table">
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "32px",
+        padding: "16px",
+      }}
+    >
+      <Box sx={{ width: "100%", display: "flex" }}>
+        <Box sx={{ flex: 1 }}>
+          <h1>Assignments</h1>
+        </Box>
+        <Fab
+          color="primary"
+          aria-label="add"
+          variant="extended"
+          onClick={onClickAddAssignment}
+        >
+          <AddIcon />
+          Add project
+        </Fab>
+      </Box>
+      <TableContainer component={Paper} sx={{ height: 500 }}>
+        <Table
+          sx={{ minWidth: 650, maxHeight: 500 }}
+          aria-label="simple table"
+          stickyHeader={true}
+        >
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
@@ -155,7 +179,12 @@ const AssignmentPage: React.FC = () => {
                     {row.id}
                   </TableCell>
                   <TableCell align="right">{row.name}</TableCell>
-                  <TableCell align="right">{row.userId}</TableCell>
+                  <TableCell align="right">
+                    {
+                      users.filter((item: any) => item.userId == row.userId)[0]
+                        ?.username
+                    }
+                  </TableCell>
                   <TableCell align="right">{row.assignType}</TableCell>
                   <TableCell align="right">
                     {row.fromDate.slice(0, 10)}
@@ -192,14 +221,6 @@ const AssignmentPage: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{ position: "fixed", bottom: "42px", right: "56px" }}
-        onClick={onClickAddAssignment}
-      >
-        <AddIcon />
-      </Fab>
 
       {/* Model add Assignment */}
       <Modal
@@ -292,30 +313,40 @@ const AssignmentPage: React.FC = () => {
                 <MenuItem value={"REVIEW"}>REVIEW</MenuItem>
               </Select>
             </FormControl>
-            <FormControl sx={{ mb: 3, width: "100%" }}>
-              <span>From date</span>
-              <Input
-                type="date"
-                value={assignFromDate}
-                onChange={(e) => {
-                  setAssignFromDate(e.target.value);
-                }}
-              />
-            </FormControl>
-            <FormControl sx={{ mb: 3, width: "100%" }}>
-              <span>To date</span>
-              <Input
-                type="date"
-                value={assignToDate}
-                onChange={(e) => {
-                  setAssignToDate(e.target.value);
-                }}
-              />
-            </FormControl>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}
+            >
+              <FormControl sx={{ mr: 3, width: "100%" }}>
+                <span>From date</span>
+                <Input
+                  type="date"
+                  value={assignFromDate}
+                  onChange={(e) => {
+                    setAssignFromDate(e.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormControl sx={{ ml: 3, width: "100%" }}>
+                <span>To date</span>
+                <Input
+                  type="date"
+                  value={assignToDate}
+                  onChange={(e) => {
+                    setAssignToDate(e.target.value);
+                  }}
+                />
+              </FormControl>
+            </Box>
           </Box>
 
-          <Box sx={{ display: "flex" }}>
-            <Button variant="contained" onClick={handleAddAssignment}>
+          <Box
+            sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}
+          >
+            <Button
+              variant="contained"
+              onClick={handleAddAssignment}
+              sx={{ width: "25% !important" }}
+            >
               {isEdit ? "Edit" : "Add"}
             </Button>
           </Box>
