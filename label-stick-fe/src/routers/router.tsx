@@ -48,7 +48,7 @@ const NavigationRouter: React.FC = () => {
       element: <AssignmentPage />,
     },
     {
-      path: "user/assign",
+      path: "user/:userId/assign",
       element: <AssignMePage />,
     },
   ];
