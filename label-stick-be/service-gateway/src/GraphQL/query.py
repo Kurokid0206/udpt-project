@@ -13,7 +13,7 @@ from ..services.project.dto import (
 from ..services.document.dto import DocumentFilterInputDTO, DocumentResponseDTO
 from ..services.assignment.dto import AssignmentFilterInputDTO, AssignmentResponseDTO
 from ..services.label.dto import LabelResponseDTO
-from ..services.sentence.dto import SentenceResponseDTO
+from ..services.sentence.dto import SentenceLabelResponseDTO, SentenceResponseDTO
 from ..services.user.dto import UserResponseDTO
 
 from ..services.project.resolver import (
@@ -26,6 +26,7 @@ from ..services.label.resolver import resolve_get_labels
 from ..services.sentence.resolver import (
     resolve_get_sentences_by_ids,
     resolve_get_sentences_by_document_id,
+    resolve_get_sentence_labels,
 )
 from ..services.user.resolver import resolve_get_labelers
 
@@ -88,6 +89,13 @@ class Query:
     ) -> ResponseDTO[list[SentenceResponseDTO]]:
         # TODO: allow get labels of sentence
         result = resolve_get_sentences_by_ids(ids)
+        return result
+
+    @strawberry.field
+    def get_sentence_labels(
+        self, sentence_id: int
+    ) -> ResponseDTO[list[SentenceLabelResponseDTO]]:
+        result = resolve_get_sentence_labels(sentence_id)
         return result
 
     @strawberry.field

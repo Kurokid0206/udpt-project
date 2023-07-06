@@ -29,3 +29,11 @@ class addLabelInputDTO:
     label_id: int = None
     user_id: int = None
     status: LabelStatus = LabelStatus.IN_PROGRESS
+
+
+@strawberry.type
+class SentenceLabelResponseDTO:
+    sentence_id: int = None
+    label_id: int = None
+    review_by: int = None
+    status: LabelStatus = LabelStatus.IN_PROGRESS

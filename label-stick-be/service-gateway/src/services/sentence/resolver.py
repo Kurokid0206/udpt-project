@@ -1,4 +1,4 @@
-from .dto import SentenceInputDTO, SentenceResponseDTO
+from .dto import SentenceInputDTO, SentenceResponseDTO, SentenceLabelResponseDTO
 from ..label_sentence.dto import LabelSentenceInputDTO, LabelSentenceResponseDTO
 from ...utils.dto import ResponseDTO
 from ...utils.rest_api import call_api, HttpMethod
@@ -57,4 +57,14 @@ async def resolve_get_sentences_by_document_id(
     response = await call_api(url=url, method=HttpMethod.GET)
     return ResponseDTO[list[SentenceResponseDTO]](
         **{"data": [SentenceResponseDTO(**item) for item in response]}
+    )
+
+
+async def resolve_get_sentence_labels(
+    sentence_id: int,
+) -> ResponseDTO[list[SentenceLabelResponseDTO]]:
+    url = f"{LABEL_SERVICE_URL}/sentence/{sentence_id}/get-labels"
+    response = await call_api(url=url, method=HttpMethod.GET)
+    return ResponseDTO[list[SentenceLabelResponseDTO]](
+        **{"data": [SentenceLabelResponseDTO(**item) for item in response]}
     )
