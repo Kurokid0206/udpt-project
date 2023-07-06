@@ -151,7 +151,7 @@ const AssignmentPage: React.FC = () => {
           onClick={onClickAddAssignment}
         >
           <AddIcon />
-          Add project
+          Assign
         </Fab>
       </Box>
       <TableContainer component={Paper} sx={{ height: 500 }}>
