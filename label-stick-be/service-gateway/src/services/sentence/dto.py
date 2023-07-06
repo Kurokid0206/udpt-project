@@ -36,5 +36,5 @@ class SentenceLabelResponseDTO:
     sentence_id: int = None
     label_id: int = None
     labeled_by: int = None
-    review_by: int = None
+    reviewed_by: int = None
     status: LabelStatus = LabelStatus.IN_PROGRESS
