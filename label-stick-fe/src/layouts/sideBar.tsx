@@ -33,6 +33,11 @@ const sideBarList: NavBarElement[] = [
     icon: <InboxIcon />,
   },
   {
+    name: "Label",
+    path: "/label",
+    icon: <InboxIcon />,
+  },
+  {
     name: "Login",
     path: "/login",
     icon: <InboxIcon />,

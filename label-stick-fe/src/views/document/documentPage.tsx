@@ -47,6 +47,7 @@ const DocumentPage: React.FC = () => {
     ).then((response) => {
       console.log(response);
       const documentId = response.data.id;
+      setDocuments([...documents, response.data]);
       const sentencesOfDocument = sentences.map((sentence) => {
         return {
           name: sentence,
@@ -85,13 +86,13 @@ const DocumentPage: React.FC = () => {
       );
     }
 
-    // fetch("http://103.176.179.83:8000/upload-file", {
-    //   method: "POST",
-    //   body: data,
-    // }).then((response) => {
-    //   const data = response;
-    //   nowDocument.documentUrl = data.url.toString();
-    // });
+    fetch("http://103.176.179.83:8000/upload-file", {
+      method: "POST",
+      body: data,
+    }).then((response) => {
+      const data = response;
+      nowDocument.documentUrl = data.url.toString();
+    });
   };
   useEffect(() => {
     fetchDocuments(Number(projectId)).then((response) => {
@@ -141,7 +142,7 @@ const DocumentPage: React.FC = () => {
               <TableCell>ID</TableCell>
               <TableCell align="right">Name</TableCell>
               <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Max user</TableCell>
+              <TableCell align="right">Document url</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -220,13 +221,13 @@ const DocumentPage: React.FC = () => {
             <MenuItem value={"TRUE_FALSE"}>TRUE_FALSE</MenuItem>
             <MenuItem value={"ANSWER"}>ANSWER</MenuItem>
           </Select>
-          <TextField
+          {/* <TextField
             label="project_id"
             variant="outlined"
             onChange={(event) => {
               nowDocument.projectId = Number(event.target.value ?? 1);
             }}
-          />
+          /> */}
           <input
             type="file"
             onChange={(e) => {

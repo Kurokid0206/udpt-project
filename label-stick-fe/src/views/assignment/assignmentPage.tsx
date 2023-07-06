@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -41,6 +42,7 @@ const AssignmentPage: React.FC = () => {
   const [users, setUsers] = useState<any>([]);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [errorMessages, setErrorMessages] = useState<string>("");
 
   const [assignName, setAssignName] = useState<string>("");
   const [assignSentences, setAssignSentences] = useState<number[]>([]);
@@ -86,7 +88,7 @@ const AssignmentPage: React.FC = () => {
       assignFromDate === "" ||
       assignToDate === ""
     ) {
-      alert("Please input assignment name");
+      setErrorMessages("Please fill all fields");
       return;
     }
     if (isEdit) {
@@ -102,6 +104,7 @@ const AssignmentPage: React.FC = () => {
       ).then((res) => {
         setAssignments([...assignments, res.data]);
         console.log(res);
+        setErrorMessages("");
         setOpenAddModal(false);
       });
     }
@@ -131,6 +134,11 @@ const AssignmentPage: React.FC = () => {
     setOpenAddModal(true);
   };
 
+  const handleCloseModal = () => {
+    setErrorMessages("");
+    setOpenAddModal(false);
+  };
+
   return (
     <Container
       sx={{
@@ -151,7 +159,7 @@ const AssignmentPage: React.FC = () => {
           onClick={onClickAddAssignment}
         >
           <AddIcon />
-          Add project
+          Assign
         </Fab>
       </Box>
       <TableContainer component={Paper} sx={{ height: 500 }}>
@@ -225,7 +233,7 @@ const AssignmentPage: React.FC = () => {
       {/* Model add Assignment */}
       <Modal
         open={openAddModal}
-        onClose={() => setOpenAddModal(false)}
+        onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -239,6 +247,9 @@ const AssignmentPage: React.FC = () => {
             Add Assignment
           </Typography>
           <Box>
+            {errorMessages && (
+              <span style={{ color: "red" }}>{errorMessages}</span>
+            )}
             <FormControl defaultValue="" required sx={{ mb: 3, width: "100%" }}>
               <TextField
                 value={assignName}

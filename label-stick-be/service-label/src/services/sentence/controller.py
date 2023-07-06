@@ -102,3 +102,14 @@ async def get_list_sentence_by_document_id(
         db=session, document_id=document_id
     )
     return sentences
+
+
+@router.get("/{id}/get-labels", response_model=list[LabelSentence])
+async def get_list_label_sentence_by_sentence_id(
+    id: int = 0,
+    session: AsyncSession = Depends(get_session),
+) -> list[LabelSentence]:
+    label_sentences = label_sentence_repository.get_by_sentence_id(
+        db=session, sentence_id=id
+    )
+    return label_sentences
