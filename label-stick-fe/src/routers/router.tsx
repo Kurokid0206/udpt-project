@@ -20,7 +20,7 @@ const NavigationRouter: React.FC = () => {
       element: <ManagerHomePage />,
     },
     {
-      path: "/manager/label",
+      path: "/label",
       element: <ManagerLabelPage />,
     },
     {
