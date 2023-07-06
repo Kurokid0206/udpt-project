@@ -15,7 +15,7 @@ async def get_assignments(
     limit: int = 100,
     session: AsyncSession = Depends(get_session),
 ) -> list[Assignment]:
-    skip = page * 100
+    skip = page * limit
     assignments = assignment_repository.get_by_user_id(
         db=session, user_id=user_id, skip=skip, limit=limit
     )

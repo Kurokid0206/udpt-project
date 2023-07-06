@@ -16,7 +16,7 @@ async def resolve_get_assignments(
 ) -> ResponseDTO[list[AssignmentResponseDTO]]:
     url = f"{MANAGER_SERVICE_URL}/assignment"
     data = jsonable_encoder(input)
-    response = await call_api(url=url, method=HttpMethod.GET, json=data)
+    response = await call_api(url=url, method=HttpMethod.GET, params=data)
     return ResponseDTO[AssignmentResponseDTO](
         **{"data": [AssignmentResponseDTO(**item) for item in response]}
     )
