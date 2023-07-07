@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from sqlalchemy.sql import func
@@ -195,6 +195,7 @@ class LabelSentenceStatusEnum(str, Enum):
 
 class LabelSentence(Base):
     __tablename__ = "label_sentences"
+    __table_args__ = (UniqueConstraint("sentence_id", "label_id"),)
     id = Column(Integer, primary_key=True)
     sentence_id = Column(Integer, ForeignKey("sentences.id"), nullable=False)
     label_id = Column(Integer, ForeignKey("labels.id"), nullable=False)
