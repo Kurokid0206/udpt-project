@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 import strawberry
 
 
@@ -39,3 +40,6 @@ class SentenceLabelResponseDTO:
     labeled_by: int = None
     reviewed_by: int = None
     status: LabelStatus = LabelStatus.IN_PROGRESS
+    label: Optional[str] = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None

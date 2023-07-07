@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -104,12 +104,16 @@ async def get_list_sentence_by_document_id(
     return sentences
 
 
-@router.get("/{id}/get-labels", response_model=list[LabelSentence])
+@router.get("/{id}/get-labels", response_model=list[Any])
 async def get_list_label_sentence_by_sentence_id(
     id: int = 0,
     session: AsyncSession = Depends(get_session),
-) -> list[LabelSentence]:
-    label_sentences = label_sentence_repository.get_by_sentence_id(
+) -> list[Any]:
+    sentence_labels = label_sentence_repository.get_by_sentence_id(
         db=session, sentence_id=id
     )
-    return label_sentences
+    result = [
+        dict(sentence_label.dict(), **{"label": sentence_label.labels.name})
+        for sentence_label in sentence_labels
+    ]
+    return result
