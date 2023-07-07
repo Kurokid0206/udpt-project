@@ -33,7 +33,7 @@ const DocumentPage: React.FC = () => {
     id: 0,
     name: "",
     documentUrl: "",
-    documentType: "",
+    documentType: "QUESTION",
     projectId: Number(projectId),
   });
   const [sentences, setSentences] = useState<string[]>([]);
@@ -89,8 +89,9 @@ const DocumentPage: React.FC = () => {
     fetch("http://103.176.179.83:8000/upload-file", {
       method: "POST",
       body: data,
-    }).then((response) => {
-      const data = response;
+    }).then(async (response) => {
+      const data = await response.json();
+      console.log(data);
       nowDocument.documentUrl = data.url.toString();
     });
   };
@@ -209,6 +210,7 @@ const DocumentPage: React.FC = () => {
             }}
           />
           <Select
+            value="QUESTION"
             onChange={(event) => {
               nowDocument.documentType = (event.target.value ??
                 "QUESTION") as string;
