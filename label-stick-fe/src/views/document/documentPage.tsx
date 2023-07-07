@@ -74,7 +74,10 @@ const DocumentPage: React.FC = () => {
       reader.onload = function () {
         const content = reader.result;
         if (content != null) {
-          setSentences((content as string).split(/(?<=[.?!])\s+/));
+          const list_sentence = (content as string).split(/(?<=[.?!])\s+/);
+          setSentences(
+            list_sentence.filter((sentence) => sentence.trim() !== "")
+          );
         }
       };
 

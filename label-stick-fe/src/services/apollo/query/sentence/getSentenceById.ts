@@ -22,6 +22,7 @@ const fetchGetSentenceByIds = async (ids: number[]) => {
     variables: {
       ids: ids,
     },
+    fetchPolicy: "network-only",
   });
   const { data } = result;
   const { getSentencesByIds } = data;
