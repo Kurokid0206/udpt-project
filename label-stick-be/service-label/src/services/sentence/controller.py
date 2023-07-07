@@ -77,7 +77,6 @@ async def delete_sentence(
 async def add_labels(
     input: SentenceLabelsDTO, session: AsyncSession = Depends(get_session)
 ) -> list[LabelSentence]:
-    session.begin()
     for label_id in input.label_ids:
         try:
             label_sentence_repository.create(
@@ -91,7 +90,6 @@ async def add_labels(
             )
         except:
             print("error")
-    session.rollback()
     result = label_sentence_repository.get_by_sentence_id(
         db=session, sentence_id=input.id
     )
