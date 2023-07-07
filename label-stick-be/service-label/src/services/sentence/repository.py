@@ -11,6 +11,9 @@ class CRUDSentence(CRUDBase[Sentence, SentenceCreate, SentenceUpdate]):
     def get_by_ids(
         self, db: Session, *, ids: list[int], skip: int, limit: int
     ) -> list[Sentence]:
+        if len(ids) == 0:
+            result = db.query(self.model).offset(skip).limit(limit).all()
+            return result
         result = (
             db.query(self.model)
             .filter(self.model.id.in_(ids))
