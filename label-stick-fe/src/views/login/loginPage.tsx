@@ -25,6 +25,7 @@ const LoginPage: React.FC = () => {
             userId: Number(res.data.userId),
             userName: res.data.username,
             email: res.data.email,
+            role: res.data.role,
           };
           dispatch(setUser(user));
           // navigate("/");

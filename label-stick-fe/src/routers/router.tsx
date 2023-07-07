@@ -11,8 +11,10 @@ import AssignMePage from "@views/user/assignMePage";
 import UserLabeling from "@views/user/userLabeling";
 import ManagerLabelPage from "@views/manager/managerLabelPage";
 import AddSentencesPage from "@views/document/addSentencesPage";
+import { useAppSelector } from "@redux/hooks";
 
 const NavigationRouter: React.FC = () => {
+  const user = useAppSelector((store) => store.user);
   //define your all page below
   const pathList: RouterElement[] = [
     {
@@ -52,15 +54,39 @@ const NavigationRouter: React.FC = () => {
       element: <AssignMePage />,
     },
   ];
+
+  const user_view = [
+    {
+      path: "/user/labeling/:assignmentId",
+      element: <UserLabeling />,
+    },
+    {
+      path: "user/:userId/assign",
+      element: <AssignMePage />,
+    },
+  ];
+  console.log(user);
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout />}>
-          {pathList.map((item) => (
-            <Route path={item.path} element={item.element} key={item.path} />
-          ))}
-        </Route>
-        <Route path="/login" element={<LoginPage />}></Route>
+        {user.role === "MANAGER" && (
+          <Route path="/" element={<MainLayout />}>
+            {pathList.map((item) => (
+              <Route path={item.path} element={item.element} key={item.path} />
+            ))}
+          </Route>
+        )}
+        {user.role === "USER_LV_1" && (
+          <Route path="/" element={<MainLayout />}>
+            {user_view.map((item) => (
+              <Route path={item.path} element={item.element} key={item.path} />
+            ))}
+          </Route>
+        )}
+        {user.role === undefined && (
+          <Route path="*" element={<LoginPage />}></Route>
+        )}
+
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
