@@ -78,15 +78,18 @@ async def add_labels(
     input: SentenceLabelsDTO, session: AsyncSession = Depends(get_session)
 ) -> list[LabelSentence]:
     for label_id in input.label_ids:
-        label_sentence_repository.create(
-            session,
-            obj_in={
-                "label_id": label_id,
-                "sentence_id": input.id,
-                "labeled_by": input.user_id,
-                "status": "IN_PROGRESS",
-            },
-        )
+        try:
+            label_sentence_repository.create(
+                session,
+                obj_in={
+                    "label_id": label_id,
+                    "sentence_id": input.id,
+                    "labeled_by": input.user_id,
+                    "status": "IN_PROGRESS",
+                },
+            )
+        except Exception as e:
+            print(e)
     result = label_sentence_repository.get_by_sentence_id(
         db=session, sentence_id=input.id
     )
