@@ -34,6 +34,7 @@ import fetchGetLabelers from "@apolloClient/query/user/getUsers";
 import fetchGetSentenceByDocumentId from "@apolloClient/query/sentence/getSentenceByDocumentId";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@redux/hooks";
 
 const AssignmentPage: React.FC = () => {
   const navigate = useNavigate();
@@ -50,9 +51,13 @@ const AssignmentPage: React.FC = () => {
   const [assignType, setAssignType] = useState<string>("");
   const [assignFromDate, setAssignFromDate] = useState<string>("");
   const [assignToDate, setAssignToDate] = useState<string>("");
+  const user = useAppSelector((store) => store.user);
 
   useEffect(() => {
-    fetchGetAssignmentByUserId(1).then((res) => setAssignments(res.data));
+    if (!user.userId) return;
+    fetchGetAssignmentByUserId(user.userId).then((res) =>
+      setAssignments(res.data)
+    );
     fetchGetLabelers().then((res) => setUsers(res.data));
     fetchGetSentenceByDocumentId(1).then((res) => setSentences(res.data));
   }, []);

@@ -13,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import SwipeableTemporaryDrawer from "./sideBar";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
-import { setUser } from "@redux/slices/userSlice";
+import { logout, setUser } from "@redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const pages = ["Products", "Pricing", "Blog"];
@@ -42,6 +42,7 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const userState = useAppSelector((store) => store.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -68,7 +69,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Label stick
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -130,10 +131,24 @@ function ResponsiveAppBar() {
           {/* TopBar menu here */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <Box sx={{ fontSize: "16px", fontWeight: "bold" }}>
+              Wellcome {userState.userName}
+            </Box>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar
+                  alt="Remy Sharp"
+                  src="https://static01.nyt.com/images/2021/04/30/multimedia/30xp-meme/29xp-meme-mediumSquareAt3X-v5.jpg"
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -153,23 +168,14 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">
-                  <Box
-                    onClick={() => {
-                      dispatch(
-                        setUser({
-                          email: undefined,
-                          role: undefined,
-                          userId: undefined,
-                          userName: undefined,
-                        })
-                      );
-                      navigate("/");
-                    }}
-                  >
-                    Logout
-                  </Box>
-                </Typography>
+                <Box
+                  onClick={() => {
+                    dispatch(logout());
+                    navigate("/");
+                  }}
+                >
+                  Logout
+                </Box>
               </MenuItem>
             </Menu>
           </Box>

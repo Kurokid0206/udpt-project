@@ -49,7 +49,7 @@ export default function SideBar() {
     sideBarList = [
       {
         name: "Assignment",
-        path: `user/:${user.userId}/assign`,
+        path: `user/assign`,
         icon: <InboxIcon />,
       },
     ];

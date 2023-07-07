@@ -49,10 +49,6 @@ const NavigationRouter: React.FC = () => {
       path: "/assignment",
       element: <AssignmentPage />,
     },
-    {
-      path: "user/:userId/assign",
-      element: <AssignMePage />,
-    },
   ];
 
   const user_view = [
@@ -61,11 +57,10 @@ const NavigationRouter: React.FC = () => {
       element: <UserLabeling />,
     },
     {
-      path: "user/:userId/assign",
+      path: "user/assign",
       element: <AssignMePage />,
     },
   ];
-  console.log(user);
   return (
     <BrowserRouter>
       <Routes>

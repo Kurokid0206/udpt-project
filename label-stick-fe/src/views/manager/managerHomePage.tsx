@@ -167,7 +167,7 @@ const ManagerHomePage: React.FC = () => {
           <TableBody>
             {projects.map((project, idx) => (
               <TableRow
-                key={project.id + idx}
+                key={`${project.id} + ${idx}`}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">

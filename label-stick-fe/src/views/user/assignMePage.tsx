@@ -10,14 +10,16 @@ import { Box, Container, IconButton, Link } from "@mui/material";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import fetchGetAssignmentByUserId from "@apolloClient/query/assignment/getAssignmentByUserID";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppSelector } from "@redux/hooks";
 
 const AssignMePage: React.FC = () => {
-  const { userId } = useParams();
+  const userState = useAppSelector((store) => store.user);
   const navigate = useNavigate();
   const [assignments, setAssignments] = useState<any>([]);
 
   useEffect(() => {
-    fetchGetAssignmentByUserId(parseInt(userId)).then((res) =>
+    if (!userState.userId) return;
+    fetchGetAssignmentByUserId(userState.userId).then((res) =>
       setAssignments(res.data)
     );
   }, []);
