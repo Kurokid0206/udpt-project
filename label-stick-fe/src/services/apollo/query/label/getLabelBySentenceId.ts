@@ -7,6 +7,7 @@ const GET_LABELS_BY_SENTENCE_ID = gql`
       statusCode
       message
       data {
+        id
         sentenceId
         labelId
         status

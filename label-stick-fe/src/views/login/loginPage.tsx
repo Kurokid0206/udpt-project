@@ -70,7 +70,7 @@ const LoginPage: React.FC = () => {
         <Box
           sx={{ fontSize: "26px", fontFamily: "Roboto", fontWeight: "bold" }}
         >
-          <h3>Label Sticke - US Codingo</h3>
+          <h3>Label Stick - US Codingo</h3>
         </Box>
 
         <TextField
