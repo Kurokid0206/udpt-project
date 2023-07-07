@@ -33,6 +33,7 @@ const fetchGetAssignmentByUserId = async (
         limit: limit,
       },
     },
+    fetchPolicy: "network-only",
   });
   const { data } = result;
   const { getAssignments } = data;

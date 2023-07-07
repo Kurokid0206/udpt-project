@@ -112,6 +112,7 @@ const AssignmentPage: React.FC = () => {
         const assignmentTemp = assignments.map((assign: any) => {
           if (assign.id === assignmentId) {
             return {
+              id: assignmentId,
               name: assignName,
               sentenceIds: assignSentences,
               userId: assignToUser,
