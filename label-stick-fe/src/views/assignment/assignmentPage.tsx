@@ -28,17 +28,20 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import fetchGetAssignmentByUserId from "@apolloClient/query/assignment/getAssignmentByUserID";
+import fetchGetAssignments from "@apolloClient/query/assignment/getAssignments";
 import createAssignment from "@apolloClient/mutation/assignment/createAssignment";
 import fetchGetLabelers from "@apolloClient/query/user/getUsers";
-import fetchGetSentenceByDocumentId from "@apolloClient/query/sentence/getSentenceByDocumentId";
+import fetchGetSentenceById from "@apolloClient/query/sentence/getSentenceById";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@redux/hooks";
+import updateAssignment from "@apolloClient/mutation/assignment/updateAssignment";
+import fetchGetAssignmentByUserId from "@apolloClient/query/assignment/getAssignmentByUserID";
 
 const AssignmentPage: React.FC = () => {
   const navigate = useNavigate();
   const [assignments, setAssignments] = useState<any>([]);
+  const [assignmentId, setAssignmentId] = useState<number>(-1);
   const [sentences, setSentences] = useState<any>([]);
   const [users, setUsers] = useState<any>([]);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
@@ -59,7 +62,7 @@ const AssignmentPage: React.FC = () => {
       setAssignments(res.data)
     );
     fetchGetLabelers().then((res) => setUsers(res.data));
-    fetchGetSentenceByDocumentId(1).then((res) => setSentences(res.data));
+    fetchGetSentenceById([]).then((res) => setSentences(res.data));
   }, []);
 
   const styleModal = {
@@ -97,7 +100,35 @@ const AssignmentPage: React.FC = () => {
       return;
     }
     if (isEdit) {
-      console.log("edit");
+      updateAssignment(
+        assignmentId,
+        assignName,
+        assignSentences,
+        assignToUser,
+        assignType,
+        new Date(assignFromDate).toISOString(),
+        new Date(assignToDate).toISOString()
+      ).then((res) => {
+        const assignmentTemp = assignments.map((assign: any) => {
+          if (assign.id === assignmentId) {
+            return {
+              id: assignmentId,
+              name: assignName,
+              sentenceIds: assignSentences,
+              userId: assignToUser,
+              assignType: assignType,
+              fromDate: new Date(assignFromDate).toISOString(),
+              toDate: new Date(assignToDate).toISOString(),
+            };
+          }
+          return assign;
+        });
+
+        setAssignments(assignmentTemp);
+
+        setErrorMessages("");
+        setOpenAddModal(false);
+      });
     } else {
       createAssignment(
         assignName,
@@ -108,7 +139,6 @@ const AssignmentPage: React.FC = () => {
         new Date(assignToDate).toISOString()
       ).then((res) => {
         setAssignments([...assignments, res.data]);
-        console.log(res);
         setErrorMessages("");
         setOpenAddModal(false);
       });
@@ -127,6 +157,7 @@ const AssignmentPage: React.FC = () => {
   };
 
   const onClickEditAssignment = (id: number) => {
+    setAssignmentId(id);
     const nowEdit = assignments.filter((item: any) => item.id === id);
 
     setAssignName(nowEdit[0].name);

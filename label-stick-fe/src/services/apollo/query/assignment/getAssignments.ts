@@ -22,6 +22,7 @@ const GET_ASSIGNMENTS = gql`
 const fetchGetAssignments = async () => {
   const result = await client.query({
     query: GET_ASSIGNMENTS,
+    fetchPolicy: "network-only",
   });
   const { data } = result;
   const { getAssignments } = data;
