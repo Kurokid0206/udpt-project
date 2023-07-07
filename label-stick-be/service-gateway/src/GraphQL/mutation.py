@@ -199,7 +199,7 @@ class Mutation:
     @strawberry.mutation
     def update_label(
         self, id: int, input: LabelInputDTO
-    ) -> ResponseDTO[StatusResponseDTO]:
+    ) -> ResponseDTO[LabelResponseDTO]:
         result = resolve_update_label(id, input)
         return result
 
