@@ -145,7 +145,7 @@ const AssignmentPage: React.FC = () => {
   };
 
   return (
-    <Container
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -368,7 +368,7 @@ const AssignmentPage: React.FC = () => {
           </Box>
         </Box>
       </Modal>
-    </Container>
+    </Box>
   );
 };
 export default AssignmentPage;

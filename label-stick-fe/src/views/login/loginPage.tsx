@@ -8,6 +8,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { setUser } from "@redux/slices/userSlice";
 import { useAppDispatch } from "@redux/store";
 import { useAppSelector } from "@redux/hooks";
+import png from "@assets/png";
 
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -63,7 +64,14 @@ const LoginPage: React.FC = () => {
           padding: "68px 16px",
         }}
       >
-        <h3>US CODINGO</h3>
+        <Box sx={{ height: 100 }}>
+          <img src={png.logo} alt="" style={{ height: "100%" }} />
+        </Box>
+        <Box
+          sx={{ fontSize: "26px", fontFamily: "Roboto", fontWeight: "bold" }}
+        >
+          <h3>Label Sticke - US Codingo</h3>
+        </Box>
 
         <TextField
           id="username"

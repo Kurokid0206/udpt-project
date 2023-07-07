@@ -11,6 +11,7 @@ const GET_LABELS_BY_SENTENCE_ID = gql`
         labelId
         status
         labeledBy
+        label
       }
     }
   }

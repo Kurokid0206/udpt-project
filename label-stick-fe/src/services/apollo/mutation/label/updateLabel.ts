@@ -7,8 +7,8 @@ const UPDATE_LABEL = gql`
       statusCode
       message
       data {
-        statusCode
-        message
+        id
+        name
       }
     }
   }

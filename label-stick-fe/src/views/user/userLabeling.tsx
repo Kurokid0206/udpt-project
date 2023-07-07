@@ -33,11 +33,6 @@ const UserLabeling: React.FC = () => {
     { sentenceId: number; labels: string[]; nowLabelSelect: string | "" }[]
   >([]);
   const userState = useAppSelector((store) => store.user);
-  const arrayData = useRef<
-    { sentenceId: number; labels: string[]; nowLabelSelect: string | "" }[]
-  >([]);
-  const [forceRender, setForceRender] = useState<boolean>(true);
-
   const renderLabel = (sentencesID: number) => {
     let sentenceSlect = labelSentence.filter(
       (item) => item.sentenceId == sentencesID
@@ -48,6 +43,23 @@ const UserLabeling: React.FC = () => {
         label={item}
         color="primary"
         size="small"
+        onDelete={() => {
+          let nowData = structuredClone(labelSentence).filter(
+            (item_) => item_.sentenceId == sentencesID
+          );
+
+          let selectedLabels = nowData[0].labels.filter(
+            (label) => label != item
+          );
+          let nowList = structuredClone(labelSentence).map((item) => {
+            if (item.sentenceId == sentencesID) {
+              return { ...item, labels: selectedLabels };
+            }
+            return item;
+          });
+
+          setLabelSentence(nowList);
+        }}
       />
     ));
   };
@@ -71,7 +83,6 @@ const UserLabeling: React.FC = () => {
       return item;
     });
 
-    console.log(nowList);
     setLabelSentence(nowList);
   };
 
@@ -81,11 +92,14 @@ const UserLabeling: React.FC = () => {
         element.labels.includes(label.name)
       );
       let listLabelsIds = listLabels.map((label) => label.id);
-      fetchAddLabelsToSentence(element.sentenceId, listLabelsIds, 1).then(
-        (res) => {
-          console.log(res);
-        }
-      );
+      if (!userState.userId) return;
+      fetchAddLabelsToSentence(
+        element.sentenceId,
+        listLabelsIds,
+        userState.userId
+      ).then((res) => {
+        console.log(res);
+      });
     });
   };
 
@@ -141,19 +155,28 @@ const UserLabeling: React.FC = () => {
                 }
               );
               setSentences(nowSentences);
-              let nowSentenceLabel: {
-                sentenceId: number;
-                labels: string[];
-                nowLabelSelect: string | "";
-              }[] = [];
-              nowSentences.forEach((item) => {
-                nowSentenceLabel.push({
-                  labels: [],
-                  nowLabelSelect: "",
-                  sentenceId: item.id,
+              let listPromise = nowSentences.map((item) => {
+                return new Promise<{
+                  sentenceId: number;
+                  labels: string[];
+                  nowLabelSelect: string | "";
+                }>((resolve, reject) => {
+                  fetchGetSentenceLabels(item.id)
+                    .then((res) => {
+                      resolve({
+                        labels: res.data?.map((label_: any) => label_?.label),
+                        nowLabelSelect: "",
+                        sentenceId: item.id,
+                      });
+                    })
+                    .catch((err) => {
+                      reject(err);
+                    });
                 });
               });
-              setLabelSentence(nowSentenceLabel);
+              Promise.all(listPromise).then((listResponse) => {
+                setLabelSentence(structuredClone(listResponse));
+              });
             }
           );
         } else {
@@ -208,7 +231,7 @@ const UserLabeling: React.FC = () => {
               <TableCell
                 align="left"
                 sx={{ backgroundColor: "#ebebeb" }}
-                width={300}
+                width={500}
               >
                 Label
               </TableCell>
@@ -224,7 +247,7 @@ const UserLabeling: React.FC = () => {
           <TableBody>
             {sentences.map((sentence, idx) => (
               <TableRow
-                key={String(sentence.id) + idx}
+                key={sentence.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
@@ -260,7 +283,7 @@ const UserLabeling: React.FC = () => {
                         value={
                           labelSentence.filter(
                             (item) => item.sentenceId == sentence.id
-                          )[0]?.nowLabelSelect
+                          )[0]?.nowLabelSelect || ""
                         }
                         onChange={(event: any, newValue: string | null) => {
                           let newList = structuredClone(labelSentence).map(

@@ -23,16 +23,16 @@ export default function SideBar() {
         path: "/manager",
         icon: <InboxIcon />,
       },
-      {
-        name: "User",
-        path: "/user",
-        icon: <MailIcon />,
-      },
-      {
-        name: "Admin",
-        path: "/admin",
-        icon: <InboxIcon />,
-      },
+      // {
+      //   name: "User",
+      //   path: "/user",
+      //   icon: <MailIcon />,
+      // },
+      // {
+      //   name: "Admin",
+      //   path: "/admin",
+      //   icon: <InboxIcon />,
+      // },
       {
         name: "Assignment",
         path: "/assignment",

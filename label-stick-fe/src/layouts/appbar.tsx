@@ -15,6 +15,7 @@ import SwipeableTemporaryDrawer from "./sideBar";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import { logout, setUser } from "@redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import png from "@assets/png";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -53,7 +54,11 @@ function ResponsiveAppBar() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <img
+            src={png.logo}
+            alt=""
+            style={{ height: 30, borderRadius: "8px", marginRight: "16px" }}
+          />
           <Typography
             variant="h6"
             noWrap
