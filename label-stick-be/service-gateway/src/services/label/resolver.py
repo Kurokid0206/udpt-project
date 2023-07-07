@@ -20,7 +20,7 @@ async def resolve_update_label(
 ) -> ResponseDTO[LabelResponseDTO]:
     url = f"{LABEL_SERVICE_URL}/label/{id}"
     data = jsonable_encoder(input)
-    response = await call_api(url=url, method=HttpMethod.POST, json=data)
+    response = await call_api(url=url, method=HttpMethod.PATCH, json=data)
     return ResponseDTO[LabelResponseDTO](**{"data": LabelResponseDTO(**response)})
 
 
