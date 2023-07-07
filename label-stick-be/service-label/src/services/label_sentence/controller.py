@@ -5,7 +5,7 @@ from .repository import label_sentence_repository
 from .schema import LabelSentence, LabelSentenceCreate, LabelSentenceUpdate
 from ...database.sessions import get_session
 
-router = APIRouter(prefix="/sentence", tags=["label_sentence"])
+router = APIRouter(prefix="/label_sentence", tags=["label_sentence"])
 
 
 @router.get("/get_label_sentence/{id}", response_model=LabelSentence)
@@ -59,7 +59,7 @@ async def update_sentence(
     return sentence
 
 
-@router.delete("/delete_label_sentence/{id}", response_model=LabelSentence)
+@router.delete("/{id}", response_model=LabelSentence)
 async def delete_sentence(
     id: int,
     session: AsyncSession = Depends(get_session),
